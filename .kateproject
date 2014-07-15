@@ -1,0 +1,9 @@
+{
+  "name": "TextEngine"
+, "files": [ { "git": 1 } ]
+, "build": {
+    "directory": "./src"
+  , "build": "make all"
+  , "clean": "make clean"
+  }
+}
