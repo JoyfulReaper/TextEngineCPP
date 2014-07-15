@@ -1,0 +1,5 @@
+shortName = 'room4'
+name = 'Room 4'
+description = 'You now find yourself in Room 4! It\'s UGLY!'
+lookDescription = 'There is garbage all over the place!'
+exits = 'W:room3:SIL:lockedRoom'
