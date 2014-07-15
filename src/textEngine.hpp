@@ -33,6 +33,7 @@
 #include <string>
 #include <deque>
 #include <map>
+#include "player.hpp"
 
 class TextEngine
 {
@@ -107,12 +108,7 @@ public:
   /**
    * @return the current Player
    */
-  //Player& getPlayer();
-  
-  /**
-   * @param player Set as active player
-   */
-  //void setPlayer(Player *player);
+  Player& getPlayer();
   
   //////////////////////////////////////////////////////////////
   
@@ -181,14 +177,13 @@ public:
   
 private:
   //CommandParser commandParser;
-  //Player player;
+  Player player;
   
   std::string startRoom = "";
   std::string gamePath;
   //std::map<std::string,std::string> itemNames;
   //std::map<std::string,std::string> npcRegistry; 
   //std::unique_ptr<Map> map;
-  //std::unique_ptr<Player> player;
   std::deque<std::string> messages;
   bool gameOver = false;
   bool gameStarted = false;

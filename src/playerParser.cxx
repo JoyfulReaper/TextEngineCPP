@@ -38,7 +38,7 @@ std::map<std::string,bool> PlayerParser::setObjectConfig()
   return objectConfig;
 }
 
-void PlayerParser::parsePlayer(const std::string &path)
+std::vector<std::map<std::string,std::string>> PlayerParser::parsePlayer(const std::string &path)
 {
   boost::filesystem::path fullPath(path);
   boost::filesystem::path player("/player.lua");
@@ -46,5 +46,5 @@ void PlayerParser::parsePlayer(const std::string &path)
   
   std::map<std::string,bool> playerConfig = setObjectConfig();
   std::vector<boost::filesystem::path> file = getFile(fullPath.native());
-  auto results = parseFiles(file, playerConfig);
+  return parseFiles(file, playerConfig);
 }

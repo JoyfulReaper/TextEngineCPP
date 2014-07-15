@@ -27,15 +27,13 @@
 #include "textEngine.hpp"
 #include "textEngineException.hpp"
 
-TextEngine::TextEngine(std::string gamePath) : gamePath(gamePath)
-{
+TextEngine::TextEngine(std::string gamePath) : player(Player(gamePath)), gamePath(gamePath)
+{ 
   //NPCParser np(this);
   //RoomParser rp(this);
-  //PlayerParser pp(this);
   //ItemParser ip(this);
   
   //rp.parseRooms(gamePath);
-  //pp.parsePlayer(gamePath);
   //ip.parseItems(gamePath);
   //np.parseNPCs(gamePath);
   
@@ -122,15 +120,10 @@ bool TextEngine::registerCommand(std::string verb, std::string file)
 
 /////////////////////////////////////////////////////////////////////////
 
-//Player& TextEngine::getPlayer() const
-//{
-  //return player;
-//}
-
-// void TextEngine::setPlayer(Player *player)
-// {  
-//   this->player.reset(player);
-// }
+Player& TextEngine::getPlayer()
+{
+  return player;
+}
 
 /////////////////////////////////////////////////////////////////////////
 

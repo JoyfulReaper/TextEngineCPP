@@ -1,5 +1,5 @@
 /*
- TextEngine: playerParser.hpp
+ TextEngine: player.hpp
  Copyright (C) 2014 Kyle Givler
  
  This program is free software: you can redistribute it and/or modify
@@ -17,27 +17,25 @@
  */
 
 /**
- * @file playerParser.hpp
+ * @file player.hpp
  * @author Kyle Givler
  */
 
-#ifndef _PLAYER_PARSER_H_
-#define _PLAYER_PARSER_H_
+#ifndef _PLAYER_H_
+#define _PLAYER_H_
 
-#include <string>
-#include <map>
-#include "parser.hpp"
+#include "character.hpp"
 
-class PlayerParser : public Parser
+class Player : public Character
 {
 public:
-  PlayerParser() {}
-  virtual ~PlayerParser() {}
+  Player(std::string gamePath);
   
-  virtual std::vector<std::map<std::string,std::string>> parsePlayer(const std::string &path);
+  Player(const Player &obj);
   
-  virtual std::map<std::string, bool> setObjectConfig();
+  virtual ~Player() {}
+  
 private:
+  std::string gamePath;
 };
-
 #endif

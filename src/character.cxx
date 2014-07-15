@@ -38,8 +38,10 @@ Character::Character(const Character &obj)
 
 void Character::setLocation(std::string locId)
 {
+  this->location = locId;
 }
 
 void Character::setFilename(std::string filename)
 {
+  this->filename = filename;
 }
