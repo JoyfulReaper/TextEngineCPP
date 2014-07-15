@@ -68,18 +68,12 @@ public:
   /**
    * @param ignore Make addMessage ignore new messages
    */
-  inline void ignoreMessages(bool ignore) 
-  { 
-    this->ignoreMsg = ignore; 
-  }
+  inline void ignoreMessages(bool ignore) { this->ignoreMsg = ignore; }
   
   /**
    * @return true if messages are being ignored, false if they are being added
    */
-  inline bool ignoringMessages() 
-  { 
-    return this->ignoreMsg; 
-  }
+  inline bool ignoringMessages() { return this->ignoreMsg; }
   
   //////////////////////////////////////////////////////////////
   
@@ -106,10 +100,7 @@ public:
   /**
    * @return The starting room
    */
-  inline std::string getStartRoom() const 
-  { 
-    return startRoom; 
-  }
+  inline std::string getStartRoom() const { return startRoom; }
   
   /////////////////////////////////////////////////////////////
   
