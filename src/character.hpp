@@ -114,11 +114,13 @@ public:
   inline virtual bool isAlive() const { return health > 0; }
   
   /**
-   * Set filename associated with this Character, intended to only be called
-   * by the builder
+   * You probably don't want to change this
    */
   void setFilename(std::string);
   
+  /**
+   * @return The file associated with this character
+   */
   inline std::string getFilename() { return filename; }
   
 protected:
@@ -128,6 +130,6 @@ protected:
   std::string location = "";
   double health = 100;
   double money = 0;
-  //std::unique_ptr<Inventory> inventory;
+  //Inventory?
 };
 #endif
