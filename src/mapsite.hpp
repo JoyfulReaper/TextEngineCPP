@@ -28,6 +28,8 @@
 
 enum class Direction : size_t  { North = 0, South = 1, East = 2, West = 3, Up = 4, Down = 5, Invalid = 6 };
 
+class TextEngine;
+
 class MapSite
 {
 public:
@@ -41,7 +43,7 @@ public:
    * Enter the mapsite
    * @param from The direction the Character is entering from
    */
-  virtual void enter(Direction from) = 0;
+  virtual void enter(Direction from, TextEngine &engine) = 0;
   
   virtual void setName(std::string name) { this->name = name; }
   

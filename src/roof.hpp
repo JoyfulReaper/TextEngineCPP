@@ -26,8 +26,6 @@
 
 #include "mapsite.hpp"
 
-class TextEngine;
-
 class Roof : public MapSite
 {
 public:

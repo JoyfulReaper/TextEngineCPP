@@ -26,8 +26,6 @@
 
 #include "mapsite.hpp"
 
-class TextEngine;
-
 class Wall : public MapSite
 {
 public:

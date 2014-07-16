@@ -26,8 +26,6 @@
 
 #include "mapsite.hpp"
 
-class TextEngine;
-
 class Floor : public MapSite
 {
 public:
