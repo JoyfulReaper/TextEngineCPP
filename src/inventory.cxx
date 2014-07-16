@@ -35,7 +35,16 @@ Inventory::Inventory(const Inventory &obj)
 
 bool Inventory::addItem(std::unique_ptr<Item> item, size_t number)
 {
-
+  if(size + number > capacity)
+    ; // throw inv full excpt?
+  
+  try {
+    Item &theItem = getItem(item->getName());
+    theItem.setQuantity(theItem.getQuantity() + number);
+    size += number;
+    return true;
+  } catch (const TextEngineException &te) {
+  }
   return false;
 }
 
@@ -62,7 +71,7 @@ bool Inventory::hasItem(std::string name)
 {
   for(auto &item : items)
   {
-    if (*item.getName() == name)
+    if (item->getName() == name)
       return true;
   }
   return false;
@@ -77,6 +86,12 @@ bool Inventory::hasItem(const Item &item)
 
 Item& Inventory::getItem(std::string name)
 {
+  for(auto &item : items)
+  {
+    if(item->getName() == name)
+      return *item;
+  }
+  throw (TextEngineException("Item is not in inventory: " + name));
 }
 
 std::vector<const Item*> Inventory::getAllItems()

@@ -28,6 +28,7 @@
 #include <vector>
 #include <climits>
 #include <memory>
+#include <map>
 #include "item.hpp"
 
 class Inventory
@@ -115,5 +116,6 @@ private:
   size_t capacity = UINT_MAX - 1;
   size_t size = 0;
   std::vector<std::unique_ptr<Item>> items;
+  static std::map<std::string, std::string> allItems;
 };
 #endif
