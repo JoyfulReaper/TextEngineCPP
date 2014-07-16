@@ -28,7 +28,7 @@ MapSite::MapSite(const MapSite &obj)
   this->name = obj.name;
 }
 
-static std::string getDirectionName(Direction dir)
+std::string MapSite::getDirectionName(Direction dir)
 {
   std::string dirName = "invalid";
   switch (dir)
@@ -68,7 +68,7 @@ static std::string getDirectionName(Direction dir)
 }
 
 
-static Direction getDirectionFromChar(char letter)
+Direction MapSite::getDirectionFromChar(char letter)
 {
   Direction direction;
   letter = toupper(letter);
