@@ -86,7 +86,6 @@ public:
   inline std::string getToRoom() const { return exitToRoom; }
   
 protected:
-  TextEngine *engine;
   std::string exitToRoom = "";
   bool isLocked = false;
   bool visible = true;

@@ -1,0 +1,240 @@
+/*
+ * TextEngine: room.cxx
+ * Copyright (C) 2014 Kyle Givler
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * @file room.cxx
+ * @author Kyle Givler
+ */
+
+#include <fstream>
+#include <boost/algorithm/string/case_conv.hpp>
+#include "thirdParty/luawrapper/LuaContext.hpp"
+#include "room.hpp"
+#include "textEngine.hpp"
+#include "textEngineException.hpp"
+
+Room::Room() {}
+
+Room::Room(const Room &obj)
+{
+  this->name = obj.name;
+  this->shortName = obj.shortName;
+  this->description = obj.description;
+  this->lookDescription = obj.lookDescription;
+  this->filename = obj.filename;
+  this->visited = obj.visited;
+  //Inventory
+  //Sides
+  //npcs
+}
+
+MapSite& Room::getSide(Direction dir)
+{
+  return *sides[static_cast<size_t>(dir)].get();
+}
+
+void Room::setSide(Direction dir, std::unique_ptr<MapSite> side)
+{
+  //sides[static_cast<size_t>(dir)].reset(side);
+}
+
+// Room was entered by Player
+void Room::enter(Direction from, TextEngine &engine)
+{
+  // lua = something();
+  //player->setLocation(getShortName()); // Update Player's location
+  
+  engine.addMessage("\nCurrent Location: " + getName() + "\n\n"); // Add name of room
+  
+  // Call room's onEnter
+//   try {
+//     std::ifstream roomFile(filename);
+//     lua.executeCode(roomFile);
+//     lua.executeCode("onEnter()"); // Notify room script Player has entered
+//     roomFile.close();
+//   } catch (const LuaContext::SyntaxErrorException &see) {
+//     std::cerr << see.what();
+//   } catch (const LuaContext::ExecutionErrorException &eee) {
+//     // No onEnter()
+//   }
+//   lua.writeVariable("onEnter", nullptr); // Clear function incase next room doesn't have an onEnter()
+  
+  engine.addMessage("\t" + getDescription() + "\n\n"); // Add description
+  
+  // Process NPC stuff
+//   try {
+//     for(auto it = npcs.begin(); it != npcs.end(); ++it)
+//     {
+//       NonPlayableCharacter *npc = it->second.get();
+//       if(!npc->isAlive())
+//       {
+// 	int ran = engine->getRandomNumber(0, 100);
+// 	if(ran <= npc->getRespawnChance())
+// 	  npc->setHealth(100);
+//       }
+//       if(npc->isAlive())
+//       {
+// 	std::ifstream npcFile(npc->getFilename());
+// 	lua->executeCode(npcFile);
+// 	//std::cerr << "Calling playerEntered for " + npc->getName() << std::endl;
+// 	lua.executeCode("playerEntered()");
+// 	npcFile.close();
+//       }
+//     }
+//   } catch (const LuaContext::SyntaxErrorException &see) {
+//     std::cerr << see.what();
+//   } catch (const LuaContext::ExecutionErrorException &eee) {
+//     // No playerEntered
+//   }
+//   lua.writeVariable("playerEntered", nullptr);
+  
+  engine.addMessage(getNpcsString() + "\n");
+  engine.addMessage("You see: " + getInventoryString() + "\n");
+  engine.addMessage("Exits: " + getExitString() + "\n");
+  
+  setVisited(true);
+}
+
+void Room::showFullDescription(TextEngine &engine)
+{
+  engine.addMessage("\nCurrent Location: " + getName() + "\n\n");
+  engine.addMessage("\t" + getDescription() + "\n\n");
+  engine.addMessage("\t" + getLookDescription() + "\n\n");
+  engine.addMessage(getNpcsString() + "\n");
+  engine.addMessage("You see: " + getInventoryString() + "\n");
+  engine.addMessage("Exits: " + getExitString() + "\n");
+}
+
+std::string Room::getExitString()
+{
+  std::string exits;
+//   for(size_t i = 0; i < 6; i++)
+//   {
+//     MapSite *side = getSide(static_cast<Direction>(i));
+//     side = dynamic_cast<Exit*>(side);
+//     if(side)
+//     {
+//       Exit *exit = static_cast<Exit *>(side);
+//       if(exit->isVisible())
+// 	exits.append(getDirectionName(static_cast<Direction>(i)) + ", ");
+//     }
+//   }
+//   exits.erase((exits.length() - 2), 2);
+  return exits;
+}
+
+std::string Room::getInventoryString()
+{
+//   if(inventory->isEmpty())
+//     return "No items";
+//   
+//   std::vector<const Item*> allItems = inventory->getAllItems();
+//   std::string items;
+//   for(auto it = allItems.begin(); it != allItems.end(); ++it)
+//   {
+//     const Item *item = *it;
+//     if(item->isVisible())
+//     {
+//       std::string name = item->getName();
+//       if(item->getQuantity() > 1)
+// 	name.append(" (" + std::to_string(item->getQuantity()) + ")");
+//       items.append(name + ", ");
+//     }
+//   }
+//   if(items.length() > 2)
+//     items.erase(items.length() -2, 2);
+//   else
+//     return "No items";
+  return "";
+}
+
+std::string Room::getNpcsString()
+{
+//   if(npcs.empty())
+//     return "";
+//   
+//   std::string creatures = "Creatures: ";
+//   for(auto it = npcs.begin(); it != npcs.end(); ++it)
+//   {
+//     NonPlayableCharacter *npc = it->second.get();
+//     std::string name = npc->getName();
+//     creatures.append(name + ", ");
+//   }
+//   creatures.erase(creatures.length() -2, 2);
+//   return creatures;
+  return "";
+}
+
+bool Room::setFilename(const std::string filename)
+{
+  if(this->filename == INVALID_ROOM_FILENAME)
+  {
+    this->filename = filename;
+    return true;
+  }
+  return false;
+}
+
+bool Room::addNPC(NonPlayableCharacter *npc)
+{
+//   if( hasNPC(npc->getName()) )
+//     return false;
+//   
+//   boost::shared_ptr<NonPlayableCharacter> sNpc;
+//   sNpc.reset(npc);
+//   std::string upperName = npc->getName();
+//   boost::to_upper(upperName);
+//   
+//   std::pair<std::map<std::string, boost::shared_ptr<NonPlayableCharacter>>::iterator, bool> ret;
+//   ret = npcs.insert(std::pair<std::string, boost::shared_ptr<NonPlayableCharacter>>(upperName, sNpc));
+//   return ret.second;
+  return false;
+}
+
+bool Room::removeNPC(std::string name)
+{
+//   boost::to_upper(name);
+//   return npcs.erase(name);
+  return false;
+}
+
+bool Room::hasNPC(std::string name)
+{
+//   boost::to_upper(name);
+//   return npcs.count(name);
+  return false;
+}
+
+//NonPlayableCharacter& Room::getNPC(std::string name)
+//{
+//   boost::to_upper(name);
+//   try {
+//     return npcs.at(name).get();
+//   } catch (const std::out_of_range &oor) {
+//     return nullptr;
+//   }
+//}
+
+//std::vector<const NonPlayableCharacter*> Room::getAllNpcs()
+//{
+//   std::vector<const NonPlayableCharacter*> allNpcs;
+//   for(auto it = npcs.begin(); it != npcs.end(); ++it)
+//     allNpcs.push_back(const_cast<NonPlayableCharacter*>(it->second.get()));
+//   
+//   return allNpcs;
+//}
