@@ -26,13 +26,8 @@
 #include <stdexcept>
 #include "mapsite.hpp"
 #include "mapBuilder.hpp"
-#include "room.hpp"
-#include "wall.hpp"
-#include "roof.hpp"
-#include "floor.hpp"
-#include "exit.hpp"
 #include "textEngineException.hpp"
-#include "textEngine.hpp"
+
 
 using namespace boost;
 
@@ -41,23 +36,23 @@ void MapBuilder::buildObjects(std::vector<std::map<std::string,std::string>> &ro
   for (auto it = roomConfig.begin(); it != roomConfig.end(); ++it)
   {
     auto config = *it;
-    Room *room = new Room(engine);
+    Room room;
     std::string startRoom = "";
     
     // Setup the room
-    room->setShortName(config["shortName"]);
-    room->setFilename(config["filename"]);
+    room.setShortName(config["shortName"]);
+    room.setFilename(config["filename"]);
     
     std::string name = config["name"];
     if(name == "player")
       throw (TextEngineException("'player' is an invalid name for a room!"));
-    room->setName(config["name"]);
+    room.setName(config["name"]);
     
-    room->setDescription(config["description"]);
+    room.setDescription(config["description"]);
     if(config["lookDescription"] == "")
-      room->setLookDescription("You look really carefully, but you can't see anything you haven't seen before.");
+      room.setLookDescription("You look really carefully, but you can't see anything you haven't seen before.");
     else
-      room->setLookDescription(config["lookDescription"]);
+      room.setLookDescription(config["lookDescription"]);
     
     try{
       if(std::stoi(config["startRoom"]))

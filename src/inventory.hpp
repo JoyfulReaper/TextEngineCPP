@@ -114,6 +114,6 @@ public:
 private:
   size_t capacity = UINT_MAX - 1;
   size_t size = 0;
-  //Items DataStruture
+  std::vector<std::unique_ptr<Item>> items;
 };
 #endif

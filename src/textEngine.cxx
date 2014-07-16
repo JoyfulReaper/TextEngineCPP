@@ -27,13 +27,10 @@
 #include "textEngine.hpp"
 #include "textEngineException.hpp"
 
-TextEngine::TextEngine(std::string gamePath) : player(Player(gamePath)), gamePath(gamePath)
+TextEngine::TextEngine(std::string gamePath) : player(Player(gamePath)), map(Map(gamePath)), gamePath(gamePath)
 { 
   //NPCParser np(this);
-  //RoomParser rp(this);
   //ItemParser ip(this);
-  
-  //rp.parseRooms(gamePath);
   //ip.parseItems(gamePath);
   //np.parseNPCs(gamePath);
   

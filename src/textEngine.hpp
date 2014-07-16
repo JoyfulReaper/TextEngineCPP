@@ -35,6 +35,7 @@
 #include <map>
 #include "player.hpp"
 #include "commandParser.hpp"
+#include "map.hpp"
 
 class TextEngine
 {
@@ -128,12 +129,8 @@ public:
   /**
    * @return The TextEngine's Map
    */
-  //Map* getMap() const;
+  Map& getMap() { return map; }
   
-  /**
-   * @param map The map for the TextEngine to use
-   */
-  //void setMap(Map *map);
   
   ///////////////////////////////////////////////////////////////
   
@@ -179,12 +176,12 @@ public:
 private:
   CommandParser commandParser;
   Player player;
+  Map map;
   
   std::string startRoom = "";
   std::string gamePath;
   //std::map<std::string,std::string> itemNames;
   //std::map<std::string,std::string> npcRegistry; 
-  //std::unique_ptr<Map> map;
   std::deque<std::string> messages;
   bool gameOver = false;
   bool gameStarted = false;

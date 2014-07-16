@@ -35,7 +35,7 @@ class MapBuilder : public Builder
 public:
   virtual ~MapBuilder() {}
   
-  MapBuilder() {}
+  MapBuilder(Map &map);
   
   /**
    * Build the room from the given configuration (see roomParser.cxx)
@@ -51,13 +51,8 @@ public:
    */
   virtual void buildExit(std::string fromRoom, std::string toRoom, Direction dir, bool locked, bool visible);
   
-  /**
-   * Get the completed Map
-   * @return The completed Map
-   */
-  //virtual Map* getMap() { return map; }
-  
 private:
+  Map &map;
 };
 
 #endif

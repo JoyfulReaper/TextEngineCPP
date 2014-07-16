@@ -15,14 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 /**
  * @file inventory.cxx
  * @author Kyle Givler
  */
 
-#include "config.h"
-#include "containerItem.hpp"
+#include <algorithm>
 #include "inventory.hpp"
 #include "textEngineException.hpp"
 
@@ -36,7 +34,8 @@ Inventory::Inventory(const Inventory &obj)
 }
 
 bool Inventory::addItem(std::unique_ptr<Item> item, size_t number)
-{  
+{
+
   return false;
 }
 
@@ -61,6 +60,11 @@ bool Inventory::removeItem(std::string name, size_t number)
 
 bool Inventory::hasItem(std::string name)
 {
+  for(auto &item : items)
+  {
+    if (*item.getName() == name)
+      return true;
+  }
   return false;
 }
 

@@ -22,8 +22,6 @@
  */
 
 #include "roomParser.hpp"
-#include "mapBuilder.hpp"
-#include "textEngineException.hpp"
 
 typedef std::pair<std::string,bool> conf;
 
@@ -40,21 +38,15 @@ std::map<std::string,bool> RoomParser::setObjectConfig()
   return objectConfig;
 }
 
-void RoomParser::parseRooms(std::string basePath)
+std::vector<std::map<std::string,std::string>> RoomParser::parseRooms(std::string basePath)
 {
-  //MapBuilder builder(engine);
   boost::filesystem::path fullPath(basePath);
   boost::filesystem::path rooms("/rooms");
   fullPath += rooms;
+  
   std::map<std::string,bool> objectConfig = setObjectConfig();
   std::string ext = ".lua";
   std::vector<boost::filesystem::path> files = getAllFilesWithExt(fullPath.native(), ext);
-  auto results = parseFiles(files, objectConfig);
-  
-  //builder.buildObjects(results);
-  
-  //if (engine->getStartRoom() == "")
-  //  throw(TextEngineException("Start room not set!"));
-  
-  //engine->setMap(builder.getMap());
+  return parseFiles(files, objectConfig);
+
 }

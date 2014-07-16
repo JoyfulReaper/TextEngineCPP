@@ -28,14 +28,14 @@
 #include <string>
 #include <vector>
 #include "mapsite.hpp"
+#include "room.hpp"
 
-class Room;
 class TextEngine;
 
 class Map
 {
 public:
-  Map(TextEngine &engine) : engine(&engine) {}
+  Map(std::string gamePath);
   
   Map(const Map &obj);
   
@@ -68,20 +68,38 @@ public:
    */
   bool removeRoom(std::string name);
   
+  inline void setStartRoom(std::string name) { this->startRoom = startRoom; }
+  
+  inline std::string getStartRoom() { return startRoom; }
+  
   ////////////////////////////////////////////////////////////////////////////////////
   
-  MapSite* getRoomSide(std::string name, Direction dir);
+  // MapSite* getRoomSide(std::string name, Direction dir);
   
-  bool setRoomSide(std::string name, Direction from, std::unique_ptr<MapSite> side);
+  // bool setRoomSide(std::string name, Direction from, std::unique_ptr<MapSite> side);
   
   bool enterRoom(std::string name, Direction from, TextEngine &engine);
   
-  bool showFullRoomDescription(std::string name, TextEngine &engine);
+  bool setRoomName(std::string shortName, std::string newLongName);
   
+  std::string getRoomName(std::string shortName);
+  
+  bool setRoomDescription(std::string name, std::string description);
+  
+  std::string getRoomDescription(std::string name);
+  
+  bool setRoomLookDescription(std::string name, std::string description);
+  
+  std::string getRoomLookDescription(std::string name);
+  
+  bool setRoomVisited(std::string room, bool visited);
+  
+  bool getRoomVisited(std::string room);
   
 private:
   std::vector<std::unique_ptr<Room>> rooms;
-  TextEngine *engine;
+  std::string startRoom = "";
+  std::string gamePath;
 };
 
 #endif

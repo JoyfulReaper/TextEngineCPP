@@ -24,7 +24,7 @@
 
 #include "exit.hpp"
 #include "textEngine.hpp"
-#include "room.hpp"
+#include "textEngineException.hpp"
 #include "map.hpp"
 
 Exit::Exit(std::string exitToRoom) : exitToRoom(exitToRoom)
@@ -47,9 +47,6 @@ void Exit::enter(Direction from, TextEngine &engine)
     return;
   }
   
-//   Room *nextRoom = engine.getMap()->getRoom(exitToRoom);
-//   if(nextRoom != nullptr)
-//     nextRoom->enter(from);
-//   else
-//     throw (TextEngineException("Requested non-exisitant room: " + exitToRoom));
+  if(!engine.getMap().enterRoom(exitToRoom, from, engine))
+    throw (TextEngineException("Requested non-exisitant room: " + exitToRoom));
 }

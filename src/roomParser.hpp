@@ -39,7 +39,7 @@ public:
    * Parse all the rooms in basePath/rooms
    * @param basePath The path to look for the rooms folder in
    */
-  virtual void parseRooms(std::string basePath);
+  virtual std::vector<std::map<std::string,std::string>> parseRooms(std::string basePath);
   
   virtual std::map<std::string,bool> setObjectConfig();
 protected:

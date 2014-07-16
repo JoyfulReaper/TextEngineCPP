@@ -21,40 +21,134 @@
  * @author Kyle Givler
  */
 
-#include "config.h"
+#include <algorithm>
 #include "map.hpp"
+#include "mapBuilder.hpp"
+#include "roomParser.hpp"
 #include "room.hpp"
+#include "textEngineException.hpp"
+
+Map::Map(std::string gamePath) : gamePath(gamePath)
+{
+  RoomParser rp;
+  MapBuilder mp(*this);
+  auto results = rp.parseRooms(gamePath);
+  mp.buildObjects(results);
+}
 
 Map::Map(const Map &obj)
 {
+  //this->rooms = obj.rooms;
 }
 
-bool Map::addRoom(Room *room)
+bool Map::addRoom(std::unique_ptr<Room> room)
 {
-//   boost::shared_ptr<Room> sRoom;
-//   sRoom.reset(room);
-//   std::pair<std::map<std::string, boost::shared_ptr<Room>>::iterator, bool> ret;
-//   ret = rooms.insert(std::pair<std::string, boost::shared_ptr<Room>>(room->getShortName(), sRoom));
-//   
-//   if(!ret.second)
-//     return false;
-//   
-//   return true;
-}
-
-Room* Map::getRoom(std::string name)
-{ 
-//   Room *room;
-//   try {
-//     room = rooms.at(name).get();
-//     return room;
-//   } catch(const std::out_of_range &oor) {
-//     return nullptr;
-//   }
-  return nullptr;
+  if(roomExists(room->getName()))
+    return false;
+  
+  rooms.push_back(std::move(room));
+  return true;
 }
 
 bool Map::roomExists(std::string name)
 {
+  for (auto &curRoom : rooms)
+  {
+    if (curRoom->getName() == name)
+      return true;
+  }
   return false;
+}
+
+Room& Map::getRoom(std::string name)
+{
+  for(auto &curRoom : rooms)
+  {
+    if(curRoom->getName() == name)
+      return *curRoom;
+  }
+  
+  throw(TextEngineException("Requested non-existant room: " + name));
+}
+
+bool Map::enterRoom(std::string name, Direction from, TextEngine &engine)
+{
+  try {
+    getRoom(name).enter(from, engine);
+  } catch (const TextEngineException &te) {
+    return false;
+  }
+  return true;
+}
+
+bool Map::setRoomName(std::string shortName, std::string newLongName)
+{
+  try {
+    getRoom(shortName).setName(newLongName);
+  } catch (const TextEngineException &te) {
+    return false;
+  }
+  return true;
+}
+
+std::string Map::getRoomName(std::string shortName)
+{
+  try {
+    return getRoom(shortName).getName();
+  } catch (const TextEngineException &te) {
+    return "";
+  }
+}
+
+bool Map::setRoomDescription(std::string name, std::string desc)
+{
+  try {
+    getRoom(name).setDescription(desc);
+    return true;
+  } catch (const TextEngineException &te) {
+    return false;
+  }
+}
+
+std::string Map::getRoomDescription(std::string name)
+{
+  try {
+    return getRoom(name).getDescription();
+  } catch (const TextEngineException &te) {
+    return "";
+  }
+}
+
+bool Map::setRoomLookDescription(std::string name, std::string desc)
+{
+  try {
+    getRoom(name).setLookDescription(desc);
+    return true;
+  } catch (const TextEngineException &te) {
+    return false;
+  }
+}
+
+std::string Map::getRoomLookDescription(std::string name)
+{
+  try {
+    return getRoom(name).getLookDescription();
+  } catch (const TextEngineException &te) {
+    return "";
+  }
+}
+
+bool Map::setRoomVisited(std::string room, bool visited)
+{
+  try {
+    getRoom(room).setVisited(visited);
+    return true;
+  } catch (const TextEngineException &te) {
+    return false;
+  }
+}
+
+bool Map::getRoomVisited(std::string room)
+{
+  return getRoom(room).getVisited();
 }
