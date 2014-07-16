@@ -28,5 +28,5 @@ Wall::Wall(const Wall &obj) : MapSite(obj) {}
 
 void Wall::enter(Direction from, TextEngine &engine)
 {
-  engine.addMessage("You try to go " + getDirectionName(from) + " but you hit your head on the " + getName() + ".\n");
+  engine.addMessage("You try to go " + getDirectionName(from) + " but you hit your head on the " + getName() + "!\n");
 }
