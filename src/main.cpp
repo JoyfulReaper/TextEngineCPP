@@ -176,9 +176,9 @@ int main(void)
 
 void addToKnown(TextEngine &engine)
 {
-//   auto playerInvItems = engine->getPlayer()->getInventory()->getAllItems();
-//   auto roomInvItems = engine->getMap()->getRoom(engine->getPlayer()->getLocation())->getInventory()->getAllItems();
-//   auto roomNpcs = engine->getMap()->getRoom(engine->getPlayer()->getLocation())->getAllNpcs();
+//   auto playerInvItems = engine.getPlayer()->getInventory()->getAllItems();
+//   auto roomInvItems = engine.getMap()->getRoom(engine.getPlayer()->getLocation())->getInventory()->getAllItems();
+//   auto roomNpcs = engine.getMap()->getRoom(engine.getPlayer()->getLocation())->getAllNpcs();
 //   
 //   for(auto it = playerInvItems.begin(); it != playerInvItems.end(); ++it)
 //   {

@@ -47,7 +47,7 @@ void Exit::enter(Direction from, TextEngine &engine)
     return;
   }
   
-//   Room *nextRoom = engine->getMap()->getRoom(exitToRoom);
+//   Room *nextRoom = engine.getMap()->getRoom(exitToRoom);
 //   if(nextRoom != nullptr)
 //     nextRoom->enter(from);
 //   else

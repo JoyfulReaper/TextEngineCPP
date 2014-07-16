@@ -74,7 +74,7 @@ bool Item::removeQuantity(size_t number)
 
 void Item::useItem(std::string command)
 {
-//   LuaContext *lua = engine->getLuaContext();
+//   LuaContext *lua = engine.getLuaContext();
 //   assert(lua);
 //   try {
 //     std::ifstream itemFile(filename);
@@ -83,7 +83,7 @@ void Item::useItem(std::string command)
 //     onUse(command);
 //     itemFile.close();
 //   } catch (const LuaContext::WrongTypeException &wte) {
-//     engine->addMessage("You can't use that...\n");
+//     engine.addMessage("You can't use that...\n");
 //   } catch (const LuaContext::SyntaxErrorException &see) {
 //     std::cerr << see.what();
 //   } catch (const LuaContext::ExecutionErrorException &eee) {
@@ -94,7 +94,7 @@ void Item::useItem(std::string command)
 
 void Item::useHelp()
 {
-//   LuaContext *lua = engine->getLuaContext();
+//   LuaContext *lua = engine.getLuaContext();
 //   try{
 //     std::ifstream itemFile(filename);
 //     lua->executeCode(itemFile);
@@ -105,14 +105,14 @@ void Item::useHelp()
 //   } catch (const LuaContext::SyntaxErrorException &see) {
 //     see.what();
 //   } catch (const LuaContext::ExecutionErrorException &eee) {
-//     engine->addMessage("No help provided\n");
+//     engine.addMessage("No help provided\n");
 //   }
 //   lua->writeVariable("onHelp", nullptr);
 }
 
 void Item::onTake()
 {
-//   LuaContext *lua = engine->getLuaContext();
+//   LuaContext *lua = engine.getLuaContext();
 //   try{
 //     std::ifstream itemFile(filename);
 //     lua->executeCode(itemFile);
@@ -124,7 +124,7 @@ void Item::onTake()
 //     see.what();
 //   } catch (const LuaContext::ExecutionErrorException &eee) {
 //     if(!obtainable)
-//       engine->addMessage("You try to take the " + name + ", but it doesn't budge.\n");
+//       engine.addMessage("You try to take the " + name + ", but it doesn't budge.\n");
 //   }
 //   lua->writeVariable("onTake", nullptr);
 }

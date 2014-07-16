@@ -50,7 +50,7 @@ MapSite& Room::getSide(Direction dir)
 
 void Room::setSide(Direction dir, std::unique_ptr<MapSite> side)
 {
-  //sides[static_cast<size_t>(dir)].reset(side);
+  sides[static_cast<size_t>(dir)] = std::move(side);
 }
 
 // Room was entered by Player
@@ -83,7 +83,7 @@ void Room::enter(Direction from, TextEngine &engine)
 //       NonPlayableCharacter *npc = it->second.get();
 //       if(!npc->isAlive())
 //       {
-// 	int ran = engine->getRandomNumber(0, 100);
+// 	int ran = engine.getRandomNumber(0, 100);
 // 	if(ran <= npc->getRespawnChance())
 // 	  npc->setHealth(100);
 //       }

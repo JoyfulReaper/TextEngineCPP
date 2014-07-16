@@ -34,6 +34,7 @@
 #include <deque>
 #include <map>
 #include "player.hpp"
+#include "commandParser.hpp"
 
 class TextEngine
 {
@@ -176,7 +177,7 @@ public:
   
   
 private:
-  //CommandParser commandParser;
+  CommandParser commandParser;
   Player player;
   
   std::string startRoom = "";

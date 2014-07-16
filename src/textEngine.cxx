@@ -103,19 +103,16 @@ void TextEngine::setStartRoom(std::string startRoom)
 
 bool TextEngine::processCommand(std::string cmd) 
 { 
-  //return commandParser.doCommand(cmd); 
-  return false;
+  return commandParser.doCommand(cmd, *this);
 }
 
 std::string TextEngine::getLastCommand() const {
-  //return commandParser.getLastCommand();
-  return "";
+  return commandParser.getLastCommand();
 }
 
 bool TextEngine::registerCommand(std::string verb, std::string file)
 {
-  return false;
-  //return commandParser.registerCommand(verb, file);
+  return commandParser.registerCommand(verb, file, *this);
 }
 
 /////////////////////////////////////////////////////////////////////////
