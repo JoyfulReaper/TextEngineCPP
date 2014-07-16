@@ -34,6 +34,7 @@ Character::Character(const Character &obj)
   this->location = obj.location;
   this->health = obj.health;
   this->money = obj.money;
+  //Inventory?
 }
 
 void Character::setLocation(std::string locId)

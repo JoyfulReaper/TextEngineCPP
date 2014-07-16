@@ -21,6 +21,7 @@
  */
 
 #include <boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>
 #include <sstream>
 #include <iomanip>
 #include <climits>

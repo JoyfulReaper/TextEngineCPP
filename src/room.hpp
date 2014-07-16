@@ -63,21 +63,6 @@ public:
   virtual void showFullDescription(TextEngine &engine);
   
   /**
-   * Get a string with the direction to this Room's exits
-   */
-  std::string getExitString();
-  
-  /**
-   * @return a string of Item names and quantities
-   */
-  std::string getInventoryString();
-  
-  /**
-   * @return String on NPCs in the room
-   */
-  std::string getNpcsString();
-  
-  /**
    * @param sName This Room's short name
    */
   inline void setShortName(std::string sName) { this->shortName = sName;  }
@@ -169,6 +154,21 @@ public:
   
   
 private:
+  /**
+   * Get a string with the direction to this Room's exits
+   */
+  std::string getExitString();
+  
+  /**
+   * @return a string of Item names and quantities
+   */
+  std::string getInventoryString();
+  
+  /**
+   * @return String on NPCs in the room
+   */
+  std::string getNpcsString();
+  
   //NPCS
   boost::array<std::unique_ptr<MapSite>, 6> sides; // Room roof/floor/wall/exits
   std::string name; // Name of room

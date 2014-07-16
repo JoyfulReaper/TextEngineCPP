@@ -1,5 +1,5 @@
 /*
- T extE*ngine: map.hpp
+ TextEngine: map.hpp
  Copyright (C) 2014 Kyle Givler
  
  This program is free software: you can redistribute it and/or modify
@@ -24,42 +24,64 @@
 #ifndef _MAP_H_
 #define _MAP_H_
 
-#include <map>
 #include <memory>
 #include <string>
+#include <vector>
+#include "mapsite.hpp"
 
 class Room;
+class TextEngine;
 
 class Map
 {
 public:
-  Map() {}
+  Map(TextEngine &engine) : engine(&engine) {}
   
   Map(const Map &obj);
   
   virtual ~Map() {}
+  
+  ////////////////////////////////////////////////////////////////////////////////
+  
   /**
    * Add a Room to the Map 
    * @param room the Room to add
    * @return true on success, false on failure (already exists)
    */
-  bool addRoom(Room *room);
-  
-  /**
-   * Retreive a Room from the map 
-   * @param name The Room name
-   * @return The requested room, or nullptr if not in the Map
-   */
-  Room* getRoom(std::string name);
-  
-  /**
+  bool addRoom(std::unique_ptr<Room> room);
+
+   /**
    * @param name The room number of the room to check for
    * @return true if the room with the given room number exists, false otherwise
    */
-  bool roomExists(std::string name); 
+  bool roomExists(std::string name);
+  
+  /**
+   * @param name Name of room
+   * @return Room
+   */
+  Room& getRoom(std::string name);
+  
+  /**
+   * @param name The room to remove 
+   * @return True on success, false on failure
+   */
+  bool removeRoom(std::string name);
+  
+  ////////////////////////////////////////////////////////////////////////////////////
+  
+  MapSite* getRoomSide(std::string name, Direction dir);
+  
+  bool setRoomSide(std::string name, Direction from, std::unique_ptr<MapSite> side);
+  
+  bool enterRoom(std::string name, Direction from, TextEngine &engine);
+  
+  bool showFullRoomDescription(std::string name, TextEngine &engine);
+  
   
 private:
-  std::map<std::string, boost::shared_ptr<Room>> rooms;
+  std::vector<std::unique_ptr<Room>> rooms;
+  TextEngine *engine;
 };
 
 #endif
