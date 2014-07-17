@@ -76,13 +76,13 @@ public:
    * @param name Name of item to search for
    * @return true if found, false otherwise
    */
-  bool hasItem(std::string name);
+  bool hasItem(std::string name) const;
   
   /**
    * @return true if the Inventory contains the Item, false otherwise
    * @param item The Item to check for
    */
-  bool hasItem(const Item &item);
+  bool hasItem(const Item &item) const;
   
   /**
    * @param name The name of the Item to retreive
@@ -108,7 +108,7 @@ public:
   /**
    * @return a vector containing all of the items in the Inventory
    */
-  std::vector<const Item*> getAllItems();
+  std::vector<const Item*> getAllItems() const;
   
   inline bool isEmpty() { return true; }
   

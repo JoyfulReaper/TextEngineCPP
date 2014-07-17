@@ -20,7 +20,6 @@
  * @author Kyle Givler
  */
 
-#include <algorithm>
 #include "inventory.hpp"
 #include "textEngineException.hpp"
 
@@ -36,14 +35,27 @@ Inventory::Inventory(const Inventory &obj)
 bool Inventory::addItem(std::unique_ptr<Item> item, size_t number)
 {
   if(size + number > capacity)
-    ; // throw inv full excpt?
+    throw (TextEngineException("Inventory is full"));
   
   try {
+    // Item already in Inventory
     Item &theItem = getItem(item->getName());
     theItem.setQuantity(theItem.getQuantity() + number);
     size += number;
     return true;
   } catch (const TextEngineException &te) {
+    // Item not yet in inventory
+    auto ret = allItems.insert(std::pair<std::string, std::string>(item->getName(), item->getFilename()));
+    if(!ret.second)
+      return false;
+    ret = allItems.insert(std::pair<std::string, std::string>(item->getUppercaseName(), item->getFilename()));
+    if(!ret.second)
+      return false;
+    
+    item->setQuantity(number);
+    items.push_back(std::move(item));
+    size += number;
+    return true;
   }
   return false;
 }
@@ -57,17 +69,41 @@ bool Inventory::addItem(std::string name, size_t number)
 
 bool Inventory::removeItem(const Item &item, size_t number)
 {
-  return false;
+  return removeItem(item.getName(), number);
 }
 
 bool Inventory::removeItem(std::string name, size_t number)
 {
-  return false;
+  try {
+    Item &theItem = getItem(name);
+    if(theItem.getQuantity() > number)
+    {
+      theItem.removeQuantity(number);
+      size -= number;
+      return true;
+    } else if (theItem.getQuantity() == number) {
+      for(auto it = items.begin(); it != items.end(); ++it)
+      {
+	Item &cur = *it->get();
+	if (cur.getName() == name)
+	{
+	  items.erase(it);
+	  return true;
+	}
+      }
+      size -= number;
+      return true;
+    } else {
+      return false;
+    }
+  } catch (const TextEngineException &te) {
+    return false;
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-bool Inventory::hasItem(std::string name)
+bool Inventory::hasItem(std::string name) const
 {
   for(auto &item : items)
   {
@@ -77,9 +113,9 @@ bool Inventory::hasItem(std::string name)
   return false;
 }
 
-bool Inventory::hasItem(const Item &item)
+bool Inventory::hasItem(const Item &item) const
 {
-  return false;
+  return hasItem(item.getName());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,6 +130,13 @@ Item& Inventory::getItem(std::string name)
   throw (TextEngineException("Item is not in inventory: " + name));
 }
 
-std::vector<const Item*> Inventory::getAllItems()
+std::vector<const Item*> Inventory::getAllItems() const
 {
+  std::vector<const Item*> all;
+  for(auto &item : items)
+  {
+    const Item *cur = item.get();
+    all.push_back(cur);
+  }
+  return all;
 }
