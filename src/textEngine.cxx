@@ -29,10 +29,8 @@
 
 TextEngine::TextEngine(std::string gamePath) : player(Player(gamePath)), map(Map(gamePath)), gamePath(gamePath)
 { 
-  //NPCParser np(this);
   //ItemParser ip(this);
   //ip.parseItems(gamePath);
-  //np.parseNPCs(gamePath);
   
   //initLuaApi();
   
@@ -129,13 +127,6 @@ bool TextEngine::isGameOver() const
 void TextEngine::gameIsOver()
 {  
   gameOver = true;
-}
-
-/////////////////////////////////////////////////////////////////
-
-Map& TextEngine::getMap() const
-{   
-  return map; 
 }
 
 /////////////////////////////////////////////////////////////////////////////////

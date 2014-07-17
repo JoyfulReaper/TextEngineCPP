@@ -21,6 +21,7 @@
  * @author Kyle Givler
  */
 
+#include <memory>
 #include <boost/algorithm/string.hpp>
 #include "npcBuilder.hpp"
 #include "textEngineException.hpp"
@@ -33,7 +34,7 @@ void NPCBuilder::buildObjects(std::vector<std::map<std::string,std::string>> &np
   for(auto it = npcConfig.begin(); it != npcConfig.end(); ++it)
   {
     auto config = *it;
-    NonPlayableCharacter npc;
+    std::unique_ptr<NonPlayableCharacter> npc(new NonPlayableCharacter);
     
     size_t health;
     double money;
@@ -62,17 +63,15 @@ void NPCBuilder::buildObjects(std::vector<std::map<std::string,std::string>> &np
       throw(TextEngineException("NPC Configuration is invalid: " + config["filename"]));
     }
     
-    npc.setFilename(config["filename"]);
-    npc.setName(config["name"]);
-    npc.setDescription(config["description"]);
-    npc.setLocation(config["location"]);
-    npc.setHealth(health);
-    npc.setMoney(money);
-    npc.setKillable(canBeKilled);
-    if(!npc.setRespawnChance(respawnChance))
+    npc->setFilename(config["filename"]);
+    npc->setName(config["name"]);
+    npc->setDescription(config["description"]);
+    npc->setLocation(config["location"]);
+    npc->setHealth(health);
+    npc->setMoney(money);
+    npc->setKillable(canBeKilled);
+    if(!npc->setRespawnChance(respawnChance))
       throw(TextEngineException(config["filename"] + ": Invalid respawnChance: " + std::to_string(respawnChance)));
-    
-    //engine->registerNPC(config["name"], config["location"]);
     
     std::vector<std::string> locVec;
     split(locVec, config["location"], is_any_of(":"));
@@ -81,12 +80,13 @@ void NPCBuilder::buildObjects(std::vector<std::map<std::string,std::string>> &np
     
     for(size_t i = 0; i < locVec.size(); i++)
     {
-//       std::string addRoom = locVec[i];
-//       if(!engine->getMap()->roomExists(addRoom))
-// 	throw(TextEngineException("Trying to add NPC to non-existant room: " + config["filename"]));
-//       
-//       engine->getMap()->getRoom(addRoom)->addNPC(npc);
-      npc = NonPlayableCharacter(npc);
+      std::string addRoom = locVec[i];
+      if(!map.roomExists(addRoom))
+	throw(TextEngineException("Trying to add NPC to non-existant room: " + addRoom + " : " + config["filename"]));
+      
+      std::unique_ptr<NonPlayableCharacter> copy(new NonPlayableCharacter(*npc));
+      map.addNpc(std::move(npc));
+      npc = std::move(copy);
     }
     
   }

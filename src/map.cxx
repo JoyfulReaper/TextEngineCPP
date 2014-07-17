@@ -51,7 +51,7 @@ Map::Map(const Map &obj)
 
 bool Map::addRoom(std::unique_ptr<Room> room)
 {
-  if(roomExists(room->getName()))
+  if( roomExists( room->getShortName() ) )
     return false;
   
   rooms.push_back(std::move(room));
@@ -62,7 +62,7 @@ bool Map::roomExists(std::string name)
 {
   for (auto &curRoom : rooms)
   {
-    if (curRoom->getName() == name)
+    if (curRoom->getShortName() == name)
       return true;
   }
   return false;
@@ -167,14 +167,36 @@ bool Map::getRoomVisited(std::string room)
 
 bool Map::addNpc(std::unique_ptr<NonPlayableCharacter> npc)
 {
+  if(roomExists(npc->getLocation()))
+  {
+    npcs.push_back(std::move(npc));
+    return true;
+  }
+  return false;
 }
 
-bool removeNpc(std::string name, std::string location)
+bool Map::removeNpcs(std::string name, std::string location)
 {
+  for(auto it = npcs.begin(); it != npcs.end(); ++it)
+  {
+    if(it->get()->getName() == name && it->get()->getLocation() == location)
+    {
+      npcs.erase(it);
+    }
+    return true;
+  }
+  return false;
 }
 
-NonPlayableCharacter& getNpc(std::string name, location)
+std::vector<NonPlayableCharacter*> Map::getNpcs(std::string name, std::string location)
 {
+  std::vector<NonPlayableCharacter*> results;
+  for(auto& npc : npcs)
+  {
+    if(npc->getName() == name && npc->getLocation() == location)
+      results.push_back(npc.get());
+  }
+  return results;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////

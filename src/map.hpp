@@ -101,9 +101,12 @@ public:
   
   bool addNpc(std::unique_ptr<NonPlayableCharacter> npc);
   
-  bool removeNpc(std::string name);
+  /**
+   * Remove All NPCs with name at location
+   */
+  bool removeNpcs(std::string name, std::string location);
   
-  NonPlayableCharacter& getNpc(std::string name);
+  std::vector<NonPlayableCharacter*> getNpcs(std::string name, std::string location);
   
   ////////////////////////////////////////////////////////////////////////////////////
   
