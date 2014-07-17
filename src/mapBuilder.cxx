@@ -36,6 +36,8 @@
 
 using namespace boost;
 
+MapBuilder::MapBuilder(Map &map) : map(map) {}
+
 void MapBuilder::buildObjects(std::vector<std::map<std::string,std::string>> &roomConfig)
 {
   for (auto it = roomConfig.begin(); it != roomConfig.end(); ++it)
@@ -74,6 +76,8 @@ void MapBuilder::buildObjects(std::vector<std::map<std::string,std::string>> &ro
     room->setSide(Direction::Up, std::unique_ptr<Roof>(new Roof));
     room->setSide(Direction::Down, std::unique_ptr<Floor>(new Floor));
     
+    std::string shortName = room->getShortName();
+    
     // Add to map, if unique shortName
     if(!map.addRoom(std::move(room)))
       throw (TextEngineException("Unable to add room " + config["shortName"] + ", duplicate room name"));
@@ -101,7 +105,7 @@ void MapBuilder::buildObjects(std::vector<std::map<std::string,std::string>> &ro
       if (direction == Direction::Invalid)
 	throw (TextEngineException("Malformed exits string in room " + config["shortName"]));
       toRoomShortName = (exitVector[i+1]);
-      buildExit(room->getShortName(), toRoomShortName, direction, isLocked, isVisible);
+      buildExit(shortName, toRoomShortName, direction, isLocked, isVisible);
     }
     
   }
@@ -109,7 +113,6 @@ void MapBuilder::buildObjects(std::vector<std::map<std::string,std::string>> &ro
 
 void MapBuilder::buildExit(std::string fromRoom, std::string toRoom, Direction dir, bool isLocked, bool isVisible)
 {
-  //Exit *exit = new Exit(engine, toRoom);
   std::unique_ptr<Exit> exit(new Exit(toRoom));
   if(isLocked)
     exit->lockExit();

@@ -39,7 +39,7 @@ public:
   /**
    * @return The ContainerItem's Inventory
    */
-  inline Inventory& getInventory() const { return inventory; }
+  inline Inventory& getInventory() { return inventory; }
   
   inline bool isLocked() { return this->locked; }
   

@@ -23,6 +23,8 @@
 #include "inventory.hpp"
 #include "textEngineException.hpp"
 
+std::map<std::string, std::string> Inventory::allItems;
+
 Inventory::Inventory() {}
 
 Inventory::Inventory(const Inventory &obj)
