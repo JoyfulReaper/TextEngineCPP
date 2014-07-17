@@ -25,6 +25,7 @@
 #define _CHARACTER_H_
 
 #include <string>
+#include "inventory.hpp"
 
 static std::string INVAILD_FILENAME = "NULL";
 
@@ -102,10 +103,10 @@ public:
   /**
    * @return The Character's Inventory
    */
-  //inline Inventory* getInventory() const
-  //{
-  //  return inventory.get();
-  //}
+  inline Inventory& getInventory()
+  {
+    return inventory;
+  }
   
   /**
    * Check if this Character is alive 
@@ -130,6 +131,6 @@ protected:
   std::string location = "";
   double health = 100;
   double money = 0;
-  //Inventory?
+  Inventory inventory;
 };
 #endif

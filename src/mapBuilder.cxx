@@ -23,10 +23,15 @@
 
 #include <boost/algorithm/string.hpp>
 #include <vector>
-#include <stdexcept>
+#include <memory>
+//#include <stdexcept>
 #include "mapsite.hpp"
 #include "mapBuilder.hpp"
 #include "textEngineException.hpp"
+#include "wall.hpp"
+#include "floor.hpp"
+#include "roof.hpp"
+#include "exit.hpp"
 
 
 using namespace boost;
@@ -36,41 +41,41 @@ void MapBuilder::buildObjects(std::vector<std::map<std::string,std::string>> &ro
   for (auto it = roomConfig.begin(); it != roomConfig.end(); ++it)
   {
     auto config = *it;
-    Room room;
+    std::unique_ptr<Room> room(new Room);
     std::string startRoom = "";
     
     // Setup the room
-    room.setShortName(config["shortName"]);
-    room.setFilename(config["filename"]);
+    room->setShortName(config["shortName"]);
+    room->setFilename(config["filename"]);
     
     std::string name = config["name"];
     if(name == "player")
       throw (TextEngineException("'player' is an invalid name for a room!"));
-    room.setName(config["name"]);
+    room->setName(config["name"]);
     
-    room.setDescription(config["description"]);
+    room->setDescription(config["description"]);
     if(config["lookDescription"] == "")
-      room.setLookDescription("You look really carefully, but you can't see anything you haven't seen before.");
+      room->setLookDescription("You look really carefully, but you can't see anything you haven't seen before.");
     else
-      room.setLookDescription(config["lookDescription"]);
+      room->setLookDescription(config["lookDescription"]);
     
     try{
       if(std::stoi(config["startRoom"]))
-	engine->setStartRoom(room->getShortName());
+	map.setStartRoom(room->getShortName());
     } catch(const std::invalid_argument &ia) {
       // Not the starting room
     }
     
     // Set defaults
-    room->setSide(Direction::North, new Wall(engine));
-    room->setSide(Direction::South, new Wall(engine));
-    room->setSide(Direction::East, new Wall(engine));
-    room->setSide(Direction::West, new Wall(engine));
-    room->setSide(Direction::Up, new Roof(engine));
-    room->setSide(Direction::Down, new Floor(engine));
+    room->setSide(Direction::North, std::unique_ptr<Wall>(new Wall));
+    room->setSide(Direction::South, std::unique_ptr<Wall>(new Wall));
+    room->setSide(Direction::East, std::unique_ptr<Wall>(new Wall));
+    room->setSide(Direction::West, std::unique_ptr<Wall>(new Wall));
+    room->setSide(Direction::Up, std::unique_ptr<Roof>(new Roof));
+    room->setSide(Direction::Down, std::unique_ptr<Floor>(new Floor));
     
     // Add to map, if unique shortName
-    if(!map->addRoom(room))
+    if(!map.addRoom(std::move(room)))
       throw (TextEngineException("Unable to add room " + config["shortName"] + ", duplicate room name"));
     
     // Split exit string
@@ -104,11 +109,12 @@ void MapBuilder::buildObjects(std::vector<std::map<std::string,std::string>> &ro
 
 void MapBuilder::buildExit(std::string fromRoom, std::string toRoom, Direction dir, bool isLocked, bool isVisible)
 {
-  Exit *exit = new Exit(engine, toRoom);
+  //Exit *exit = new Exit(engine, toRoom);
+  std::unique_ptr<Exit> exit(new Exit(toRoom));
   if(isLocked)
     exit->lockExit();
   if(!isVisible)
     exit->setVisible(false);
-  Room *from = map->getRoom(fromRoom);
-  from->setSide(dir, exit);
+  Room &from = map.getRoom(fromRoom);
+  from.setSide(dir, std::move(exit));
 }

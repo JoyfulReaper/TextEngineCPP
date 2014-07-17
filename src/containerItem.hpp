@@ -39,14 +39,14 @@ public:
   /**
    * @return The ContainerItem's Inventory
    */
-  //inline Inventory* getInventory() const { return inventory.get(); }
+  inline Inventory& getInventory() const { return inventory; }
   
   inline bool isLocked() { return this->locked; }
   
   inline void setLocked(bool locked) { this->locked = locked; }
   
 private:
-  //Inventory
+  Inventory inventory;
   bool locked = false;
 };
 #endif

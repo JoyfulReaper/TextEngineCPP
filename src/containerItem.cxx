@@ -29,4 +29,5 @@ ContainerItem::ContainerItem() {}
 ContainerItem::ContainerItem(const ContainerItem &obj) : Item(obj)
 {
   this->locked = obj.locked;
+  //Inventory?
 }
