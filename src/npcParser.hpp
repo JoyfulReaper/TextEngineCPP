@@ -34,7 +34,7 @@ public:
   
   virtual ~NPCParser() {}
   
-  virtual void parseNPCs(const std::string &path);
+  virtual std::vector<std::map<std::string,std::string>> parseNPCs(const std::string &path);
   
   virtual std::map<std::string, bool> setObjectConfig();
   

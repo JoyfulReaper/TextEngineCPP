@@ -40,7 +40,6 @@ Room::Room(const Room &obj)
   this->visited = obj.visited;
   //Inventory
   //Sides
-  //npcs
 }
 
 MapSite& Room::getSide(Direction dir)
@@ -190,51 +189,9 @@ bool Room::setFilename(const std::string filename)
   return false;
 }
 
-bool Room::addNPC(NonPlayableCharacter *npc)
-{
-//   if( hasNPC(npc->getName()) )
-//     return false;
-//   
-//   boost::shared_ptr<NonPlayableCharacter> sNpc;
-//   sNpc.reset(npc);
-//   std::string upperName = npc->getName();
-//   boost::to_upper(upperName);
-//   
-//   std::pair<std::map<std::string, boost::shared_ptr<NonPlayableCharacter>>::iterator, bool> ret;
-//   ret = npcs.insert(std::pair<std::string, boost::shared_ptr<NonPlayableCharacter>>(upperName, sNpc));
-//   return ret.second;
-  return false;
-}
-
-bool Room::removeNPC(std::string name)
-{
-//   boost::to_upper(name);
-//   return npcs.erase(name);
-  return false;
-}
-
 bool Room::hasNPC(std::string name)
 {
 //   boost::to_upper(name);
 //   return npcs.count(name);
   return false;
 }
-
-//NonPlayableCharacter& Room::getNPC(std::string name)
-//{
-//   boost::to_upper(name);
-//   try {
-//     return npcs.at(name).get();
-//   } catch (const std::out_of_range &oor) {
-//     return nullptr;
-//   }
-//}
-
-//std::vector<const NonPlayableCharacter*> Room::getAllNpcs()
-//{
-//   std::vector<const NonPlayableCharacter*> allNpcs;
-//   for(auto it = npcs.begin(); it != npcs.end(); ++it)
-//     allNpcs.push_back(const_cast<NonPlayableCharacter*>(it->second.get()));
-//   
-//   return allNpcs;
-//}

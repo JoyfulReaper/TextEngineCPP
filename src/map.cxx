@@ -26,6 +26,8 @@
 #include "map.hpp"
 #include "mapBuilder.hpp"
 #include "roomParser.hpp"
+#include "npcParser.hpp"
+#include "npcBuilder.hpp"
 #include "room.hpp"
 #include "textEngineException.hpp"
 
@@ -35,6 +37,11 @@ Map::Map(std::string gamePath) : gamePath(gamePath)
   MapBuilder mp(*this);
   auto results = rp.parseRooms(gamePath);
   mp.buildObjects(results);
+  
+  NPCParser np;
+  NPCBuilder nb(*this);
+  results = np.parseNPCs(gamePath);
+  nb.buildObjects(results);
 }
 
 Map::Map(const Map &obj)
@@ -71,6 +78,8 @@ Room& Map::getRoom(std::string name)
   
   throw(TextEngineException("Requested non-existant room: " + name));
 }
+
+////////////////////////////////////////////////////////////////////////////////////
 
 bool Map::enterRoom(std::string name, Direction from, TextEngine &engine)
 {
@@ -153,3 +162,19 @@ bool Map::getRoomVisited(std::string room)
 {
   return getRoom(room).getVisited();
 }
+
+////////////////////////////////////////////////////////////////////////////////////
+
+bool Map::addNpc(std::unique_ptr<NonPlayableCharacter> npc)
+{
+}
+
+bool removeNpc(std::string name, std::string location)
+{
+}
+
+NonPlayableCharacter& getNpc(std::string name, location)
+{
+}
+
+////////////////////////////////////////////////////////////////////////////////////

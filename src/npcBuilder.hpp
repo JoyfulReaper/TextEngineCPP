@@ -25,17 +25,19 @@
 #define _NPC_BUILDER_H_
 
 #include "builder.hpp"
+#include "map.hpp"
 
 class NPCBuilder : public Builder
 {
 public:
-  NPCBuilder() {}
+  NPCBuilder(Map &map) : map(map) {}
   
   virtual ~NPCBuilder() {}
   
   virtual void buildObjects(std::vector<std::map<std::string, std::string>> &npcConfig);
   
 private: 
+  Map &map;
 };
 
 #endif

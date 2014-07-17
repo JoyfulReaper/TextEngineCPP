@@ -116,7 +116,7 @@ public:
   /**
    * @return the Room's Inventory
    */
-  //inline Inventory* getInventory() { return nullptr; }
+  inline Inventory& getInventory() { return inventory; }
   
   /**
    * @return true on success, false on failure
@@ -124,34 +124,10 @@ public:
   bool setFilename(const std::string filename);
   
   /**
-   * @param npc The NonPlayableCharacter to add to the room 
-   * @return true on success, false on failure
-   */
-  bool addNPC(NonPlayableCharacter *npc);
-  
-  /**
-   * @param name The name of the NonPlayableCharacter to remove 
-   * @return true on success, false on failure
-   */
-  bool removeNPC(std::string name);
-  
-  /**
    * @param name The name of the NonPlayableCharacter to check for
    * @return true if it is in the room, false otherwise
    */
-  bool hasNPC(std::string name);
-  
-  /**
-   * @param name The name of the NonPlayableCharacter to retreive
-   * @return the NonPlayableCharacter or nullptr on failure
-   */
-  //NonPlayableCharacter& getNPC(std::string name);
-  
-  /**
-   * @return a vector containing all the NPCs in this room
-   */
-  //DataStructure getAllNpcs();
-  
+  bool hasNPC(std::string name);  
   
 private:
   /**
@@ -169,14 +145,13 @@ private:
    */
   std::string getNpcsString();
   
-  //NPCS
   boost::array<std::unique_ptr<MapSite>, 6> sides; // Room roof/floor/wall/exits
+  Inventory inventory;
   std::string name; // Name of room
   std::string shortName;
   std::string description; // Room description
   std::string lookDescription; // Extra description shown on look command
   std::string filename = INVALID_ROOM_FILENAME; // Lua file associated with room
   bool visited = false;
-  //Inventory
 };
 #endif

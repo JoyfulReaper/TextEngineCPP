@@ -131,7 +131,6 @@ public:
    */
   Map& getMap() { return map; }
   
-  
   ///////////////////////////////////////////////////////////////
   
   /**
@@ -142,33 +141,9 @@ public:
     return gamePath; 
   }
   
-  ///////////////////////////////////////////////////////////////
-  
-  /**
-   * Tell the TextEngine that that an item with the given name exists.
-   * This should probably only be called by the ItemBuilder.
-   * @param name The name of the item to "teach" the TextEngine
-   * @param filename The file of the item to add
-   * @throws TextEngineException if the Item id is already known
-   */
-  //void teachItem(std::string name, std::string filename);
-  
-  /**
-   * @return The filename of the given item if it exists or "" if it doesn't
-   */
-  //std::string getItemFilename(std::string ItemName);
-  
-  //void registerNPC(std::string name, std::string location);
-  
-  //std::string locateNPC(std::string name);
-  
   /////////////////////////////////////////////////////////////////////////////
   
   int getRandomNumber(int min, int max);
-  
-  /////////////////////////////////////////////////////////////////////////////
-  
-
   
   ////////////////////////////////////////////////////////////////////////////
   
@@ -180,8 +155,6 @@ private:
   
   std::string startRoom = "";
   std::string gamePath;
-  //std::map<std::string,std::string> itemNames;
-  //std::map<std::string,std::string> npcRegistry; 
   std::deque<std::string> messages;
   bool gameOver = false;
   bool gameStarted = false;

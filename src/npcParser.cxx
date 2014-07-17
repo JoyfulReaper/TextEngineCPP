@@ -21,10 +21,7 @@
  * @author Kyle Givler
  */
 
-#include "config.h"
 #include "npcParser.hpp"
-#include "npcBuilder.hpp"
-#include "inventory.hpp"
 
 typedef std::pair<std::string,bool> conf;
 
@@ -42,15 +39,13 @@ std::map<std::string,bool> NPCParser::setObjectConfig()
   return objectConfig;
 }
 
-void NPCParser::parseNPCs(const std::string &path)
+std::vector<std::map<std::string,std::string>> NPCParser::parseNPCs(const std::string &path)
 {
-  //NPCBuilder builder(engine);
   boost::filesystem::path fullPath(path);
   boost::filesystem::path npcs("/characters");
   fullPath += npcs;
   
   std::map<std::string, bool> npcConfig = setObjectConfig();
   std::vector<boost::filesystem::path> files = getAllFilesWithExt(fullPath.native(), ".lua");
-  auto results = parseFiles(files, npcConfig);
-  //builder.buildObjects(results);
+  return parseFiles(files, npcConfig);
 }

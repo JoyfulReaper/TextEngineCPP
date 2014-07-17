@@ -29,6 +29,7 @@
 #include <vector>
 #include "mapsite.hpp"
 #include "room.hpp"
+#include "npc.hpp"
 
 class TextEngine;
 
@@ -96,8 +97,19 @@ public:
   
   bool getRoomVisited(std::string room);
   
+  ////////////////////////////////////////////////////////////////////////////////////
+  
+  bool addNpc(std::unique_ptr<NonPlayableCharacter> npc);
+  
+  bool removeNpc(std::string name);
+  
+  NonPlayableCharacter& getNpc(std::string name);
+  
+  ////////////////////////////////////////////////////////////////////////////////////
+  
 private:
   std::vector<std::unique_ptr<Room>> rooms;
+  std::vector<std::unique_ptr<NonPlayableCharacter>> npcs;
   std::string startRoom = "";
   std::string gamePath;
 };

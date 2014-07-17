@@ -133,63 +133,10 @@ void TextEngine::gameIsOver()
 
 /////////////////////////////////////////////////////////////////
 
-
-// Map* TextEngine::getMap() const
-// {   
-//   return map.get(); 
-// }
-// 
-// 
-// void TextEngine::setMap(Map *map) 
-// { 
-//   this->map.reset(map);
-// }
-
-/////////////////////////////////////////////////////////////////////////
-
-// void TextEngine::teachItem(std::string name, std::string filename)
-// {
-//   std::pair<std::map<std::string, std::string>::iterator, bool> ret;
-//   
-//   
-//   ret = itemNames.insert(std::pair<std::string,std::string>(name, filename));
-//   if( (!ret.second) && (ret.first->second != filename) )
-//     throw(TextEngineException("Item " + name + " already exists"));
-//   
-//   
-//   
-//   boost::to_upper(name);
-//   ret = itemNames.insert(std::pair<std::string,std::string>(name, filename));
-//   if( (!ret.second) && (ret.first->second != filename) )
-//     throw(TextEngineException("Item " + name + " already exists"));
-//   
-// }
-// 
-// std::string TextEngine::getItemFilename(std::string ItemName)
-// {  
-//   auto find = itemNames.find(ItemName);
-//   if(find != itemNames.end())
-//     return (find->second);
-//   
-//   return "";
-// }
-// 
-// void TextEngine::registerNPC(std::string name, std::string location)
-// {
-//   std::pair<std::map<std::string,std::string>::iterator, bool> ret;
-//   ret = npcRegistry.insert(std::pair<std::string,std::string>(name, location));
-//   if(!ret.second)
-//     throw(TextEngineException("NPC already registered: " + name));
-// }
-// 
-// std::string TextEngine::locateNPC(std::string name)
-// {
-//   auto found = npcRegistry.find(name);
-//   if(found == npcRegistry.end())
-//     return "";
-//   
-//   return found->second;
-// }
+Map& TextEngine::getMap() const
+{   
+  return map; 
+}
 
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -279,23 +226,3 @@ int TextEngine::getRandomNumber(int min, int max)
 // }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-
-// std::map<std::string, std::string> TextEngine::getItemNames()
-// {
-//   return itemNames;
-// }
-// 
-// void TextEngine::setItemNames(std::map<std::string, std::string> itemNames)
-// {
-//   this->itemNames = itemNames;
-// }
-// 
-// std::map<std::string, std::string> TextEngine::getNPCRegistry()
-// {
-//   return npcRegistry;
-// }
-// 
-// void TextEngine::setNPCRegistry(std::map<std::string, std::string> npcRegistry)
-// {
-//   this->npcRegistry = npcRegistry;
-// }
