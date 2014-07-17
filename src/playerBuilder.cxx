@@ -44,8 +44,8 @@ void PlayerBuilder::buildObjects(std::vector<std::map<std::string,std::string>> 
     else
       money = std::stod(config["money"]);
     
-//     if(config["invCapacity"] != "")
-//       player->getInventory()->setCapacity(std::stod(config["invCapacity"]));
+     if(config["invCapacity"] != "")
+       player.getInventory().setCapacity(std::stod(config["invCapacity"]));
     
   } catch (const std::invalid_argument &ia) {
     throw(TextEngineException("Configuration is invalid: " + config["filename"]));

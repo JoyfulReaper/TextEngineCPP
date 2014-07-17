@@ -26,7 +26,7 @@
 
 Character::Character() {}
 
-Character::Character(const Character &obj)
+Character::Character(const Character &obj) : inventory(Inventory(obj.inventory))
 {
   this->name = obj.name;
   this->description = obj.description;
@@ -34,7 +34,6 @@ Character::Character(const Character &obj)
   this->location = obj.location;
   this->health = obj.health;
   this->money = obj.money;
-  //Inventory?
 }
 
 void Character::setLocation(std::string locId)

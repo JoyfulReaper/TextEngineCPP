@@ -31,7 +31,11 @@ Inventory::Inventory(const Inventory &obj)
 {
   this->capacity = obj.capacity;
   this->size = obj.size;
-  //Copy items
+  
+  for(auto it = obj.items.begin(); it != obj.items.end(); ++it)
+  {
+    this->addItem( std::unique_ptr<Item>(new Item(*it->get())) );
+  }
 }
 
 bool Inventory::addItem(std::unique_ptr<Item> item, size_t number)
