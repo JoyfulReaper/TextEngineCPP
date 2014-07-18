@@ -28,6 +28,8 @@
 #include "roomParser.hpp"
 #include "npcParser.hpp"
 #include "npcBuilder.hpp"
+#include "itemParser.hpp"
+#include "itemBuilder.hpp"
 #include "room.hpp"
 #include "textEngineException.hpp"
 
@@ -42,6 +44,12 @@ Map::Map(std::string gamePath) : gamePath(gamePath)
   NPCBuilder nb(*this);
   results = np.parseNPCs(gamePath);
   nb.buildObjects(results);
+  
+  ItemParser ip;
+  ItemBuilder ib(*this);
+  results = ip.parseItems(gamePath);
+  ib.buildObjects(results);
+  
 }
 
 Map::Map(const Map &obj)

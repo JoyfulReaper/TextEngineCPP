@@ -38,7 +38,7 @@ public:
   
   virtual ~ItemParser() {}
   
-  virtual void parseItems(std::string basePath);
+  virtual std::vector<std::map<std::string,std::string>> parseItems(std::string basePath);
   
   //virtual void parseItem(std::string itemName, std::string location);
   

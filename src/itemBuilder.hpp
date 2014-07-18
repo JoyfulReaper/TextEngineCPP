@@ -31,21 +31,22 @@ class Inventory;
 class ItemBuilder : public Builder
 {
 public:
-  ItemBuilder() {}
+  ItemBuilder(Map &map) : map(map) {}
   
   virtual ~ItemBuilder() {}
   
   virtual void buildObjects(std::vector<std::map<std::string,std::string>> &ObjectConfig);
   
-  //virtual void buildObjects(std::vector<std::map<std::string,std::string>> &itemConfig, Inventory *inv, int quantity = 1);
+  virtual void buildObjects(std::vector<std::map<std::string,std::string>> &itemConfig, Inventory &inv, int quantity = 1);
   
 private:
-  
+  Map &map;
+  Inventory *inventory = nullptr;
   int quantity = -1;
   
-  //inline void setInventory(Inventory *inv) { this->inventory = inv; }
+  inline void setInventory(Inventory &inv) { this->inventory = &inv; }
   
-  //inline Inventory* getInventory() { return inventory; }
+  inline Inventory* getInventory() { return inventory; }
   
   inline void setQuantity(int number) { quantity = number; }
   

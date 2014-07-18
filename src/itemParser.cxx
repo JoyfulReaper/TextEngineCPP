@@ -22,8 +22,6 @@
  */
 
 #include "itemParser.hpp"
-#include "itemBuilder.hpp"
-#include "inventory.hpp"
 #include "textEngineException.hpp"
 
 typedef std::pair<std::string,bool> config;
@@ -41,17 +39,15 @@ std::map<std::string,bool> ItemParser::setObjectConfig()
   return objectConfig;
 }
 
-void ItemParser::parseItems(std::string basePath)
+std::vector<std::map<std::string,std::string>> ItemParser::parseItems(std::string basePath)
 {
-  //ItemBuilder builder(engine);
   boost::filesystem::path fullPath(basePath);
   boost::filesystem::path items("/items");
   fullPath += items;
   std::map<std::string,bool> objectConfig = setObjectConfig();
   std::string ext = ".lua";
   std::vector<boost::filesystem::path> files = getAllFilesWithExt(fullPath.native(), ext);
-  auto results = parseFiles(files, objectConfig);
-  //builder.buildObjects(results);
+  return parseFiles(files, objectConfig);
 }
 
 //void ItemParser::parseItem(std::string name, std::string location)
