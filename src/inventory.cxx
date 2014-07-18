@@ -21,6 +21,7 @@
  */
 
 #include "inventory.hpp"
+#include "containerItem.hpp"
 #include "itemParser.hpp"
 #include "itemBuilder.hpp"
 #include "textEngineException.hpp"
@@ -34,9 +35,17 @@ Inventory::Inventory(const Inventory &obj)
   this->capacity = obj.capacity;
   this->size = obj.size;
   
+  // I think this is correct
   for(auto it = obj.items.begin(); it != obj.items.end(); ++it)
   {
-    this->addItem( std::unique_ptr<Item>(new Item(*it->get())) );
+    Item *item = it->get();
+    if(dynamic_cast<ContainerItem*>(item))
+    {
+      std::unique_ptr<ContainerItem> cItem(new ContainerItem(*static_cast<ContainerItem*>(item)));
+      this->addItem(std::move(cItem));
+    } else {
+      this->addItem(std::unique_ptr<Item>(new Item(*item)) );
+    }
   }
 }
 
