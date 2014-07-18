@@ -27,24 +27,24 @@
 #include "builder.hpp"
 
 class Inventory;
+class Map;
 
 class ItemBuilder : public Builder
 {
 public:
-  ItemBuilder(Map &map) : map(map) {}
+  ItemBuilder(Inventory &inv) : map(nullptr), inventory(&inv) {}
+  ItemBuilder(Map &map) : map(&map), inventory(nullptr) {}
   
   virtual ~ItemBuilder() {}
   
   virtual void buildObjects(std::vector<std::map<std::string,std::string>> &ObjectConfig);
   
-  virtual void buildObjects(std::vector<std::map<std::string,std::string>> &itemConfig, Inventory &inv, int quantity = 1);
+  virtual void buildObject(std::vector<std::map<std::string,std::string>> &itemConfig, int quantity = 1);
   
 private:
-  Map &map;
+  Map *map;
   Inventory *inventory = nullptr;
   int quantity = -1;
-  
-  inline void setInventory(Inventory &inv) { this->inventory = &inv; }
   
   inline Inventory* getInventory() { return inventory; }
   

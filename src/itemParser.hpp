@@ -42,7 +42,7 @@ public:
   
   //virtual void parseItem(std::string itemName, std::string location);
   
-  //virtual void parseItem(std::string name, Inventory *inv, size_t number = 1);
+  virtual void parseItem(std::string name, Inventory &inv, size_t number = 1);
   
   /**
    * @return a map of strings to check for in the file to parse, and a bool to indicate if the string is optional

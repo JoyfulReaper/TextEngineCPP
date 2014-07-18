@@ -21,6 +21,8 @@
  */
 
 #include "inventory.hpp"
+#include "itemParser.hpp"
+#include "itemBuilder.hpp"
 #include "textEngineException.hpp"
 
 std::map<std::string, std::string> Inventory::allItems;
@@ -40,7 +42,7 @@ Inventory::Inventory(const Inventory &obj)
 
 bool Inventory::addItem(std::unique_ptr<Item> item, size_t number)
 {
-  if(size + number > capacity)
+  if((size + number) > capacity)
     throw (TextEngineException("Inventory is full"));
   
   try {
@@ -52,10 +54,10 @@ bool Inventory::addItem(std::unique_ptr<Item> item, size_t number)
   } catch (const TextEngineException &te) {
     // Item not yet in inventory
     auto ret = allItems.insert(std::pair<std::string, std::string>(item->getName(), item->getFilename()));
-    if(!ret.second)
+    if(!ret.second && item->getFilename() != ret.first->second)
       return false;
     ret = allItems.insert(std::pair<std::string, std::string>(item->getUppercaseName(), item->getFilename()));
-    if(!ret.second)
+    if(!ret.second && item->getFilename() != ret.first->second)
       return false;
     
     item->setQuantity(number);
@@ -68,7 +70,17 @@ bool Inventory::addItem(std::unique_ptr<Item> item, size_t number)
 
 bool Inventory::addItem(std::string name, size_t number)
 {
-  return false;
+  if((size + number) > capacity)
+    throw(TextEngineException("Inventory is full"));
+  
+  try {
+    ItemParser ip;
+    ip.parseItem(name, *this, number);
+  } catch (const TextEngineException &te) {
+    return false;
+  }
+  
+  return true;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////

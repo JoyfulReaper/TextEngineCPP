@@ -22,6 +22,8 @@
  */
 
 #include "itemParser.hpp"
+#include "itemBuilder.hpp"
+#include "inventory.hpp"
 #include "textEngineException.hpp"
 
 typedef std::pair<std::string,bool> config;
@@ -68,18 +70,21 @@ std::vector<std::map<std::string,std::string>> ItemParser::parseItems(std::strin
 //}
 
 
-// void ItemParser::parseItem(std::string name, Inventory *inv, size_t number)
-// {
-//   ItemBuilder builder(engine);
-//   std::string file = engine->getItemFilename(name);
-//   if(file == "")
-//     throw(TextEngineException("TextEngine doesn't know about: " + name));
-//   
-//   boost::filesystem::path fullPath(file);
-//   std::map<std::string,bool> objectConfig = setObjectConfig();
-//   std::vector<boost::filesystem::path> files;
-//   files.push_back(fullPath);
-//   
-//   auto result = parseFiles(files, objectConfig);
-//   builder.buildObjects(result, inv, number);
-// }
+void ItemParser::parseItem(std::string name, Inventory &inv, size_t number)
+{
+  std::string file;
+  auto it = Inventory::allItems.find(name);
+  if(it == Inventory::allItems.end())
+    throw(TextEngineException("Unknown item: " + name));
+  
+  file = it->second;
+  
+  boost::filesystem::path fullPath(file);
+  std::map<std::string,bool> objectConfig = setObjectConfig();
+  std::vector<boost::filesystem::path> files;
+  files.push_back(fullPath);
+  
+  auto result = parseFiles(files, objectConfig);
+  ItemBuilder builder(inv);
+  builder.buildObject(result, number);
+}

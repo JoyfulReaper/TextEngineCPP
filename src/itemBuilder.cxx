@@ -23,6 +23,7 @@
 
 #include <boost/algorithm/string.hpp>
 #include <memory>
+#include <cassert>
 #include "map.hpp"
 #include "itemBuilder.hpp"
 #include "item.hpp"
@@ -31,9 +32,8 @@
 
 using namespace boost;
 
-void ItemBuilder::buildObjects(std::vector<std::map<std::string,std::string>> &itemConfig, Inventory &inv, int quantity)
+void ItemBuilder::buildObject(std::vector<std::map<std::string,std::string>> &itemConfig, int quantity)
 {
-  setInventory(inv);
   setQuantity(quantity);
   buildObjects(itemConfig);
 }
@@ -130,10 +130,10 @@ void ItemBuilder::buildObjects(std::vector<std::map<std::string,std::string>> &i
 	}
 	else
 	{
-	  if(!map.roomExists(addRoom))
+	  if(!map->roomExists(addRoom))
 	    throw (TextEngineException("Trying to add " + config["name"] + " to invalid location: " + addRoom));
 	  
-	  map.getRoom(addRoom).getInventory().addItem(std::move(item), quantity);
+	  map->getRoom(addRoom).getInventory().addItem(std::move(item), quantity);
 	}
 	if(container)
 	  item.reset(new ContainerItem(*static_cast<ContainerItem*>(copyItem.get())));
@@ -143,9 +143,9 @@ void ItemBuilder::buildObjects(std::vector<std::map<std::string,std::string>> &i
     } // End location parsing
     else
     { // add to given inventory
-      Inventory *inv = getInventory();
-      inv->addItem(std::move(item), quantity);
+      assert(inventory != nullptr);
+      if(!inventory->addItem(std::move(item), quantity))
+	throw(TextEngineException("Failed to add item"));
     }
-    //engine->teachItem(config["name"], config["filename"]);
   } // End main loop
 } // End buildObjects()
