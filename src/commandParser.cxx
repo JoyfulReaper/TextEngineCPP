@@ -621,68 +621,72 @@ bool CommandParser::processDrop(vector &command, TextEngine &engine)
 // SAY
 bool CommandParser::processSay(vector &command, TextEngine &engine)
 {
-//   std::vector<const NonPlayableCharacter*> allNpcs = engine.getMap()->getRoom(engine.getPlayer()->getLocation())->getAllNpcs();
-//   if(allNpcs.size() == 0)
-//   {
-//     engine.addMessage("You talk, but no one listens...\n");
-//     return false;
-//   }
-//   
-//   if(allNpcs.size() == 1)
-//   {
-//     NonPlayableCharacter *npc = engine.getMap()->getRoom(engine.getPlayer()->getLocation())->getNPC(allNpcs.at(0)->getName());
-//     std::string said = getObjectName(command);
-//     npc->processSpeech(said);
-//     return true;
-//   }
-//   
-//   //More than one NPC (PROBABLY A BETTER WAY TO DO THIS?!)
-//   auto cmdIt = command.begin();
-//   command.erase(cmdIt); // Strip verb
-//   std::string full = "";
-//   for(auto it = command.begin(); it != command.end(); ++it)
-//     full.append(*it + " ");
-//   if(full != "")
-//     full.pop_back(); // Stip trailing space
-//     
-//     // Find potential matches
-//     size_t pos;
-//   std::string name;
-//   std::vector<std::string> matches;
-//   for(auto it = allNpcs.begin(); it != allNpcs.end(); ++it)
-//   {
-//     const NonPlayableCharacter *npc = *it;
-//     name = npc->getName();
-//     boost::to_upper(name);
-//     pos = full.rfind(name);
-//     if(pos != std::string::npos)
-//       matches.push_back(full.substr(pos, name.length()));
-//   }
-//   if(matches.size() == 0)
-//   {
-//     engine.addMessage("Say to who?\n");
-//     return false;
-//   }
-//   // Find best match (longest)
-//   std::string bestMatch;
-//   for(auto it = matches.begin(); it != matches.end(); ++it)
-//   {
-//     if(it->length() > bestMatch.length())
-//       bestMatch = *it;
-//   }
-//   
-//   NonPlayableCharacter *npc = engine.getMap()->getRoom(engine.getPlayer()->getLocation())->getNPC(bestMatch);
-//   full.replace(pos, name.length()+1, ""); // Remove NPC name
-//   boost::trim(full);
-//   if(full.length() == 0)
-//   {
-//     engine.addMessage("Say to what to " + npc->getName() + "?\n");
-//     return false;
-//   }
-//   
-//   npc->processSpeech(full);
-//   return true;
-  return false;
+  auto allNpcs = engine.getMap().getAllNpcs(engine.getPlayerLocation());
+  if(allNpcs.size() == 0)
+  {
+    engine.addMessage("You talk, but no one listens...\n");
+    return false;
+  }
+  
+  if(allNpcs.size() == 1)
+  {
+    NonPlayableCharacter *npc = allNpcs.at(0);
+    std::string said = getObjectName(command);
+    npc->processSpeech(said, engine);
+    return true;
+  }
+  
+  //More than one NPC (PROBABLY A BETTER WAY TO DO THIS?!)
+  auto cmdIt = command.begin();
+  command.erase(cmdIt); // Strip verb
+  std::string full = "";
+  for(auto it = command.begin(); it != command.end(); ++it)
+    full.append(*it + " ");
+  if(full != "")
+    full.pop_back(); // Stip trailing space
+    
+  // Find potential matches
+  size_t pos;
+  std::string name;
+  std::vector<std::string> matches;
+  for(auto it = allNpcs.begin(); it != allNpcs.end(); ++it)
+  {
+    const NonPlayableCharacter *npc = *it;
+    name = npc->getName();
+    boost::to_upper(name);
+    pos = full.rfind(name);
+    if(pos != std::string::npos)
+      matches.push_back(full.substr(pos, name.length()));
+  }
+  if(matches.size() == 0)
+  {
+    engine.addMessage("Say to who?\n");
+    return false;
+  }
+  // Find best match (longest)
+  std::string bestMatch;
+  for(auto it = matches.begin(); it != matches.end(); ++it)
+  {
+    if(it->length() > bestMatch.length())
+      bestMatch = *it;
+  }
+  
+  NonPlayableCharacter *theMatch = nullptr;
+  for(auto &curNpc : allNpcs)
+  {
+    if(curNpc->getName() == bestMatch || curNpc->getUppercaseName() == bestMatch)
+      theMatch = curNpc;
+  }
+  full.replace(pos, name.length()+1, ""); // Remove NPC name
+  boost::trim(full);
+  if(full.length() == 0)
+  {
+    engine.addMessage("Say to what to " + theMatch->getName() + "?\n");
+    return false;
+  }
+  
+  theMatch->processSpeech(full, engine);
+  return true;
 }
 
 // USE
