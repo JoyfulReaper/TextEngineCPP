@@ -22,6 +22,9 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+
 #include <memory>
 #include <sstream>
 #include <iomanip>
@@ -117,33 +120,25 @@ bool CommandParser::doCommand(std::string command, TextEngine &engine)
 
 bool CommandParser::processSave(const vector &command, TextEngine &engine)
 {
-//   boost::filesystem::path saveFile(engine.getGamePath());
-//   saveFile += "/saves/";
-//   saveFile += getObjectName(command);
-//   saveFile += ".tes";
-//   
-//   std::ofstream saveOS(saveFile.native());
-//   if(!saveOS.good())
-//   {
-//     engine.addMessage("Failed to save game!\n");
-//     return false;
-//   }
-//   
-//   boost::archive::text_oarchive oa(saveOS);
-//   auto itemNames = engine.getItemNames();
-//   auto npcRegistry = engine.getNPCRegistry();
-//   auto map = engine.getMap();
-//   auto player = engine.getPlayer();
-//   oa << itemNames;
-//   oa << npcRegistry;
-//   oa << map;
-//   oa << player;
-//   
-//   engine.addMessage("Your game has been saved!\n");
-//   saveOS.close();
-//   
-//   return true;
-  return false;
+  boost::filesystem::path saveFile(engine.getGamePath());
+  saveFile += "/saves/";
+  saveFile += getObjectName(command);
+  saveFile += ".tes";
+  
+  std::ofstream saveOS(saveFile.native());
+  if(!saveOS.good())
+  {
+    engine.addMessage("Failed to save game!\n");
+    return false;
+  }
+  
+  boost::archive::text_oarchive oa(saveOS);
+  oa << engine.map;
+  
+  engine.addMessage("Your game has been saved!\n");
+  saveOS.close();
+  
+  return true;
 }
 
 bool CommandParser::processLoad(const vector &command, TextEngine &engine)

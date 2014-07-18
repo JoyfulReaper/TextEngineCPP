@@ -173,5 +173,7 @@ private:
   bool gameOver = false;
   bool gameStarted = false;
   bool ignoreMsg = false;
+  
+  friend class CommandParser;
 };
 #endif

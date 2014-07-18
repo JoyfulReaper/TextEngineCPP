@@ -26,6 +26,11 @@
 
 #include <memory>
 #include <boost/array.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/vector.hpp>
+#include <boost/serialization/array.hpp>
+#include "serialization_adaptors.hpp"
 #include "mapsite.hpp"
 #include "inventory.hpp"
 
@@ -153,5 +158,20 @@ private:
   std::string lookDescription; // Extra description shown on look command
   std::string filename = INVALID_ROOM_FILENAME; // Lua file associated with room
   bool visited = false;
+  
+  friend class boost::serialization::access;
+  
+  template<class Archive>
+  void serialize(Archive &ar, const unsigned int version)
+  {
+    ar & sides;
+    ar & inventory;
+    ar & name;
+    ar & shortName;
+    ar & description;
+    ar & lookDescription;
+    ar & filename;
+    ar & visited;
+  }
 };
 #endif

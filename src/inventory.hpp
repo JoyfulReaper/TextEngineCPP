@@ -29,6 +29,10 @@
 #include <climits>
 #include <memory>
 #include <map>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/vector.hpp>
+#include "serialization_adaptors.hpp"
 #include "item.hpp"
 
 class Inventory
@@ -118,5 +122,15 @@ private:
   size_t capacity = UINT_MAX - 1;
   size_t size = 0;
   std::vector<std::unique_ptr<Item>> items;
+  
+  friend class boost::serialization::access;
+  
+  template<class Archive>
+  void serialize(Archive &ar, const unsigned int version)
+  {
+    ar & capacity;
+    ar & size;
+    ar & items;
+  }
 };
 #endif

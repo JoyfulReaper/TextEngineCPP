@@ -25,6 +25,8 @@
 #define _ITEM_H_
 
 #include <string>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
 
 static const std::string INVALID_ITEM_FILENAME = "NULL";
 
@@ -139,5 +141,19 @@ protected:
   std::string uppercaseName;
   std::string description;
   std::string filename = INVALID_ITEM_FILENAME;
+  
+  friend class boost::serialization::access;
+  
+  template<class Archive>
+  void serialize(Archive &ar, const unsigned int version)
+  {
+    ar & obtainable;
+    ar & visible;
+    ar & quantity;
+    ar & name;
+    ar & uppercaseName;
+    ar & description;
+    ar & filename;
+  }
 };
 #endif

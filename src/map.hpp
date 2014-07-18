@@ -27,6 +27,10 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/vector.hpp>
+#include "serialization_adaptors.hpp"
 #include "mapsite.hpp"
 #include "room.hpp"
 #include "npc.hpp"
@@ -121,6 +125,17 @@ private:
   std::vector<std::unique_ptr<NonPlayableCharacter>> npcs;
   std::string startRoom = "";
   std::string gamePath;
+  
+  friend class boost::serialization::access;
+  
+  template<class Archive>
+  void serialize(Archive &ar, const unsigned int version)
+  {
+    ar & rooms;
+    ar & npcs;
+    ar & startRoom;
+    ar & gamePath;
+  }
 };
 
 #endif
