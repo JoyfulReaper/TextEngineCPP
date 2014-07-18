@@ -40,8 +40,6 @@ public:
   
   virtual std::vector<std::map<std::string,std::string>> parseItems(std::string basePath);
   
-  //virtual void parseItem(std::string itemName, std::string location);
-  
   virtual void parseItem(std::string name, Inventory &inv, size_t number = 1);
   
   /**

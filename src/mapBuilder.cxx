@@ -24,7 +24,6 @@
 #include <boost/algorithm/string.hpp>
 #include <vector>
 #include <memory>
-//#include <stdexcept>
 #include "mapsite.hpp"
 #include "mapBuilder.hpp"
 #include "textEngineException.hpp"

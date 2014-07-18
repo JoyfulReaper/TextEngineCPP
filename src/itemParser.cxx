@@ -52,24 +52,6 @@ std::vector<std::map<std::string,std::string>> ItemParser::parseItems(std::strin
   return parseFiles(files, objectConfig);
 }
 
-//void ItemParser::parseItem(std::string name, std::string location)
-//{
-  //ItemBuilder builder(engine);
-  //std::string file = engine->getItemFilename(name);
-  //if(file == "")
-//     throw(TextEngineException("TextEngine doesn't know about: " + name));
-//   
-//   boost::filesystem::path fullPath(file);
-//   std::map<std::string,bool> objectConfig = setObjectConfig();
-//   std::vector<boost::filesystem::path> files;
-//   files.push_back(fullPath);
-//   
-//   auto result = parseFiles(files, objectConfig);
-//   result.front()["location"] = location;
-  //builder.buildObjects(result);
-//}
-
-
 void ItemParser::parseItem(std::string name, Inventory &inv, size_t number)
 {
   std::string file;
