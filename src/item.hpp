@@ -28,6 +28,8 @@
 
 static const std::string INVALID_ITEM_FILENAME = "NULL";
 
+class TextEngine;
+
 class Item
 {
 public:
@@ -110,17 +112,17 @@ public:
   /**
    * Called on command USE ITEM {PARAMS}
    */
-  virtual void useItem(std::string command);
+  virtual void useItem(std::string command, TextEngine &engine);
   
   /**
    * Called on HELP ITEM
    */
-  virtual void useHelp();
+  virtual void useHelp(TextEngine &engine);
   
   /**
    * Called on TAKE ITEM
    */
-  virtual void onTake();
+  virtual void onTake(TextEngine &engine);
   
   /**
    * Set filename associated with this item

@@ -27,6 +27,7 @@
 #include <functional>
 #include "thirdParty/luawrapper/LuaContext.hpp"
 #include "item.hpp"
+#include "textEngine.hpp"
 #include "textEngineException.hpp"
 
 Item::Item() {}
@@ -72,59 +73,58 @@ bool Item::removeQuantity(size_t number)
   return true;
 }
 
-void Item::useItem(std::string command)
+void Item::useItem(std::string command, TextEngine &engine)
 {
-//   LuaContext *lua = engine.getLuaContext();
-//   assert(lua);
-//   try {
-//     std::ifstream itemFile(filename);
-//     lua->executeCode(itemFile);
-//     const auto onUse = lua->readVariable<std::function<void (std::string)>>("onUse");
-//     onUse(command);
-//     itemFile.close();
-//   } catch (const LuaContext::WrongTypeException &wte) {
-//     engine.addMessage("You can't use that...\n");
-//   } catch (const LuaContext::SyntaxErrorException &see) {
-//     std::cerr << see.what();
-//   } catch (const LuaContext::ExecutionErrorException &eee) {
-//     std::cerr << eee.what();
-//   }
-//   lua->writeVariable("onUse", nullptr);
+  LuaContext &lua = engine.getLuaContext();
+  try {
+    std::ifstream itemFile(filename);
+    lua.executeCode(itemFile);
+    const auto onUse = lua.readVariable<std::function<void (std::string)>>("onUse");
+    onUse(command);
+    itemFile.close();
+  } catch (const LuaContext::WrongTypeException &wte) {
+    engine.addMessage("You can't use that...\n");
+  } catch (const LuaContext::SyntaxErrorException &see) {
+    std::cerr << see.what();
+  } catch (const LuaContext::ExecutionErrorException &eee) {
+    std::cerr << eee.what();
+  }
+  lua.writeVariable("onUse", nullptr);
 }
 
-void Item::useHelp()
+void Item::useHelp(TextEngine &engine)
 {
-//   LuaContext *lua = engine.getLuaContext();
-//   try{
-//     std::ifstream itemFile(filename);
-//     lua->executeCode(itemFile);
-//     lua->executeCode("onHelp()");
-//     itemFile.close();
-//   } catch (const LuaContext::WrongTypeException &wte) {
-//     wte.what();
-//   } catch (const LuaContext::SyntaxErrorException &see) {
-//     see.what();
-//   } catch (const LuaContext::ExecutionErrorException &eee) {
-//     engine.addMessage("No help provided\n");
-//   }
-//   lua->writeVariable("onHelp", nullptr);
+  LuaContext &lua = engine.getLuaContext();
+  try{
+    std::ifstream itemFile(filename);
+    lua.executeCode(itemFile);
+    lua.executeCode("onHelp()");
+    itemFile.close();
+  } catch (const LuaContext::WrongTypeException &wte) {
+    wte.what();
+  } catch (const LuaContext::SyntaxErrorException &see) {
+    see.what();
+  } catch (const LuaContext::ExecutionErrorException &eee) {
+    engine.addMessage("No help provided\n");
+  }
+  lua.writeVariable("onHelp", nullptr);
 }
 
-void Item::onTake()
+void Item::onTake(TextEngine &engine)
 {
-//   LuaContext *lua = engine.getLuaContext();
-//   try{
-//     std::ifstream itemFile(filename);
-//     lua->executeCode(itemFile);
-//     lua->executeCode("onTake()");
-//     itemFile.close();
-//   } catch (const LuaContext::WrongTypeException &wte) {
-//     wte.what();
-//   } catch (const LuaContext::SyntaxErrorException &see) {
-//     see.what();
-//   } catch (const LuaContext::ExecutionErrorException &eee) {
-//     if(!obtainable)
-//       engine.addMessage("You try to take the " + name + ", but it doesn't budge.\n");
-//   }
-//   lua->writeVariable("onTake", nullptr);
+  LuaContext &lua = engine.getLuaContext();
+  try{
+    std::ifstream itemFile(filename);
+    lua.executeCode(itemFile);
+    lua.executeCode("onTake()");
+    itemFile.close();
+  } catch (const LuaContext::WrongTypeException &wte) {
+    wte.what();
+  } catch (const LuaContext::SyntaxErrorException &see) {
+    see.what();
+  } catch (const LuaContext::ExecutionErrorException &eee) {
+    if(!obtainable)
+      engine.addMessage("You try to take the " + name + ", but it doesn't budge.\n");
+  }
+  lua.writeVariable("onTake", nullptr);
 }
