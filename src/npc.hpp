@@ -27,6 +27,8 @@
 
 #include "character.hpp"
 
+class TextEngine;
+
 class NonPlayableCharacter : public Character
 {
 public:
@@ -68,20 +70,23 @@ public:
   /**
    * @param ammount Amount of health to give the npc (0-100)
    */
-  void setHealth(double amount);
+  void setHealth(double amount, TextEngine &engine);
+  
+  void setHealthNoAttack(double amount);
   
   /**
    * The Player spoke to this NonPlayableCharacter
    */
-  void processSpeech(std::string speech);
-  
-  /**
-   * This NPC was attacked
-   */
-  void wasAttacked();
+  void processSpeech(std::string speech, TextEngine &engine);
   
 private:  
   bool canBeKilled = true;
   size_t respawnChance = 0;
+  
+   /**
+   * This NPC was attacked
+   */
+  void wasAttacked(TextEngine &engine);
+  
 };
 #endif

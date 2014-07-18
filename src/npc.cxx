@@ -25,6 +25,7 @@
 #include <fstream>
 #include <functional>
 #include "npc.hpp"
+#include "textEngine.hpp"
 #include "thirdParty/luawrapper/LuaContext.hpp"
 #include "textEngine.hpp"
 #include "inventory.hpp"
@@ -46,7 +47,7 @@ bool NonPlayableCharacter::setRespawnChance(size_t chance)
   return true;
 }
 
-void NonPlayableCharacter::setHealth(double amount)
+void NonPlayableCharacter::setHealth(double amount, TextEngine &engine)
 {
   if(!canBeKilled)
     return;
@@ -58,44 +59,55 @@ void NonPlayableCharacter::setHealth(double amount)
   this->health = amount;
   
   if(getHealth() < orgHealth && isAlive())
-    wasAttacked();
+    wasAttacked(engine);
 }
 
-void NonPlayableCharacter::processSpeech(std::string speech)
+void NonPlayableCharacter::setHealthNoAttack(double amount)
 {
-//   LuaContext *lua = engine->getLuaContext();
-//   try {
-//     std::ifstream npcFile(filename);
-//     lua->executeCode(npcFile);
-//     const auto onSay = lua->readVariable<std::function<void (std::string)>>("onSay");
-//     onSay(speech);
-//     npcFile.close();
-//     
-//   } catch (const LuaContext::WrongTypeException &wte) {
-//     engine->addMessage("Your speech is greeted by a blank stare...\n");
-//   } catch (const LuaContext::SyntaxErrorException &see) {
-//     std::cerr << see.what();
-//   } catch (const LuaContext::ExecutionErrorException &eee) {
-//     std::cerr << eee.what();
-//   }
-//   lua->writeVariable("onSay", nullptr);
+  if(!canBeKilled)
+    return;
+  
+  if(amount > 100)
+    amount = 100;
+  
+  this->health = amount;
+}
+
+void NonPlayableCharacter::processSpeech(std::string speech, TextEngine &engine)
+{
+  LuaContext &lua = engine.getLuaContext();
+  try {
+    std::ifstream npcFile(filename);
+    lua.executeCode(npcFile);
+    const auto onSay = lua.readVariable<std::function<void (std::string)>>("onSay");
+    onSay(speech);
+    npcFile.close();
+    
+  } catch (const LuaContext::WrongTypeException &wte) {
+    engine.addMessage("Your speech is greeted by a blank stare...\n");
+  } catch (const LuaContext::SyntaxErrorException &see) {
+    std::cerr << see.what();
+  } catch (const LuaContext::ExecutionErrorException &eee) {
+    std::cerr << eee.what();
+  }
+  lua.writeVariable("onSay", nullptr);
 }
 
 
-void NonPlayableCharacter::wasAttacked()
+void NonPlayableCharacter::wasAttacked(TextEngine &engine)
 {
-//   LuaContext *lua = engine->getLuaContext();
-//   try {
-//     std::ifstream npcFile(filename);
-//     lua->executeCode(npcFile);
-//     lua->executeCode("onAttack()");
-//     npcFile.close();
-//   } catch (const LuaContext::WrongTypeException &wte) {
-//     // no onAttack()
-//   } catch (const LuaContext::SyntaxErrorException &see) {
-//     std::cerr << see.what();
-//   } catch (const LuaContext::ExecutionErrorException &eee) {
-//     std::cerr << eee.what();
-//   }
-//   lua->writeVariable("onAttack", nullptr);
+  LuaContext &lua = engine.getLuaContext();
+  try {
+    std::ifstream npcFile(filename);
+    lua.executeCode(npcFile);
+    lua.executeCode("onAttack()");
+    npcFile.close();
+  } catch (const LuaContext::WrongTypeException &wte) {
+    // no onAttack()
+  } catch (const LuaContext::SyntaxErrorException &see) {
+    std::cerr << see.what();
+  } catch (const LuaContext::ExecutionErrorException &eee) {
+    std::cerr << eee.what();
+  }
+  lua.writeVariable("onAttack", nullptr);
 }

@@ -112,7 +112,7 @@ void Room::enter(Direction from, TextEngine &engine)
       {
 	int ran = engine.getRandomNumber(0, 100);
 	if(ran <= npc->getRespawnChance())
-	  npc->setHealth(100);
+	  npc->setHealthNoAttack(100);
       }
       if(npc->isAlive())
       {

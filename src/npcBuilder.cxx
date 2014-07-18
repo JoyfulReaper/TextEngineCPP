@@ -67,7 +67,7 @@ void NPCBuilder::buildObjects(std::vector<std::map<std::string,std::string>> &np
     npc->setName(config["name"]);
     npc->setDescription(config["description"]);
     npc->setLocation(config["location"]);
-    npc->setHealth(health);
+    npc->setHealthNoAttack(health);
     npc->setMoney(money);
     npc->setKillable(canBeKilled);
     if(!npc->setRespawnChance(respawnChance))
