@@ -39,6 +39,7 @@
 #include "luaAPI.hpp"
 
 class LuaContext;
+class Room;
 
 class TextEngine
 {
@@ -114,6 +115,10 @@ public:
    * @return the current Player
    */
   Player& getPlayer();
+  
+  std::string getPlayerLocation();
+  
+  Room& getPlayerRoom();
   
   //////////////////////////////////////////////////////////////
   

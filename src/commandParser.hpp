@@ -28,12 +28,6 @@
 #include <map>
 #include <boost/filesystem.hpp>
 
-// namespace boost {
-//   namespace filesystem {
-//     class path;
-//   }
-// }
-
 class TextEngine;
 typedef std::vector<std::string> vector;
 

@@ -187,102 +187,98 @@ bool CommandParser::processLoad(const vector &command, TextEngine &engine)
 
 bool CommandParser::processScript(vector &command, TextEngine &engine)
 {
-//   std::string verb = command.at(0);
-//   auto cmdIt = command.begin();
-//   command.erase(cmdIt);
-//   
-//   std::string full = "";
-//   for(auto it = command.begin(); it != command.end(); ++it)
-//     full.append(*it + " ");
-//   if(full != "")
-//     full.pop_back();
-//   
-//   auto found = commands.find(verb);
-//   if(found == commands.end())
-//     return false;
-//   
-//   boost::filesystem::path spath = found->second;
-//   LuaContext *lua =  engine.getLuaContext();
-//   
-//   try {
-//     std::fstream sfile(spath.native());
-//     lua->executeCode(sfile);
-//     auto onCommand = lua->readVariable<std::function<void (std::string)>>("onCommand");
-//     onCommand(full);
-//     sfile.close();
-//   } catch (const LuaContext::WrongTypeException &wte) {
-//     return false;
-//   } catch (const LuaContext::SyntaxErrorException &see) {
-//     return false;
-//   } catch (const LuaContext::ExecutionErrorException &eee) {
-//     return false;
-//   }
-//   lua->writeVariable("onCommand", nullptr);
-//   return true;
-  return false;
+  std::string verb = command.at(0);
+  auto cmdIt = command.begin();
+  command.erase(cmdIt);
+  
+  std::string full = "";
+  for(auto it = command.begin(); it != command.end(); ++it)
+    full.append(*it + " ");
+  if(full != "")
+    full.pop_back();
+  
+  auto found = commands.find(verb);
+  if(found == commands.end())
+    return false;
+  
+  boost::filesystem::path spath = found->second;
+  LuaContext &lua =  engine.getLuaContext();
+  
+  try {
+    std::fstream sfile(spath.native());
+    lua.executeCode(sfile);
+    auto onCommand = lua.readVariable<std::function<void (std::string)>>("onCommand");
+    onCommand(full);
+    sfile.close();
+  } catch (const LuaContext::WrongTypeException &wte) {
+    return false;
+  } catch (const LuaContext::SyntaxErrorException &see) {
+    return false;
+  } catch (const LuaContext::ExecutionErrorException &eee) {
+    return false;
+  }
+  lua.writeVariable("onCommand", nullptr);
+  return true;
 }
 
 bool CommandParser::registerCommand(std::string command, std::string script, TextEngine &engine)
 {
 //   Commands can't have a space 
-//   size_t space = command.find(" ");
-//   if(space == std::string::npos)
-//     return false;
-//   
-//   boost::filesystem::path spath(engine.getGamePath());
-//   spath += "/scripts/";
-//   spath += script;
-//   
-//   if(!(boost::filesystem::exists(spath)) && (boost::filesystem::is_regular_file(spath)) )
-//     return false;
-//   
-//   std::pair<std::map<std::string, boost::filesystem::path>::iterator, bool> ret;
-//   ret = commands.insert(std::pair<std::string, boost::filesystem::path>(command, spath));
-//   
-//   return ret.second;
-  return false;
+  size_t space = command.find(" ");
+  if(space == std::string::npos)
+    return false;
+  
+  boost::filesystem::path spath(engine.getGamePath());
+  spath += "/scripts/";
+  spath += script;
+  
+  if(!(boost::filesystem::exists(spath)) && (boost::filesystem::is_regular_file(spath)) )
+    return false;
+  
+  std::pair<std::map<std::string, boost::filesystem::path>::iterator, bool> ret;
+  ret = commands.insert(std::pair<std::string, boost::filesystem::path>(command, spath));
+  
+  return ret.second;
 }
 
 // LOOK
 bool CommandParser::processLook(const vector &command, TextEngine &engine)
 {
-//   // Look at Room
-//   if(command.size() == 1)
-//   {
-//     engine.getMap()->getRoom(engine.getPlayer()->getLocation())->showFullDescription();
-//     return true;
-//   }
-//   
-//   // Look in Player Inventory
-//   std::string object = getObjectName(command);
-//   Inventory *playerInv = engine.getPlayer()->getInventory();
-//   assert(playerInv);
-//   if(playerInv->hasItem(object))
-//   {
-//     engine.addMessage("\n" + playerInv->getItem(object)->getDescription() + "\n");
-//     return true;
-//   }
-//   
-//   // Look in room Inventory
-//   Inventory *inv = engine.getMap()->getRoom(engine.getPlayer()->getLocation())->getInventory();
-//   assert(inv != nullptr);
-//   Item *item = inv->getItem(object);
-//   if(item)
-//   {
-//     engine.addMessage("\n" + item->getDescription() + "\n");
-//     return true;
-//   }
-//   
-//   // Look at NPCs
-//   NonPlayableCharacter *npc = engine.getMap()->getRoom(engine.getPlayer()->getLocation())->getNPC(object);
-//   if(npc)
-//   {
-//     engine.addMessage("\n" + npc->getDescription() + "\n");
-//     return true;
-//   }
-//   
-//   engine.addMessage("\nYou don't see that.\n");
-//   return false;
+  // Look at Room
+  if(command.size() == 1)
+  {
+    engine.getMap().getRoom(engine.getPlayer().getLocation()).showFullDescription(engine);
+    return true;
+  }
+  
+  // Look in Player Inventory
+  std::string object = getObjectName(command);
+  Inventory &playerInv = engine.getPlayer().getInventory();
+  if(playerInv.hasItem(object))
+  {
+    engine.addMessage("\n" + playerInv.getItem(object).getDescription() + "\n");
+    return true;
+  }
+  
+  // Look in room Inventory
+  Inventory &inv = engine.getMap().getRoom(engine.getPlayer().getLocation()).getInventory();
+  if(inv.hasItem(object))
+  {
+    Item &item = inv.getItem(object);
+    engine.addMessage("\n" + item.getDescription() + "\n");
+    return true;
+  }
+  
+  // Look at NPCs
+  if(engine.getPlayerRoom().hasNpc(object, engine))
+  {
+    auto npcs = engine.getMap().getAllNpcs(engine.getPlayerLocation());
+    auto npc = npcs[0];
+    engine.addMessage("\n" + npc->getDescription() + "\n");
+    return true;
+  }
+  
+  engine.addMessage("\nYou don't see that.\n");
   return false;
 }
 

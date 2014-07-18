@@ -24,6 +24,7 @@
 #include <random>
 #include <chrono>
 #include <fstream>
+#include "room.hpp"
 #include "textEngine.hpp"
 #include "textEngineException.hpp"
 #include "thirdParty/luawrapper/LuaContext.hpp"
@@ -115,6 +116,16 @@ bool TextEngine::registerCommand(std::string verb, std::string file)
 Player& TextEngine::getPlayer()
 {
   return player;
+}
+
+std::string TextEngine::getPlayerLocation() 
+{ 
+  return player.getLocation(); 
+}
+  
+Room& TextEngine::getPlayerRoom() 
+{ 
+  return map.getRoom(getPlayerLocation()); 
 }
 
 /////////////////////////////////////////////////////////////////////////

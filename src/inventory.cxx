@@ -112,7 +112,7 @@ bool Inventory::removeItem(std::string name, size_t number)
       for(auto it = items.begin(); it != items.end(); ++it)
       {
 	Item &cur = *it->get();
-	if (cur.getName() == name)
+	if (cur.getName() == name || cur.getUppercaseName() == name)
 	{
 	  items.erase(it);
 	  return true;
@@ -134,7 +134,7 @@ bool Inventory::hasItem(std::string name) const
 {
   for(auto &item : items)
   {
-    if (item->getName() == name)
+    if (item->getName() == name || item->getUppercaseName() == name)
       return true;
   }
   return false;
@@ -151,7 +151,7 @@ Item& Inventory::getItem(std::string name)
 {
   for(auto &item : items)
   {
-    if(item->getName() == name)
+    if(item->getName() == name || item->getUppercaseName() == name)
       return *item;
   }
   throw (TextEngineException("Item is not in inventory: " + name));
