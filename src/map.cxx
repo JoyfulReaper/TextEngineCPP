@@ -207,4 +207,15 @@ std::vector<NonPlayableCharacter*> Map::getNpcs(std::string name, std::string lo
   return results;
 }
 
+std::vector<NonPlayableCharacter*> Map::getAllNpcs(std::string location)
+{
+  std::vector<NonPlayableCharacter*> results;
+  for(auto &npc : npcs)
+  {
+    if(npc->getLocation() == location)
+      results.push_back(npc.get());
+  }
+  return results;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////

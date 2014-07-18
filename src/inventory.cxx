@@ -157,12 +157,12 @@ Item& Inventory::getItem(std::string name)
   throw (TextEngineException("Item is not in inventory: " + name));
 }
 
-std::vector<const Item*> Inventory::getAllItems() const
+std::vector<Item*> Inventory::getAllItems()
 {
-  std::vector<const Item*> all;
+  std::vector<Item*> all;
   for(auto &item : items)
   {
-    const Item *cur = item.get();
+    Item *cur = item.get();
     all.push_back(cur);
   }
   return all;

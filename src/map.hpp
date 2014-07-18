@@ -108,6 +108,8 @@ public:
   
   std::vector<NonPlayableCharacter*> getNpcs(std::string name, std::string location);
   
+  std::vector<NonPlayableCharacter*> getAllNpcs(std::string location);
+  
   ////////////////////////////////////////////////////////////////////////////////////
   
 private:

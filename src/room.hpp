@@ -46,7 +46,7 @@ public:
    * Get the "side" of the room in the given Direction
    * @return MapSite in direction
    */
-  MapSite& getSide(Direction dir);
+  MapSite* getSide(Direction dir);
   
   /**
    * @param dir Direction to put MapSite
@@ -143,7 +143,7 @@ private:
   /**
    * @return String on NPCs in the room
    */
-  std::string getNpcsString();
+  std::string getNpcString(TextEngine &engine);
   
   boost::array<std::unique_ptr<MapSite>, 6> sides; // Room roof/floor/wall/exits
   Inventory inventory;

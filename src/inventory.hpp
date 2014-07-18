@@ -110,9 +110,9 @@ public:
   /**
    * @return a vector containing all of the items in the Inventory
    */
-  std::vector<const Item*> getAllItems() const;
+  std::vector<Item*> getAllItems();
   
-  inline bool isEmpty() { return true; }
+  inline bool isEmpty() { return (items.size() == 0); }
   
 private:
   size_t capacity = UINT_MAX - 1;
