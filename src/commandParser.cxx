@@ -24,6 +24,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/deque.hpp>
 
 #include <memory>
 #include <sstream>
@@ -133,7 +134,13 @@ bool CommandParser::processSave(const vector &command, TextEngine &engine)
   }
   
   boost::archive::text_oarchive oa(saveOS);
+  oa << engine.player;
   oa << engine.map;
+  oa << engine.startRoom;
+  oa << engine.gamePath;
+  oa << engine.messages;
+  oa << engine.gameStarted;
+  oa << engine.ignoreMsg;
   
   engine.addMessage("Your game has been saved!\n");
   saveOS.close();
