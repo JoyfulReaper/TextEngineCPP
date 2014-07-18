@@ -774,108 +774,105 @@ bool CommandParser::processUse(vector &command, TextEngine &engine)
  */
 bool CommandParser::processPut(vector &command, TextEngine &engine)
 {
-//   auto cmdIt = command.begin();
-//   command.erase(cmdIt); //strip verb
-//   
-//   std::string full = "";
-//   for(auto it = command.begin(); it != command.end(); ++it)
-//     full.append(*it + " ");
-//   if(full != "")
-//     full.pop_back();
-//   
-//   size_t pos = full.find(" IN ");
-//   if(pos == std::string::npos)
-//   {
-//     engine.addMessage("Put what in what?");
-//     return false;
-//   }
-//   
-//   std::string contained = full.substr(0, pos);
-//   std::string container = full.substr(pos + 4, std::string::npos);
-//   //std::cerr << "DEBUG: " << " '"<< container << "' " << " '" << contained <<"' " << std::endl;
-//   
-//   if(container.length() == 0 || contained.length() == 0)
-//   {
-//     engine.addMessage("Put what in what?");
-//     return false;
-//   }
-//   
-//   ContainerItem *containerI = nullptr;
-//   Item *containedI = nullptr;
-//   Inventory *playerInv = engine.getPlayer()->getInventory();
-//   Inventory *roomInv = engine.getMap()->getRoom(engine.getPlayer()->getLocation())->getInventory();
-//   Inventory *removeInv = nullptr;
-//   assert(playerInv && roomInv);
-//   
-//   if(roomInv->hasItem(container))
-//   {
-//     containerI = dynamic_cast<ContainerItem*>(roomInv->getItem(container));
-//     if(!containerI)
-//     {
-//       engine.addMessage(container + " is not a container!\n");
-//       return false;
-//     }
-//   }
-//   if(roomInv->hasItem(contained))
-//   {
-//     containedI = roomInv->getItem(contained);
-//     removeInv = roomInv;
-//   }
-//   
-//   if(!containerI)
-//   {
-//     if(playerInv->hasItem(container))
-//     {
-//       containerI = dynamic_cast<ContainerItem*>(playerInv->getItem(container));
-//       if(!containerI)
-//       {
-// 	engine.addMessage(container + " is not a container!\n");
-// 	return false;
-//       }
-//     }
-//   }
-//   if(!containedI)
-//   {
-//     if(playerInv->hasItem(contained))
-//     {
-//       containedI = playerInv->getItem(contained);
-//       removeInv = playerInv;
-//     }
-//   }
-//   
-//   if(!containerI)
-//   {
-//     engine.addMessage("You don't see a " + container + ".\n");
-//     return false;
-//   }
-//   if(!containedI)
-//   {
-//     engine.addMessage("You don't see a " + contained + ".\n");
-//     return false;
-//   }
-//   
-//   if(containerI->isLocked())
-//   {
-//     engine.addMessage("The container is locked!\n");
-//     return true;
-//   }
-//   
-//   if(containedI == containerI)
-//   {
-//     engine.addMessage("I don't think that should be allowed! The world might end!\n");
-//     return false;
-//   }
-//   
-//   Item *tempItem = new Item(containedI);
-//   tempItem->setQuantity(0);
-//   containerI->getInventory()->addItem(tempItem, 1);
-//   removeInv->removeItem(containedI, 1);
-//   
-//   delete tempItem;
-//   engine.addMessage("You put the " + contained + " in the " + container + ".\n");
-//   
-//   return true;
-  return false;
+  auto cmdIt = command.begin();
+  command.erase(cmdIt); //strip verb
+  
+  std::string full = "";
+  for(auto it = command.begin(); it != command.end(); ++it)
+    full.append(*it + " ");
+  if(full != "")
+    full.pop_back();
+  
+  size_t pos = full.find(" IN ");
+  if(pos == std::string::npos)
+  {
+    engine.addMessage("Put what in what?");
+    return false;
+  }
+  
+  std::string contained = full.substr(0, pos);
+  std::string container = full.substr(pos + 4, std::string::npos);
+  //std::cerr << "DEBUG: " << " '"<< container << "' " << " '" << contained <<"' " << std::endl;
+  
+  if(container.length() == 0 || contained.length() == 0)
+  {
+    engine.addMessage("Put what in what?");
+    return false;
+  }
+  
+  ContainerItem *containerI = nullptr;
+  Item *containedI = nullptr;
+  Inventory &playerInv = engine.getPlayer().getInventory();
+  Inventory &roomInv = engine.getPlayerRoom().getInventory();
+  Inventory *removeInv = nullptr;
+  
+  if(roomInv.hasItem(container))
+  {
+    containerI = dynamic_cast<ContainerItem*>(&roomInv.getItem(container));
+    if(!containerI)
+    {
+      engine.addMessage(container + " is not a container!\n");
+      return false;
+    }
+  }
+  if(roomInv.hasItem(contained))
+  {
+    containedI = &roomInv.getItem(contained);
+    removeInv = &roomInv;
+  }
+  
+  if(!containerI)
+  {
+    if(playerInv.hasItem(container))
+    {
+      containerI = dynamic_cast<ContainerItem*>(&playerInv.getItem(container));
+      if(!containerI)
+      {
+	engine.addMessage(container + " is not a container!\n");
+	return false;
+      }
+    }
+  }
+  if(!containedI)
+  {
+    if(playerInv.hasItem(contained))
+    {
+      containedI = &playerInv.getItem(contained);
+      removeInv = &playerInv;
+    }
+  }
+  
+  if(!containerI)
+  {
+    engine.addMessage("You don't see a " + container + ".\n");
+    return false;
+  }
+  if(!containedI)
+  {
+    engine.addMessage("You don't see a " + contained + ".\n");
+    return false;
+  }
+  
+  if(containerI->isLocked())
+  {
+    engine.addMessage("The container is locked!\n");
+    return true;
+  }
+  
+  if(containedI == containerI)
+  {
+    engine.addMessage("I don't think that should be allowed! The world might end!\n");
+    return false;
+  }
+  
+  std::unique_ptr<Item> tempItem(new Item(*containedI));
+  tempItem->setQuantity(0);
+  containerI->getInventory().addItem(std::move(tempItem), 1);
+  removeInv->removeItem(*containedI, 1);
+  
+  engine.addMessage("You put the " + contained + " in the " + container + ".\n");
+  
+  return true;
 }
 
 std::string CommandParser::getObjectName(const vector &command)
