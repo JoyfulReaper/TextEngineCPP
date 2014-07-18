@@ -475,101 +475,98 @@ bool CommandParser::processGet(vector &command, TextEngine &engine)
 // INV 
 bool CommandParser::processInv(vector &command, TextEngine &engine)
 {
-//   if(command.size() == 1)
-//   {
-//     Inventory *playerInv = engine.getPlayer()->getInventory();
-//     assert(playerInv);
-//     
-//     size_t capacity = playerInv->getCapacity();
-//     std::string scapacity;
-//     if(capacity == UINT_MAX - 1)
-//       scapacity = "Practicaly Unlimited";
-//     else
-//       scapacity = std::to_string(capacity);
-//     
-//     engine.addMessage("\nItems: " + std::to_string(playerInv->getSize()) + " Capacity: " + scapacity + "\n");
-//     engine.addMessage("You have: \n");
-//     if(playerInv->isEmpty())
-//     {
-//       engine.addMessage("No items\n\n");
-//       return true;
-//     }
-//     
-//     std::string result;
-//     auto items = playerInv->getAllItems();
-//     for (auto it = items.begin(); it != items.end(); ++it)
-//     {
-//       const Item *item = *it;
-//       std::string name = item->getName();
-//       if(item->getQuantity() > 1)
-// 	name.append(" (" + std::to_string(item->getQuantity()) + ")");
-//       result.append(name + ", ");
-//     }
-//     result.erase(result.length() -2, 2);
-//     engine.addMessage(result + "\n\n");
-//     return true;
-//   }
-//   
-//   // Check inventory of container object
-//   // FIXME: Only checks the first container found...
-//   std::string object = getObjectName(command);
-//   Inventory *playerInv = engine.getPlayer()->getInventory();
-//   Inventory *roomInv = engine.getMap()->getRoom(engine.getPlayer()->getLocation())->getInventory();
-//   Inventory *useInv = nullptr;
-//   assert(playerInv && roomInv);
-//   
-//   if(playerInv->hasItem(object))
-//     useInv = playerInv;
-//   if( (roomInv->hasItem(object)) && (!useInv))
-//     useInv = roomInv;
-//   
-//   if(!useInv)
-//   {
-//     engine.addMessage("You don't see a " + object + ".\n");
-//     return false;
-//   }
-//   
-//   ContainerItem *container = dynamic_cast<ContainerItem*>(useInv->getItem(object));
-//   if(!container)
-//   {
-//     engine.addMessage(object + " isn't a container!\n");
-//     return false;
-//   }
-//   
-//   if(container->isLocked())
-//   {
-//     engine.addMessage("The container is locked\n");
-//     return true;
-//   }
-//   
-//   size_t capacity = container->getInventory()->getCapacity();
-//   std::string scapacity;
-//   if(capacity == UINT_MAX - 1)
-//     scapacity = "Practicaly Unlimited";
-//   else
-//     scapacity = std::to_string(capacity);
-//   
-//   engine.addMessage("The " + object + " contains " +  std::to_string(container->getInventory()->getSize()) + " of " + scapacity + " items:\n");
-//   //engine.addMessage("The " + object + " contains: \n");
-//   if(container->getInventory()->isEmpty())
-//   {
-//     engine.addMessage("No Items\n\n");
-//     return true;
-//   }
-//   auto allItems = container->getInventory()->getAllItems();
-//   std::string result;
-//   for(auto it = allItems.begin(); it != allItems.end(); ++it)
-//   {
-//     const Item *item = *it;
-//     std::string name = item->getName();
-//     if(item->getQuantity() > 1)
-//       name.append(" (" + std::to_string(item->getQuantity()) + ")");
-//     result.append(name + ", ");
-//   }
-//   result.erase(result.length() -2, 2);
-//   engine.addMessage(result + "\n");
-//   return true;
-  return false;
+  if(command.size() == 1)
+  {
+    Inventory &playerInv = engine.getPlayer().getInventory();
+    
+    size_t capacity = playerInv.getCapacity();
+    std::string scapacity;
+    if(capacity == UINT_MAX - 1)
+      scapacity = "Practicaly Unlimited";
+    else
+      scapacity = std::to_string(capacity);
+    
+    engine.addMessage("\nItems: " + std::to_string(playerInv.getSize()) + " Capacity: " + scapacity + "\n");
+    engine.addMessage("You have: \n");
+    if(playerInv.isEmpty())
+    {
+      engine.addMessage("No items\n\n");
+      return true;
+    }
+    
+    std::string result;
+    auto items = playerInv.getAllItems();
+    for (auto it = items.begin(); it != items.end(); ++it)
+    {
+      const Item *item = *it;
+      std::string name = item->getName();
+      if(item->getQuantity() > 1)
+	name.append(" (" + std::to_string(item->getQuantity()) + ")");
+      result.append(name + ", ");
+    }
+    result.erase(result.length() -2, 2);
+    engine.addMessage(result + "\n\n");
+    return true;
+  }
+  
+  // Check inventory of container object
+  // FIXME: Only checks the first container found...
+  std::string object = getObjectName(command);
+  Inventory &playerInv = engine.getPlayer().getInventory();
+  Inventory &roomInv = engine.getPlayerRoom().getInventory();
+  Inventory *useInv = nullptr;
+  
+  if(playerInv.hasItem(object))
+    useInv = &playerInv;
+  if( (roomInv.hasItem(object)) && (!useInv))
+    useInv = &roomInv;
+  
+  if(useInv == nullptr)
+  {
+    engine.addMessage("You don't see a " + object + ".\n");
+    return false;
+  }
+  
+  ContainerItem *container = dynamic_cast<ContainerItem*>(&useInv->getItem(object));
+  if(!container)
+  {
+    engine.addMessage(object + " isn't a container!\n");
+    return false;
+  }
+  
+  if(container->isLocked())
+  {
+    engine.addMessage("The container is locked\n");
+    return true;
+  }
+  
+  size_t capacity = container->getInventory().getCapacity();
+  std::string scapacity;
+  if(capacity == UINT_MAX - 1)
+    scapacity = "Practicaly Unlimited";
+  else
+    scapacity = std::to_string(capacity);
+  
+  engine.addMessage("The " + object + " contains " +  std::to_string(container->getInventory().getSize()) + " of " + scapacity + " items:\n");
+  //engine.addMessage("The " + object + " contains: \n");
+  if(container->getInventory().isEmpty())
+  {
+    engine.addMessage("No Items\n\n");
+    return true;
+  }
+  auto allItems = container->getInventory().getAllItems();
+  std::string result;
+  for(auto it = allItems.begin(); it != allItems.end(); ++it)
+  {
+    const Item *item = *it;
+    std::string name = item->getName();
+    if(item->getQuantity() > 1)
+      name.append(" (" + std::to_string(item->getQuantity()) + ")");
+    result.append(name + ", ");
+  }
+  result.erase(result.length() -2, 2);
+  engine.addMessage(result + "\n");
+  return true;
 }
 
 // DROP
