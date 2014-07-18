@@ -548,7 +548,6 @@ bool CommandParser::processInv(vector &command, TextEngine &engine)
     scapacity = std::to_string(capacity);
   
   engine.addMessage("The " + object + " contains " +  std::to_string(container->getInventory().getSize()) + " of " + scapacity + " items:\n");
-  //engine.addMessage("The " + object + " contains: \n");
   if(container->getInventory().isEmpty())
   {
     engine.addMessage("No Items\n\n");
@@ -572,53 +571,50 @@ bool CommandParser::processInv(vector &command, TextEngine &engine)
 // DROP
 bool CommandParser::processDrop(vector &command, TextEngine &engine)
 {
-//   size_t quantity = 1;
-//   auto cantDrop = [this] { engine.addMessage("You can't drop that.\n"); return false; };
-//   if(command.size() < 2)
-//     return cantDrop();
-//   
-//   if(command.size() >= 3)
-//   {
-//     try{
-//       quantity = std::stoi(command.back());
-//       command.pop_back();
-//     } catch (const std::invalid_argument &ia) {
-//       // No quantity given
-//     }
-//   }
-//   
-//   std::string object = getObjectName(command);
-//   Inventory *playerInv = engine.getPlayer()->getInventory();
-//   Inventory *roomInv = engine.getMap()->getRoom(engine.getPlayer()->getLocation())->getInventory();
-//   assert(playerInv && roomInv);
-//   Item *item = playerInv->getItem(object);
-//   
-//   if(!item)
-//     return cantDrop();
-//   
-//   std::string name = item->getName();  
-//   
-//   Item *addItem = nullptr;
-//   if(dynamic_cast<ContainerItem*>(item))
-//   {
-//     addItem = new ContainerItem(static_cast<ContainerItem*>(item));
-//   } else
-//     addItem = new Item(item);
-//   
-//   bool removed = playerInv->removeItem(item, quantity);
-//   bool added = roomInv->addItem(addItem, quantity);
-//   if( added && removed )
-//   {
-//     delete addItem;
-//     if(quantity == 1)
-//       engine.addMessage("You dropped the " + name +  ".\n");
-//     else if (quantity > 1)
-//       engine.addMessage("You dropped " + std::to_string(quantity) + " " + name + "s.\n");
-//     return true;
-//   }
-//   
-//   engine.addMessage("\nSomething went wrong, You shouldn't see this message :(\n");
-//   return false;
+  size_t quantity = 1;
+  auto cantDrop = [&engine] { engine.addMessage("You can't drop that.\n"); return false; };
+  if(command.size() < 2)
+    return cantDrop();
+  
+  if(command.size() >= 3)
+  {
+    try{
+      quantity = std::stoi(command.back());
+      command.pop_back();
+    } catch (const std::invalid_argument &ia) {
+      // No quantity given
+    }
+  }
+  
+  std::string object = getObjectName(command);
+  Inventory &playerInv = engine.getPlayer().getInventory();
+  Inventory &roomInv = engine.getPlayerRoom().getInventory();
+  
+  if(!playerInv.hasItem(object))
+    return cantDrop();
+  
+  Item *item = &playerInv.getItem(object);
+  std::string name = item->getName();  
+  
+  std::unique_ptr<Item> addItem(nullptr);
+  if(dynamic_cast<ContainerItem*>(item))
+  {
+    addItem.reset(new ContainerItem(*static_cast<ContainerItem*>(item)));
+  } else
+    addItem.reset(new Item(*item));
+  
+  bool removed = playerInv.removeItem(*item, quantity);
+  bool added = roomInv.addItem(std::move(addItem), quantity);
+  if( added && removed )
+  {
+    if(quantity == 1)
+      engine.addMessage("You dropped the " + name +  ".\n");
+    else if (quantity > 1)
+      engine.addMessage("You dropped " + std::to_string(quantity) + " " + name + "s.\n");
+    return true;
+  }
+  
+  engine.addMessage("\nSomething went wrong, You shouldn't see this message :(\n");
   return false;
 }
 
