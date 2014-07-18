@@ -41,12 +41,14 @@ public:
   /**
    * @param name The Player's name
    */
-  inline virtual void setName(std::string name) { this->name = name; }
+  virtual void setName(std::string name);
   
    /**
    * @return The player's name
    */
   inline virtual std::string getName() const { return name; }
+  
+  inline std::string getUppercaseName() const { return upperName; }
   
     /**
    * @param desc the players description
@@ -126,6 +128,7 @@ public:
   
 protected:
   std::string name = "Character";
+  std::string upperName = "CHARACTER";
   std::string description = "Character";
   std::string filename = INVAILD_FILENAME;
   std::string location = "";

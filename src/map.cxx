@@ -187,7 +187,7 @@ bool Map::removeNpcs(std::string name, std::string location)
 {
   for(auto it = npcs.begin(); it != npcs.end(); ++it)
   {
-    if(it->get()->getName() == name && it->get()->getLocation() == location)
+    if( (it->get()->getName() == name || it->get()->getUppercaseName() == name) && (it->get()->getLocation() == location) )
     {
       npcs.erase(it);
     }
@@ -200,7 +200,7 @@ bool Map::hasNpc(std::string name, std::string location)
 {
   for(auto &npc : npcs)
   {
-    if(npc->getName() == name && npc->getLocation() == location)
+    if( (npc->getName() == name || npc->getUppercaseName() == name) && (npc->getLocation() == location) )
       return true;
   }
   return false;
@@ -211,7 +211,7 @@ std::vector<NonPlayableCharacter*> Map::getNpcs(std::string name, std::string lo
   std::vector<NonPlayableCharacter*> results;
   for(auto& npc : npcs)
   {
-    if(npc->getName() == name && npc->getLocation() == location)
+    if( (npc->getName() == name || npc->getUppercaseName() == name) && (npc->getLocation() == location) )
       results.push_back(npc.get());
   }
   return results;

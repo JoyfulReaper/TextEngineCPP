@@ -23,6 +23,7 @@
 
 
 #include "character.hpp"
+#include <boost/algorithm/string/case_conv.hpp>
 
 Character::Character() {}
 
@@ -34,6 +35,13 @@ Character::Character(const Character &obj) : inventory(Inventory(obj.inventory))
   this->location = obj.location;
   this->health = obj.health;
   this->money = obj.money;
+}
+
+void Character::setName(std::string name) 
+{ 
+  this->name = name; 
+  boost::to_upper(name);
+  this->upperName = name;
 }
 
 void Character::setLocation(std::string locId)

@@ -285,19 +285,18 @@ bool CommandParser::processLook(const vector &command, TextEngine &engine)
 // GO
 bool CommandParser::processGo(const vector &command, TextEngine &engine)
 {
-//   Direction dir;
-//   auto goWhere = [this] {engine.addMessage("\nGo where?\n"); return false; };
-//   
-//   if(command.size() < 2 || command[1] == "")
-//     return goWhere();
-//   if ( (dir = MapSite::getDirectionFromChar(command.at(1)[0])) == Direction::Invalid )
-//     return goWhere();
-//   
-//   MapSite *next = engine.getMap()->getRoom(engine.getPlayer()->getLocation())->getSide(dir);
-//   next->enter(dir);
-//   
-//   return true;
-  return false;
+  Direction dir;
+  auto goWhere = [&engine] {engine.addMessage("\nGo where?\n"); return false; };
+  
+  if(command.size() < 2 || command[1] == "")
+    return goWhere();
+  if ( (dir = MapSite::getDirectionFromChar(command.at(1)[0])) == Direction::Invalid )
+    return goWhere();
+  
+  MapSite *next = engine.getPlayerRoom().getSide(dir);
+  next->enter(dir, engine);
+  
+  return true;
 }
 
 // HELP
