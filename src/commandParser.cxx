@@ -22,11 +22,13 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
+#include <memory>
 #include <sstream>
 #include <iomanip>
 #include <climits>
 #include <fstream>
 #include <functional>
+#include "containerItem.hpp"
 #include "commandParser.hpp"
 #include "textEngine.hpp"
 
@@ -357,123 +359,116 @@ bool CommandParser::processSelf(TextEngine &engine)
 // GET
 bool CommandParser::processGet(vector &command, TextEngine &engine)
 {
-//   std::string object;
-//   size_t quantity = 1;
-//   auto cantTake = [this] { engine.addMessage("You can't take that.\n"); return false; };
-//   
-//   if(command.size() < 2)
-//     return cantTake();
-//   
-//   // Try to take item from container item, could be improved 
-//   // Won't work on items with " FROM " in the name...
-//   auto strippedVec = command;
-//   auto stripIt = strippedVec.begin();
-//   strippedVec.erase(stripIt);
-//   
-//   std::string full = "";
-//   for(auto it = strippedVec.begin(); it != strippedVec.end(); ++it)
-//     full.append(*it + " ");
-//   if(full != "")
-//     full.pop_back();
-//   
-//   size_t pos = full.find(" FROM ");
-//   if(pos != std::string::npos)
-//   {
-//     std::string contained = full.substr(0, pos);
-//     std::string container = full.substr(pos + 6, std::string::npos);
-//     
-//     ContainerItem *containerI = nullptr;
-//     Item *containedI = nullptr;
-//     Inventory *playerInv = engine.getPlayer()->getInventory();
-//     Inventory *roomInv = engine.getMap()->getRoom(engine.getPlayer()->getLocation())->getInventory();
-//     
-//     if(roomInv->hasItem(container))
-//     {
-//       containerI = dynamic_cast<ContainerItem*>(roomInv->getItem(container));
-//     }
-//     if(!containerI)
-//     {
-//       if(playerInv->hasItem(container))
-//       {
-// 	containerI = dynamic_cast<ContainerItem*>(playerInv->getItem(container));
-//       }
-//     }
-//     if(containerI)
-//     {
-//       if(containerI->isLocked())
-//       {
-// 	engine.addMessage("The container is locked!\n");
-// 	return true;
-//       }
-//       containedI = containerI->getInventory()->getItem(contained);
-//       if(containedI)
-//       {
-// 	Item *addItem = nullptr;
-// 	if(dynamic_cast<ContainerItem*>(containedI))
-// 	{
-// 	  addItem = new ContainerItem(static_cast<ContainerItem*>(containedI));
-// 	} else
-// 	  addItem = new Item(containedI);
-// 	
-// 	playerInv->addItem(addItem, 1);
-// 	addItem->onTake();
-// 	containerI->getInventory()->removeItem(containedI, 1);
-// 	
-// 	delete addItem;
-// 	
-// 	engine.addMessage("You took the " + contained + " from the " + container + ".\n");
-// 	return true;
-//       }
-//     }
-//   }
-//   
-//   // Try to take multiple quantity
-//   if(command.size() >=3)
-//   {
-//     try {
-//       quantity = std::stoi(command.back());
-//       command.pop_back();
-//     } catch (const std::invalid_argument &ia) {
-//       // no quantity given
-//     }
-//   }
-//   
-//   object = getObjectName(command);
-//   Inventory *roomInv = engine.getMap()->getRoom(engine.getPlayer()->getLocation())->getInventory();
-//   assert(roomInv);
-//   
-//   Item *item = roomInv->getItem(object);
-//   if(!item)
-//     return cantTake();
-//   
-//   if(!item->isObtainable())
-//   {
-//     item->onTake();
-//     return false;
-//   }
-//   
-//   Inventory *playerInv = engine.getPlayer()->getInventory();
-//   assert(playerInv);
-//   if(quantity > item->getQuantity())
-//   {
-//     engine.addMessage("The aren't enough " + item->getName() + "s to take that many!\n");
-//     return false;
-//   }
-//   
-//   bool removed = false;
-//   bool added = (playerInv->addItem(item, quantity));
-//   if(added)
-//     removed = (roomInv->removeItem(item, quantity));
-//   if( added && removed )
-//   {
-//     if(quantity > 1)
-//       engine.addMessage("You took " + std::to_string(quantity) + " " + item->getName() + "s\n");
-//     else
-//       engine.addMessage("You took the " + item->getName() + "\n");
-//     
-//     return true;
-//   }
-//   return false;
+  std::string object;
+  size_t quantity = 1;
+  auto cantTake = [&engine] { engine.addMessage("You can't take that.\n"); return false; };
+  
+  if(command.size() < 2)
+    return cantTake();
+  
+  // Try to take item from container item, could be improved 
+  // Won't work on items with " FROM " in the name...
+  auto strippedVec = command;
+  auto stripIt = strippedVec.begin();
+  strippedVec.erase(stripIt);
+  
+  std::string full = "";
+  for(auto it = strippedVec.begin(); it != strippedVec.end(); ++it)
+    full.append(*it + " ");
+  if(full != "")
+    full.pop_back();
+  
+  size_t pos = full.find(" FROM ");
+  if(pos != std::string::npos)
+  {
+    std::string contained = full.substr(0, pos);
+    std::string container = full.substr(pos + 6, std::string::npos);
+    
+    ContainerItem *containerI = nullptr;
+    Item *containedI = nullptr;
+    Inventory &playerInv = engine.getPlayer().getInventory();
+    Inventory &roomInv = engine.getPlayerRoom().getInventory();
+    
+    if(roomInv.hasItem(container))
+    {
+      containerI = dynamic_cast<ContainerItem*>(&roomInv.getItem(container));
+    }
+    if(!containerI)
+    {
+      if(playerInv.hasItem(container))
+      {
+	containerI = dynamic_cast<ContainerItem*>(&playerInv.getItem(container));
+      }
+    }
+    if(containerI)
+    {
+      if(containerI->isLocked())
+      {
+	engine.addMessage("The container is locked!\n");
+	return true;
+      }
+      containedI = &containerI->getInventory().getItem(contained);
+      if(containedI)
+      {
+	std::unique_ptr<Item> addItem(nullptr);
+	if(dynamic_cast<ContainerItem*>(containedI))
+	{
+	  addItem.reset(new ContainerItem(*static_cast<ContainerItem*>(containedI)) );
+	} else
+	  addItem.reset(new Item(*containedI));
+	
+	playerInv.addItem(std::move(addItem), 1);
+	addItem->onTake(engine);
+	containerI->getInventory().removeItem(*containedI, 1);
+	
+	engine.addMessage("You took the " + contained + " from the " + container + ".\n");
+	return true;
+      }
+    }
+  }
+  
+  // Try to take multiple quantity
+  if(command.size() >=3)
+  {
+    try {
+      quantity = std::stoi(command.back());
+      command.pop_back();
+    } catch (const std::invalid_argument &ia) {
+      // no quantity given
+    }
+  }
+  
+  object = getObjectName(command);
+  Inventory &roomInv = engine.getPlayerRoom().getInventory();
+  
+  if(!roomInv.hasItem(object))
+    return cantTake();
+  
+  Item &item = roomInv.getItem(object);
+  if(!item.isObtainable())
+  {
+    item.onTake(engine);
+    return false;
+  }
+  
+  Inventory &playerInv = engine.getPlayer().getInventory();
+  if(quantity > item.getQuantity())
+  {
+    engine.addMessage("The aren't enough " + item.getName() + "s to take that many!\n");
+    return false;
+  }
+  
+  bool added = (playerInv.addItem(std::unique_ptr<Item>(new Item(item)), quantity));
+  bool removed = (roomInv.removeItem(item, quantity));
+  if( added && removed )
+  {
+    if(quantity > 1)
+      engine.addMessage("You took " + std::to_string(quantity) + " " + item.getName() + "s\n");
+    else
+      engine.addMessage("You took the " + item.getName() + "\n");
+    
+    return true;
+  }
   return false;
 }
 
