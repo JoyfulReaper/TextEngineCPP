@@ -25,6 +25,9 @@
 #define _MAPSITE_H_
 
 #include <string>
+#include <boost/serialization/assume_abstract.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
 
 enum class Direction : size_t  { North = 0, South = 1, East = 2, West = 3, Up = 4, Down = 5, Invalid = 6 };
 
@@ -63,5 +66,16 @@ public:
   
 protected:
   std::string name;
+  
+  friend class boost::serialization::access;
+  
+  template<class Archive>
+  void serialize(Archive &ar, const unsigned int version)
+  {
+    ar & name;
+  }
 };
+
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(MapSite)
+
 #endif

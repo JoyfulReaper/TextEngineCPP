@@ -48,5 +48,15 @@ public:
 private:
   Inventory inventory;
   bool locked = false;
+  
+  friend boost::serialization::access;
+  
+  template<class Archive>
+  void serialize(Archive &ar, const unsigned int version)
+  {
+    ar & boost::serialization::base_object<Item>(*this);
+    ar & locked;
+    ar & inventory;
+  }
 };
 #endif

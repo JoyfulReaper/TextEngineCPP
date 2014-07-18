@@ -164,6 +164,7 @@ private:
   template<class Archive>
   void serialize(Archive &ar, const unsigned int version)
   {
+    ar & boost::serialization::base_object<MapSite>(*this);
     ar & sides;
     ar & inventory;
     ar & name;

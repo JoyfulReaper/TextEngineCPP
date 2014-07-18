@@ -89,5 +89,15 @@ protected:
   std::string exitToRoom = "";
   bool isLocked = false;
   bool visible = true;
+  
+  friend boost::serialization::access;
+  
+  template<class Archive>
+  void serialize(Archive &ar, const unsigned int version)
+  {
+    ar & boost::serialization::base_object<MapSite>(*this);
+    ar & isLocked;
+    ar & visible;
+  }
 };
 #endif

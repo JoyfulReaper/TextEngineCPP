@@ -25,6 +25,8 @@
 #ifndef _NPC_H_
 #define _NPC_H_
 
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
 #include "character.hpp"
 
 class TextEngine;
@@ -87,6 +89,16 @@ private:
    * This NPC was attacked
    */
   void wasAttacked(TextEngine &engine);
+  
+  friend class boost::serialization::access;
+  
+  template<class Archive>
+  void serialize(Archive &ar, const unsigned int version)
+  {
+    ar & boost::serialization::base_object<Character>(*this);
+    ar & canBeKilled;
+    ar & respawnChance;
+  }
   
 };
 #endif
