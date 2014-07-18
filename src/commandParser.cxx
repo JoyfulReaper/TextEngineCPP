@@ -692,80 +692,77 @@ bool CommandParser::processSay(vector &command, TextEngine &engine)
 // USE
 bool CommandParser::processUse(vector &command, TextEngine &engine)
 {
-//   std::string verb = command.at(0);
-//   auto cmdIt = command.begin();
-//   command.erase(cmdIt); //strip verb
-//   
-//   std::string full = "";
-//   for(auto it = command.begin(); it != command.end(); ++it)
-//     full.append(*it + " ");
-//   if(full != "")
-//     full.pop_back();
-//   
-//   auto findMatches = [](Inventory *inv, std::string fullString) -> std::string
-//   {
-//     std::vector<std::string> matches;
-//     size_t pos;
-//     std::string name;
-//     auto allItems = inv->getAllItems();
-//     
-//     for(auto it = allItems.begin(); it != allItems.end(); ++it)
-//     {
-//       const Item *item = *it;
-//       name = item->getName();
-//       boost::to_upper(name);
-//       pos = fullString.rfind(name);
-//       if(pos != std::string::npos)
-// 	matches.push_back(fullString.substr(pos, name.length()));
-//     }
-//     
-//     if(matches.size() == 0)
-//       return "";
-//     
-//     std::string bestMatch;
-//     for(auto it = matches.begin(); it != matches.end(); ++it)
-//       if(it->length() > bestMatch.length())
-// 	bestMatch = *it;
-//       
-//       return bestMatch;
-//   };
-//   
-//   auto stripBestMatch = [&full](std::string bestMatch)
-//   {
-//     full.replace(0, bestMatch.length()+1, "");
-//     boost::trim(full);
-//     return;
-//   };
-//   
-//   Inventory *playerInv = engine.getPlayer()->getInventory();
-//   Inventory *roomInv = engine.getMap()->getRoom(engine.getPlayer()->getLocation())->getInventory();
-//   if(!roomInv->isEmpty())
-//   {
-//     std::string itemMatch = findMatches(roomInv, full);
-//     if(itemMatch != "")
-//     {
-//       stripBestMatch(itemMatch);
-//       //std::cerr << "DEBUG: using: " << itemMatch << " full: " << full << std::endl;
-//       roomInv->getItem(itemMatch)->useItem(full);
-//       return true;
-//     }
-//   }
-//   
-//   if(!playerInv->isEmpty())
-//   {
-//     std::string itemMatch = findMatches(playerInv, full);
-//     if(itemMatch != "")
-//     {
-//       stripBestMatch(itemMatch);
-//       //std::cerr << "DEBUG: using: " << itemMatch << " full: " << full << std::endl;
-//       Item *matchItem = playerInv->getItem(itemMatch);
-//       matchItem->useItem(full);
-//       return true;
-//     }
-//   }
-//   
-//   engine.addMessage("You can't " + verb + " that!\n");
-//   return false;
+  std::string verb = command.at(0);
+  auto cmdIt = command.begin();
+  command.erase(cmdIt); //strip verb
+  
+  std::string full = "";
+  for(auto it = command.begin(); it != command.end(); ++it)
+    full.append(*it + " ");
+  if(full != "")
+    full.pop_back();
+  
+  auto findMatches = [](Inventory *inv, std::string fullString) -> std::string
+  {
+    std::vector<std::string> matches;
+    size_t pos;
+    std::string name;
+    auto allItems = inv->getAllItems();
+    
+    for(auto it = allItems.begin(); it != allItems.end(); ++it)
+    {
+      const Item *item = *it;
+      name = item->getName();
+      boost::to_upper(name);
+      pos = fullString.rfind(name);
+      if(pos != std::string::npos)
+	matches.push_back(fullString.substr(pos, name.length()));
+    }
+    
+    if(matches.size() == 0)
+      return "";
+    
+    std::string bestMatch;
+    for(auto it = matches.begin(); it != matches.end(); ++it)
+      if(it->length() > bestMatch.length())
+	bestMatch = *it;
+      
+      return bestMatch;
+  };
+  
+  auto stripBestMatch = [&full](std::string bestMatch)
+  {
+    full.replace(0, bestMatch.length()+1, "");
+    boost::trim(full);
+    return;
+  };
+  
+  Inventory &playerInv = engine.getPlayer().getInventory();
+  Inventory &roomInv = engine.getPlayerRoom().getInventory();
+  if(!roomInv.isEmpty())
+  {
+    std::string itemMatch = findMatches(&roomInv, full);
+    if(itemMatch != "")
+    {
+      stripBestMatch(itemMatch);
+      roomInv.getItem(itemMatch).useItem(full, engine);
+      return true;
+    }
+  }
+  
+  if(!playerInv.isEmpty())
+  {
+    std::string itemMatch = findMatches(&playerInv, full);
+    if(itemMatch != "")
+    {
+      stripBestMatch(itemMatch);
+      Item &matchItem = playerInv.getItem(itemMatch);
+      matchItem.useItem(full, engine);
+      return true;
+    }
+  }
+  
+  engine.addMessage("You can't " + verb + " that!\n");
   return false;
 }
 
