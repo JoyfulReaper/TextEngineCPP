@@ -127,7 +127,7 @@ public:
    * @param name The name of the NonPlayableCharacter to check for
    * @return true if it is in the room, false otherwise
    */
-  bool hasNPC(std::string name);  
+  bool hasNpc(std::string name, TextEngine &engine);  
   
 private:
   /**

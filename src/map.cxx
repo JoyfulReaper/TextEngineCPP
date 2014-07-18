@@ -196,6 +196,16 @@ bool Map::removeNpcs(std::string name, std::string location)
   return false;
 }
 
+bool Map::hasNpc(std::string name, std::string location)
+{
+  for(auto &npc : npcs)
+  {
+    if(npc->getName() == name && npc->getLocation() == location)
+      return true;
+  }
+  return false;
+}
+
 std::vector<NonPlayableCharacter*> Map::getNpcs(std::string name, std::string location)
 {
   std::vector<NonPlayableCharacter*> results;

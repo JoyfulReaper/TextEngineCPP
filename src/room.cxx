@@ -220,9 +220,7 @@ bool Room::setFilename(const std::string filename)
   return false;
 }
 
-bool Room::hasNPC(std::string name)
+bool Room::hasNpc(std::string name, TextEngine &engine)
 {
-  //   boost::to_upper(name);
-  //   return npcs.count(name);
-  return false;
+  return engine.getMap().hasNpc(name, getShortName());
 }
