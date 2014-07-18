@@ -31,9 +31,15 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/serialization/vector.hpp>
 #include "serialization_adaptors.hpp"
-#include "mapsite.hpp"
-#include "room.hpp"
+
 #include "npc.hpp"
+#include "wall.hpp"
+#include "room.hpp"
+#include "roof.hpp"
+#include "exit.hpp"
+#include "floor.hpp"
+#include "player.hpp"
+#include "containerItem.hpp"
 
 class TextEngine;
 
@@ -131,6 +137,14 @@ private:
   template<class Archive>
   void serialize(Archive &ar, const unsigned int version)
   {
+    ar.register_type(static_cast<ContainerItem *>(NULL));
+    ar.register_type(static_cast<Player *>(NULL));
+    ar.register_type(static_cast<NonPlayableCharacter *>(NULL));
+    ar.register_type(static_cast<Wall *>(NULL));
+    ar.register_type(static_cast<Room *>(NULL));
+    ar.register_type(static_cast<Roof *>(NULL));
+    ar.register_type(static_cast<Floor *>(NULL));
+    ar.register_type(static_cast<Exit *>(NULL));
     ar & rooms;
     ar & npcs;
     ar & startRoom;

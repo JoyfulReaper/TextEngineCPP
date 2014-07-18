@@ -30,7 +30,6 @@
 #include "npcBuilder.hpp"
 #include "itemParser.hpp"
 #include "itemBuilder.hpp"
-#include "room.hpp"
 #include "textEngineException.hpp"
 
 Map::Map(std::string gamePath) : gamePath(gamePath)
