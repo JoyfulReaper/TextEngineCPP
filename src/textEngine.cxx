@@ -28,10 +28,7 @@
 #include "textEngineException.hpp"
 
 TextEngine::TextEngine(std::string gamePath) : player(Player(gamePath)), map(Map(gamePath)), gamePath(gamePath)
-{ 
-  //ItemParser ip(this);
-  //ip.parseItems(gamePath);
-  
+{   
   //initLuaApi();
   
   //LuaContext *lua = getLuaContext();
@@ -44,13 +41,11 @@ TextEngine::TextEngine(std::string gamePath) : player(Player(gamePath)), map(Map
   //  scriptPath.close();
   // }
   
-  //gameStarted = true;
-  //if(startRoom == "")
-  //  throw(TextEngineException("Starting room has not been set"));
+  gameStarted = true;
+  if(map.getStartRoom() == "")
+    throw(TextEngineException("Starting room has not been set"));
   
-  //map->getRoom(startRoom)->enter(Direction::Invalid);
-  
-  //initLuaApi(); 
+  map.getRoom(map.getStartRoom()).enter(Direction::Invalid, *this);
 }
 
 ////////////////////////////////////////////////////////////////////////

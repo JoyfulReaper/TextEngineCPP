@@ -69,7 +69,7 @@ public:
    */
   bool removeRoom(std::string name);
   
-  inline void setStartRoom(std::string name) { this->startRoom = startRoom; }
+  inline void setStartRoom(std::string name) { this->startRoom = name; }
   
   inline std::string getStartRoom() { return startRoom; }
   
