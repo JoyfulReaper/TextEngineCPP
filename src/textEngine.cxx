@@ -35,7 +35,7 @@ TextEngine::TextEngine(std::string gamePath) :
   api(LuaAPI(*this)),
   gamePath(gamePath)
 {   
-  //initLuaApi();
+  initLuaApi();
   
   LuaContext &lua = getLuaContext();
   boost::filesystem::path startScript(gamePath);
@@ -43,7 +43,7 @@ TextEngine::TextEngine(std::string gamePath) :
   std::fstream scriptPath(startScript.native());
   if(scriptPath.is_open())
   {
-    //lua.executeCode(scriptPath);
+    lua.executeCode(scriptPath);
     scriptPath.close();
    }
   
@@ -157,74 +157,74 @@ LuaContext& TextEngine::getLuaContext() { return api.getLuaContext(); }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// void TextEngine::initLuaApi()
-// {
-//   LuaContext *lua = api->getLuaContext();
-//   // Engine Related
-//   lua->registerFunction("addMessage", &LuaAPI::addMessage);
-//   lua->registerFunction("doCommand", &LuaAPI::doCommand);
-//   lua->registerFunction("doCommandSilent", &LuaAPI::doCommandSilent);
-//   lua->registerFunction("getRandomNumber", &LuaAPI::getRandomNumber);
-//   lua->registerFunction("setGameOver", &LuaAPI::setGameOver);
-//   lua->registerFunction("runScript", &LuaAPI::runScript);
-//   lua->registerFunction("runLuaCode", &LuaAPI::runLuaCode);
-//   lua->registerFunction("registerCommand", &LuaAPI::registerCommand);
-//   // Direction Related:
-//   lua->writeVariable("dirNorth", static_cast<int>(Direction::North));
-//   lua->writeVariable("dirSouth", static_cast<int>(Direction::South));
-//   lua->writeVariable("dirEast", static_cast<int>(Direction::East));
-//   lua->writeVariable("dirWest", static_cast<int>(Direction::West));
-//   lua->writeVariable("dirUp", static_cast<int>(Direction::Up));
-//   lua->writeVariable("dirDown", static_cast<int>(Direction::Down));
-//   // Room Related:
-//   lua->registerFunction("roomExists", &LuaAPI::roomExists);
-//   lua->registerFunction("roomHasNpc", &LuaAPI::roomHasNPC);
-//   lua->registerFunction("setRoomDescription", &LuaAPI::setRoomDescription);
-//   lua->registerFunction("getRoomDescription", &LuaAPI::getRoomDescription);
-//   lua->registerFunction("setRoomVisited", &LuaAPI::setRoomVisited);
-//   lua->registerFunction("getRoomVisited", &LuaAPI::getRoomVisited);
-//   lua->registerFunction("getRoomShortName", &LuaAPI::getRoomShortName);
-//   lua->registerFunction("setRoomName", &LuaAPI::setRoomName);
-//   lua->registerFunction("getRoomName", &LuaAPI::getRoomName);
-//   lua->registerFunction("setRoomLookDescription", &LuaAPI::setRoomLookDescription);
-//   lua->registerFunction("getRoomLookDescription", &LuaAPI::getRoomLookDescription);
-//   lua->registerFunction("getTableOfNpcs", &LuaAPI::getTableOfNpcs);
-//   lua->registerFunction("checkIfExitLocked", &LuaAPI::checkIfExitLocked);
-//   lua->registerFunction("setExitLocked", &LuaAPI::setExitLocked);
-//   lua->registerFunction("checkExitVisible", &LuaAPI::checkExitVisible);
-//   lua->registerFunction("setExitVisible", &LuaAPI::setExitVisible);
-//   // Character Related:
-//   lua->registerFunction("characterIsAlive", &LuaAPI::characterIsAlive);
-//   lua->registerFunction("setPlayerHealth", &LuaAPI::setPlayerHealth);
-//   lua->registerFunction("getPlayerHealth", &LuaAPI::getPlayerHealth);
-//   lua->registerFunction("setPlayerMoney", &LuaAPI::setPlayerMoney);
-//   lua->registerFunction("getPlayerMoney", &LuaAPI::getPlayerMoney);
-//   lua->registerFunction("setCharacterDescription", &LuaAPI::setCharacterDescription);
-//   lua->registerFunction("getCharacterDescription", &LuaAPI::getCharacterDescription);
-//   lua->registerFunction("setPlayerLocation", &LuaAPI::setPlayerLocation);
-//   lua->registerFunction("getCharacterLocation", &LuaAPI::getCharacterLocation);
-//   lua->registerFunction("setCharacterMoney", &LuaAPI::setCharacterMoney);
-//   lua->registerFunction("getCharacterMoney", &LuaAPI::getCharacterMoney);
-//   lua->registerFunction("setCharacterHealth", &LuaAPI::setCharacterHealth);
-//   lua->registerFunction("getCharacterHealth", &LuaAPI::getCharacterHealth);
-//   // Item and Inventory related
-//   lua->registerFunction("playerAddItem", &LuaAPI::playerAddItem);
-//   lua->registerFunction("playerRemoveItem", &LuaAPI::playerRemoveItem);
-//   lua->registerFunction("roomAddItem", &LuaAPI::roomAddItem);
-//   lua->registerFunction("roomRemoveItem", &LuaAPI::roomRemoveItem);
-//   lua->registerFunction("playerHasItem", &LuaAPI::playerHasItem);
-//   lua->registerFunction("roomHasItem", &LuaAPI::roomHasItem);
-//   lua->registerFunction("getPlayerInvTable", &LuaAPI::getPlayerInvTable);
-//   lua->registerFunction("getRoomInvTable", &LuaAPI::getRoomInvTable);
-//   lua->registerFunction("checkContainerLocked", &LuaAPI::checkContainerLocked);
-//   lua->registerFunction("setContainerLocked", &LuaAPI::setContainerLocked);
-//   lua->registerFunction("putItemInItem", &LuaAPI::putItemInItem);
-//   lua->registerFunction("getItemVisibility", &LuaAPI::getItemVisibility);
-//   lua->registerFunction("setItemVisibility", &LuaAPI::setItemVisibility);
-//   lua->registerFunction("setItemObtainable", &LuaAPI::setItemObtainable);
-//   lua->registerFunction("getItemObtainable", &LuaAPI::getItemObtainable);
-//   
-//   lua->writeVariable("te", LuaAPI{this});
-// }
+void TextEngine::initLuaApi()
+{
+  LuaContext &lua = getLuaContext();
+  // Engine Related
+  lua.registerFunction("addMessage", &LuaAPI::addMessage);
+  lua.registerFunction("doCommand", &LuaAPI::doCommand);
+  lua.registerFunction("doCommandSilent", &LuaAPI::doCommandSilent);
+  lua.registerFunction("getRandomNumber", &LuaAPI::getRandomNumber);
+  lua.registerFunction("setGameOver", &LuaAPI::setGameOver);
+  lua.registerFunction("runScript", &LuaAPI::runScript);
+  lua.registerFunction("runLuaCode", &LuaAPI::runLuaCode);
+  lua.registerFunction("registerCommand", &LuaAPI::registerCommand);
+  // Direction Related:
+  lua.writeVariable("dirNorth", static_cast<int>(Direction::North));
+  lua.writeVariable("dirSouth", static_cast<int>(Direction::South));
+  lua.writeVariable("dirEast", static_cast<int>(Direction::East));
+  lua.writeVariable("dirWest", static_cast<int>(Direction::West));
+  lua.writeVariable("dirUp", static_cast<int>(Direction::Up));
+  lua.writeVariable("dirDown", static_cast<int>(Direction::Down));
+  // Room Related:
+  lua.registerFunction("roomExists", &LuaAPI::roomExists);
+  lua.registerFunction("roomHasNpc", &LuaAPI::roomHasNPC);
+  lua.registerFunction("setRoomDescription", &LuaAPI::setRoomDescription);
+  lua.registerFunction("getRoomDescription", &LuaAPI::getRoomDescription);
+  lua.registerFunction("setRoomVisited", &LuaAPI::setRoomVisited);
+  lua.registerFunction("getRoomVisited", &LuaAPI::getRoomVisited);
+  lua.registerFunction("getRoomShortName", &LuaAPI::getRoomShortName);
+  lua.registerFunction("setRoomName", &LuaAPI::setRoomName);
+  lua.registerFunction("getRoomName", &LuaAPI::getRoomName);
+  lua.registerFunction("setRoomLookDescription", &LuaAPI::setRoomLookDescription);
+  lua.registerFunction("getRoomLookDescription", &LuaAPI::getRoomLookDescription);
+  lua.registerFunction("getTableOfNpcs", &LuaAPI::getTableOfNpcs);
+  lua.registerFunction("checkIfExitLocked", &LuaAPI::checkIfExitLocked);
+  lua.registerFunction("setExitLocked", &LuaAPI::setExitLocked);
+  lua.registerFunction("checkExitVisible", &LuaAPI::checkExitVisible);
+  lua.registerFunction("setExitVisible", &LuaAPI::setExitVisible);
+  // Character Related:
+  lua.registerFunction("characterIsAlive", &LuaAPI::characterIsAlive);
+  lua.registerFunction("setPlayerHealth", &LuaAPI::setPlayerHealth);
+  lua.registerFunction("getPlayerHealth", &LuaAPI::getPlayerHealth);
+  lua.registerFunction("setPlayerMoney", &LuaAPI::setPlayerMoney);
+  lua.registerFunction("getPlayerMoney", &LuaAPI::getPlayerMoney);
+  lua.registerFunction("setCharacterDescription", &LuaAPI::setCharacterDescription);
+  lua.registerFunction("getCharacterDescription", &LuaAPI::getCharacterDescription);
+  lua.registerFunction("setPlayerLocation", &LuaAPI::setPlayerLocation);
+  lua.registerFunction("getCharacterLocation", &LuaAPI::getCharacterLocation);
+  lua.registerFunction("setCharacterMoney", &LuaAPI::setCharacterMoney);
+  lua.registerFunction("getCharacterMoney", &LuaAPI::getCharacterMoney);
+  lua.registerFunction("setCharacterHealth", &LuaAPI::setCharacterHealth);
+  lua.registerFunction("getCharacterHealth", &LuaAPI::getCharacterHealth);
+  // Item and Inventory related
+  lua.registerFunction("playerAddItem", &LuaAPI::playerAddItem);
+  lua.registerFunction("playerRemoveItem", &LuaAPI::playerRemoveItem);
+  lua.registerFunction("roomAddItem", &LuaAPI::roomAddItem);
+  lua.registerFunction("roomRemoveItem", &LuaAPI::roomRemoveItem);
+  lua.registerFunction("playerHasItem", &LuaAPI::playerHasItem);
+  lua.registerFunction("roomHasItem", &LuaAPI::roomHasItem);
+  lua.registerFunction("getPlayerInvTable", &LuaAPI::getPlayerInvTable);
+  lua.registerFunction("getRoomInvTable", &LuaAPI::getRoomInvTable);
+  lua.registerFunction("checkContainerLocked", &LuaAPI::checkContainerLocked);
+  lua.registerFunction("setContainerLocked", &LuaAPI::setContainerLocked);
+  lua.registerFunction("putItemInItem", &LuaAPI::putItemInItem);
+  lua.registerFunction("getItemVisibility", &LuaAPI::getItemVisibility);
+  lua.registerFunction("setItemVisibility", &LuaAPI::setItemVisibility);
+  lua.registerFunction("setItemObtainable", &LuaAPI::setItemObtainable);
+  lua.registerFunction("getItemObtainable", &LuaAPI::getItemObtainable);
+  
+  lua.writeVariable("te", LuaAPI{*this});
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////

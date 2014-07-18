@@ -165,6 +165,8 @@ private:
   Map map;
   LuaAPI api;
   
+  void initLuaApi();
+  
   std::string startRoom = "";
   std::string gamePath;
   std::deque<std::string> messages;
