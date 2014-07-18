@@ -302,59 +302,56 @@ bool CommandParser::processGo(const vector &command, TextEngine &engine)
 // HELP
 bool CommandParser::processHelp(const vector &command, TextEngine &engine)
 {
-//   if(command.size() > 1)
-//   {
-//     Inventory *roomInv = engine.getMap()->getRoom(engine.getPlayer()->getLocation())->getInventory();
-//     Inventory *playerInv = engine.getPlayer()->getInventory();
-//     std::string object = getObjectName(command);
-//     
-//     if(roomInv->getItem(object))
-//     {
-//       roomInv->getItem(object)->useHelp();
-//       return true;
-//     }
-//     if(playerInv->getItem(object))
-//     {
-//       playerInv->getItem(object)->useHelp();
-//       return true;
-//     }
-//   }
-//   
-//   
-//   engine.addMessage("\nCurrently supported commands:\n");
-//   engine.addMessage("HELP [ITEM]: Show item's help message\n");
-//   engine.addMessage("GO [(N)ORTH, (S)OUTH, (E)AST, (W)EST, (U)P, (D)OWN]: Go in direction\n");
-//   engine.addMessage("LOOK [ITEM]: Look at room or item\n");
-//   engine.addMessage("GET [ITEM] [QUANTITY]: Take item\n");
-//   engine.addMessage("GET [ITEM] FROM [CONTAINER]: Remove item from container\n");
-//   engine.addMessage("DROP [ITEM]: Drop item\n");
-//   engine.addMessage("SAY [CREATURE]: Speak with creature\n");
-//   engine.addMessage("USE [ITEM SPECIFIC]: Use item\n");
-//   engine.addMessage("PUT [ITEM] IN [CONTAINER]\n");
-//   engine.addMessage("INV [ITEM]: Show inventory, or ITEM inventory if it is a container\n");
-//   engine.addMessage("SELF: Show information such as health and money\n");
-//   engine.addMessage("QUIT: Exit the game\n");
-//   return true; 
-  return false;
+  if(command.size() > 1)
+  {
+    Inventory &roomInv = engine.getPlayerRoom().getInventory();
+    Inventory &playerInv = engine.getPlayer().getInventory();
+    std::string object = getObjectName(command);
+    
+    if(roomInv.hasItem(object))
+    {
+      roomInv.getItem(object).useHelp(engine);
+      return true;
+    }
+    if(playerInv.hasItem(object))
+    {
+      playerInv.getItem(object).useHelp(engine);
+      return true;
+    }
+  }
+  
+  engine.addMessage("\nCurrently supported commands:\n");
+  engine.addMessage("HELP [ITEM]: Show item's help message\n");
+  engine.addMessage("GO [(N)ORTH, (S)OUTH, (E)AST, (W)EST, (U)P, (D)OWN]: Go in direction\n");
+  engine.addMessage("LOOK [ITEM]: Look at room or item\n");
+  engine.addMessage("GET [ITEM] [QUANTITY]: Take item\n");
+  engine.addMessage("GET [ITEM] FROM [CONTAINER]: Remove item from container\n");
+  engine.addMessage("DROP [ITEM]: Drop item\n");
+  engine.addMessage("SAY [CREATURE]: Speak with creature\n");
+  engine.addMessage("USE [ITEM SPECIFIC]: Use item\n");
+  engine.addMessage("PUT [ITEM] IN [CONTAINER]\n");
+  engine.addMessage("INV [ITEM]: Show inventory, or ITEM inventory if it is a container\n");
+  engine.addMessage("SELF: Show information such as health and money\n");
+  engine.addMessage("QUIT: Exit the game\n");
+  return true; 
 }
 
 // SELF
 bool CommandParser::processSelf(TextEngine &engine)
 {
-//   auto to_string_2 = [] ( double value ) {
-//     std::ostringstream out;
-//     out << std::setprecision(2) << std::fixed << value;
-//     return out.str();
-//   };
-//   
-//   Player *player = engine.getPlayer();
-//   engine.addMessage("\nName: " + player->getName());
-//   engine.addMessage("\nDescription: " + player->getDescription());
-//   engine.addMessage("\nHealth: " + to_string_2( player->getHealth() ) );
-//   engine.addMessage("\nMoney: " + to_string_2(player->getMoney()) + "\n\n");
-//   
-//   return true;
-  return false;
+  auto to_string_2 = [] ( double value ) {
+    std::ostringstream out;
+    out << std::setprecision(2) << std::fixed << value;
+    return out.str();
+  };
+  
+  Player &player = engine.getPlayer();
+  engine.addMessage("\nName: " + player.getName());
+  engine.addMessage("\nDescription: " + player.getDescription());
+  engine.addMessage("\nHealth: " + to_string_2( player.getHealth() ) );
+  engine.addMessage("\nMoney: " + to_string_2(player.getMoney()) + "\n");
+  
+  return true;
 }
 
 // GET

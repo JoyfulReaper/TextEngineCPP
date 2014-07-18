@@ -222,7 +222,7 @@ char* rl_gets ()
   }
   
   /* Get a line from the user. */
-  line_read = readline ("Enter Command: ");
+  line_read = readline ("\nEnter Command: ");
   #ifdef HAVE_READLINE_HISTORY
   /* If the line has any text in it,
    *    save it on the history. */
