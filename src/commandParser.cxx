@@ -22,9 +22,6 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/serialization/deque.hpp>
 
 #include <memory>
 #include <sstream>
@@ -136,7 +133,6 @@ bool CommandParser::processSave(const vector &command, TextEngine &engine)
   boost::archive::text_oarchive oa(saveOS);
   oa << engine.player;
   oa << engine.map;
-  oa << engine.startRoom;
   oa << engine.gamePath;
   oa << engine.messages;
   oa << engine.gameStarted;
@@ -150,43 +146,33 @@ bool CommandParser::processSave(const vector &command, TextEngine &engine)
 
 bool CommandParser::processLoad(const vector &command, TextEngine &engine)
 {
-//   boost::filesystem::path saveFile(engine.getGamePath());
-//   saveFile += "/saves/";
-//   saveFile += getObjectName(command);
-//   saveFile += ".tes";
-//   
-//   std::ifstream saveIS(saveFile.native());
-//   if(!saveIS.good())
-//   {
-//     engine.addMessage("Failed to load game: " + saveFile.string() + "\n");
-//     return false;
-//   }
-//   boost::archive::text_iarchive ia(saveIS);
-// 
-//   auto itemNames = engine.getItemNames();
-//   auto npcRegistry = engine.getNPCRegistry();
-//   auto map = engine.getMap();
-//   auto player = engine.getPlayer();  
-//   ia >> itemNames;
-//   ia >> npcRegistry;
-//   ia >> map;
-//   ia >> player;
-//   engine.setItemNames(itemNames);
-//   engine.setNPCRegistry(npcRegistry);
-//   engine.setMap(new Map(map));
-//   engine.setPlayer(new Player(player));
-//   
-//   engine.getMap()->getRoom(engine.getPlayer()->getLocation())->enter(Direction::Invalid);
-//   
-//   //TextEngine *restore;
-//   //ia >> restore;
-//   //delete restore;
-//   
-//   engine.addMessage("Your game has been loaded!\n");
-//   saveIS.close();
-//   
-//   return true;
-  return false;
+  boost::filesystem::path saveFile(engine.getGamePath());
+  saveFile += "/saves/";
+  saveFile += getObjectName(command);
+  saveFile += ".tes";
+  
+  std::ifstream saveIS(saveFile.native());
+  if(!saveIS.good())
+  {
+    engine.addMessage("Failed to load game: " + saveFile.string() + "\n");
+    return false;
+  }
+  boost::archive::text_iarchive ia(saveIS);
+
+  
+  ia >> engine.player;
+  ia >> engine.map;
+  ia >> engine.gamePath;
+  ia >> engine.messages;
+  ia >> engine.gameStarted;
+  ia >> engine.ignoreMsg;
+  
+  engine.getPlayerRoom().enter(Direction::Invalid, engine);
+  
+  engine.addMessage("Your game has been loaded!\n");
+  saveIS.close();
+  
+  return true;
 }
 
 bool CommandParser::processScript(vector &command, TextEngine &engine)

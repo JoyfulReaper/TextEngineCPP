@@ -26,6 +26,14 @@
 
 #include "character.hpp"
 
+class Player;
+namespace boost {
+  namespace serialization {
+    template<class Archive>
+    inline void save_construct_data(Archive &ar, const Player *t, const unsigned int file_version);
+  }
+}
+
 class Player : public Character
 {
 public:
@@ -37,5 +45,36 @@ public:
   
 private:
   std::string gamePath;
+  
+  template<class Archive>
+  friend void boost::serialization::save_construct_data(Archive & ar, const Player *t, const unsigned int file_version);
+  
+  friend boost::serialization::access;
+  
+  template<class Archive>
+  void serialize(Archive &ar, const unsigned int version)
+  {
+    ar & boost::serialization::base_object<Character>(*this);
+  }
 };
+
+namespace boost {
+  namespace serialization {
+    template<class Archive>
+    inline void save_construct_data(
+      Archive &ar, const Player *t, const unsigned int file_version)
+    {
+      ar << t->gamePath;
+    }
+    
+    template <class Archive>
+    inline void load_construct_data(
+      Archive &ar, Player *t, const unsigned int file_version)
+    {
+      std::string gamePath;
+      ar >> gamePath;
+      ::new(t)Player(gamePath);
+    }
+  }
+}
 #endif

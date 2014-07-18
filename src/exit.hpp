@@ -27,6 +27,14 @@
 #include "mapsite.hpp"
 #include "textEngineException.hpp"
 
+class Exit;
+namespace boost {
+  namespace serialization {
+    template<class Archive>
+    inline void save_construct_data(Archive &ar, const Exit *t, const unsigned int file_version);
+  }
+}
+
 class Exit : public MapSite
 {
 public:
@@ -90,6 +98,9 @@ protected:
   bool isLocked = false;
   bool visible = true;
   
+  template<class Archive>
+  friend void boost::serialization::save_construct_data(Archive & ar, const Exit *t, const unsigned int file_version);
+  
   friend boost::serialization::access;
   
   template<class Archive>
@@ -100,4 +111,24 @@ protected:
     ar & visible;
   }
 };
+namespace boost {
+  namespace serialization {
+    template<class Archive>
+    inline void save_construct_data(
+      Archive &ar, const Exit *t, const unsigned int file_version)
+    {
+      ar << t->exitToRoom;
+    }
+    
+    template <class Archive>
+    inline void load_construct_data(
+      Archive &ar, Exit *t, const unsigned int file_version)
+    {
+      std::string exitToRoom;
+      ar >> exitToRoom;
+      ::new(t)Exit(exitToRoom);
+    }
+  }
+}
+
 #endif

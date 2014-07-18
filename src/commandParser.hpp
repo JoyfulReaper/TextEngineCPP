@@ -27,6 +27,13 @@
 #include <vector>
 #include <map>
 #include <boost/filesystem.hpp>
+#include <boost/serialization/array.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/deque.hpp>
+#include <boost/serialization/map.hpp>
+#include <boost/serialization/vector.hpp>
+#include "serialization_adaptors.hpp"
 
 class TextEngine;
 typedef std::vector<std::string> vector;

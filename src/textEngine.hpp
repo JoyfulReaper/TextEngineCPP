@@ -99,15 +99,11 @@ public:
    */
   bool registerCommand(std::string verb, std::string file);
   
-  /**
-   * @param room The room to start to game in
-   */
-  void setStartRoom(std::string room);
   
   /**
    * @return The starting room
    */
-  inline std::string getStartRoom() const { return startRoom; }
+  inline std::string getStartRoom() const { return map.getStartRoom(); }
   
   /////////////////////////////////////////////////////////////
   
@@ -167,7 +163,6 @@ private:
   
   void initLuaApi();
   
-  std::string startRoom = "";
   std::string gamePath;
   std::deque<std::string> messages;
   bool gameOver = false;
