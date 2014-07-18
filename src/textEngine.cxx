@@ -26,20 +26,25 @@
 #include <fstream>
 #include "textEngine.hpp"
 #include "textEngineException.hpp"
+#include "thirdParty/luawrapper/LuaContext.hpp"
 
-TextEngine::TextEngine(std::string gamePath) : player(Player(gamePath)), map(Map(gamePath)), gamePath(gamePath)
+TextEngine::TextEngine(std::string gamePath) : 
+  player(Player(gamePath)), 
+  map(Map(gamePath)),
+  api(LuaAPI(*this)),
+  gamePath(gamePath)
 {   
   //initLuaApi();
   
-  //LuaContext *lua = getLuaContext();
-  //boost::filesystem::path startScript(gamePath);
-  //startScript += "/scripts/startup.lua";
-  //std::fstream scriptPath(startScript.native());
-  //if(scriptPath.is_open())
-  //{
-  //  lua->executeCode(scriptPath);
-  //  scriptPath.close();
-  // }
+  LuaContext &lua = getLuaContext();
+  boost::filesystem::path startScript(gamePath);
+  startScript += "/scripts/startup.lua";
+  std::fstream scriptPath(startScript.native());
+  if(scriptPath.is_open())
+  {
+    //lua.executeCode(scriptPath);
+    scriptPath.close();
+   }
   
   gameStarted = true;
   if(map.getStartRoom() == "")
@@ -137,7 +142,7 @@ int TextEngine::getRandomNumber(int min, int max)
 
 /////////////////////////////////////////////////////////////////////////////
 
-//LuaContext* TextEngine::getLuaContext() { return api->getLuaContext(); }
+LuaContext& TextEngine::getLuaContext() { return api.getLuaContext(); }
 
 ////////////////////////////////////////////////////////////////////////////////
 

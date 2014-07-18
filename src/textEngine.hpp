@@ -36,6 +36,9 @@
 #include "player.hpp"
 #include "commandParser.hpp"
 #include "map.hpp"
+#include "luaAPI.hpp"
+
+class LuaContext;
 
 class TextEngine
 {
@@ -147,11 +150,15 @@ public:
   
   ////////////////////////////////////////////////////////////////////////////
   
+  LuaContext& getLuaContext();
+  
+  ////////////////////////////////////////////////////////////////////////////
   
 private:
   CommandParser commandParser;
   Player player;
   Map map;
+  LuaAPI api;
   
   std::string startRoom = "";
   std::string gamePath;
