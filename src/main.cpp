@@ -49,16 +49,7 @@
 #ifdef HAVE_LIBREADLINE
 
 #include <boost/algorithm/string/case_conv.hpp>
-// #include <boost/filesystem.hpp>
-// #include <cstdio>
-// #include <cstdlib>
 #include <unordered_set>
-// #include <fstream>
-// #include "item.hpp"
-// #include "room.hpp"
-// #include "NPC.hpp"
-// #include "player.hpp"
-// #include "map.hpp"
 
 #  if defined(HAVE_READLINE_READLINE_H)
 #    include <readline/readline.h>
@@ -176,30 +167,30 @@ int main(void)
 
 void addToKnown(TextEngine &engine)
 {
-//   auto playerInvItems = engine.getPlayer()->getInventory()->getAllItems();
-//   auto roomInvItems = engine.getMap()->getRoom(engine.getPlayer()->getLocation())->getInventory()->getAllItems();
-//   auto roomNpcs = engine.getMap()->getRoom(engine.getPlayer()->getLocation())->getAllNpcs();
-//   
-//   for(auto it = playerInvItems.begin(); it != playerInvItems.end(); ++it)
-//   {
-//     const Item *item = *it;
-//     if( !completion.count(item->getName()) )
-//       completion.insert(item->getName());
-//   }
-//   
-//   for(auto it = roomInvItems.begin(); it != roomInvItems.end(); ++it)
-//   {
-//     const Item *item = *it;
-//     if (item->isVisible() && !completion.count(item->getName()) )
-//       completion.insert(item->getName());
-//   }
-//   
-//   for(auto it = roomNpcs.begin(); it != roomNpcs.end(); ++it)
-//   {
-//     const NonPlayableCharacter *npc = *it;
-//     if(!completion.count(npc->getName()))
-//       completion.insert(npc->getName());
-//   }
+  auto playerInvItems = engine.getPlayer().getInventory().getAllItems();
+  auto roomInvItems = engine.getPlayerRoom().getInventory().getAllItems();
+  auto roomNpcs = engine.getMap().getAllNpcs(engine.getPlayerLocation());
+  
+  for(auto it = playerInvItems.begin(); it != playerInvItems.end(); ++it)
+  {
+    const Item *item = *it;
+    if( !completion.count(item->getName()) )
+      completion.insert(item->getName());
+  }
+  
+  for(auto it = roomInvItems.begin(); it != roomInvItems.end(); ++it)
+  {
+    const Item *item = *it;
+    if (item->isVisible() && !completion.count(item->getName()) )
+      completion.insert(item->getName());
+  }
+  
+  for(auto it = roomNpcs.begin(); it != roomNpcs.end(); ++it)
+  {
+    const NonPlayableCharacter *npc = *it;
+    if(!completion.count(npc->getName()))
+      completion.insert(npc->getName());
+  }
 }
 
 void initialize_readline ()

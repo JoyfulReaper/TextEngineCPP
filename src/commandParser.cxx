@@ -505,7 +505,7 @@ bool CommandParser::processInv(vector &command, TextEngine &engine)
       result.append(name + ", ");
     }
     result.erase(result.length() -2, 2);
-    engine.addMessage(result + "\n\n");
+    engine.addMessage(result + "\n");
     return true;
   }
   
