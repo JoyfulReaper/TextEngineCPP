@@ -472,6 +472,7 @@ bool CommandParser::processGet(vector &command, TextEngine &engine)
     itemToAdd.reset(new Item(item));
   }
   
+  std::string itemName = item.getName();
   bool added;
   try {
   added = (playerInv.addItem(std::move(itemToAdd), quantity));
@@ -483,9 +484,9 @@ bool CommandParser::processGet(vector &command, TextEngine &engine)
   if( added && removed )
   {
     if(quantity > 1)
-      engine.addMessage("You took " + std::to_string(quantity) + " " + item.getName() + "s\n");
+      engine.addMessage("You took " + std::to_string(quantity) + " " + itemName + "s\n");
     else
-      engine.addMessage("You took the " + item.getName() + "\n");
+      engine.addMessage("You took the " + itemName + "\n");
     
     return true;
   }
