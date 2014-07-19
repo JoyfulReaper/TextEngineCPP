@@ -157,6 +157,17 @@ Item& Inventory::getItem(std::string name)
   throw (TextEngineException("Item is not in inventory: " + name));
 }
 
+std::vector<Item*> Inventory::getItems(std::string name)
+{
+  std::vector<Item*> results;
+  for(auto &item: items)
+  {
+    if(item->getName() == name || item->getUppercaseName() == name)
+      results.push_back(item.get());
+  }
+  return results;
+}
+
 std::vector<Item*> Inventory::getAllItems()
 {
   std::vector<Item*> all;

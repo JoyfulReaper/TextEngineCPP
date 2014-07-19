@@ -99,6 +99,12 @@ public:
   Item& getItem(std::string name);
   
   /**
+   * @param name Name of item 
+   * @return all items with the given name
+   */
+  std::vector<Item*> getItems(std::string name);
+  
+  /**
    * @return This Inventory's capacity
    */
   inline size_t getCapacity() const { return this->capacity; }

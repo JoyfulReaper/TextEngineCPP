@@ -20,7 +20,7 @@
  * @author Kyle Givler
  * 
  * TODO:
- * Largely un-tested, based on old work, and could use many improvements!
+ * Largely un-tested and could use many improvements!
  */
 
 #include <boost/algorithm/string.hpp>
