@@ -19,6 +19,9 @@
 /**
  * @file commandParser.hpp
  * @author Kyle Givler
+ * 
+ * TODO:
+ * Largely un-tested, based on old work, and could use many improvements!
  */
 
 #ifndef _COMMAND_PARSER_H_

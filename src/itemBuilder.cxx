@@ -64,7 +64,7 @@ void ItemBuilder::buildObjects(std::vector<std::map<std::string,std::string>> &i
 	}
       }
       else
-	item.reset(new Item);
+	item.reset(new Item); // Not a container
       
       if(config["obtainable"] == "") // Is the item obtainable by the player?
 	obtainable = 1;
@@ -125,6 +125,8 @@ void ItemBuilder::buildObjects(std::vector<std::map<std::string,std::string>> &i
 	addRoom = locVector[i];
 	if(addRoom == "player")
 	{
+	  // This was gutted since we don't have access to the Player object from
+	  // Here anymore, should be take out.
 	  //inv = engine->getPlayer()->getInventory();
 	  //inv->addItem(item);
 	}

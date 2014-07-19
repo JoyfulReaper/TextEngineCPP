@@ -60,6 +60,8 @@ description = "Description"
 location = "room1:2:room3:4" [roomName:quantity:roomName:quantity...]
 obtainable = 1 [1 true, 0 false]
 visible = 1 [1 true, 0 false, whether or not it shows in item list]
+container = 0 [1 true, 0 false]
+InvCapacity = 10 [Only for containers]
 
 function onUse(command)
   [Called when item is used]

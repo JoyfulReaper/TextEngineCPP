@@ -19,6 +19,9 @@
 /**
  * @file luaAPI.cxx
  * @author Kyle Givler
+ * 
+ * TODO:
+ * Largely un-tested, based on old work, and could use many improvements!
  */
 
 #include <boost/filesystem.hpp>
@@ -449,7 +452,14 @@ bool LuaAPI::characterIsAlive(std::string who, std::string where)
 
 bool LuaAPI::playerAddItem(std::string name, size_t num)
 {
-  return engine->getPlayer().getInventory().addItem(name, num);
+  bool ret;
+  try {
+    ret = engine->getPlayer().getInventory().addItem(name, num);
+  } catch (const TextEngineException &te) {
+    //Inv is full 
+    return false;
+  }
+  return ret;
 }
 
 bool LuaAPI::playerRemoveItem(std::string name, size_t num)
@@ -459,10 +469,18 @@ bool LuaAPI::playerRemoveItem(std::string name, size_t num)
 
 bool LuaAPI::roomAddItem(std::string name, size_t num, std::string room)
 {
+  bool ret;
   if(!engine->getMap().roomExists(room))
     return false;
+  
   Room &theRoom = engine->getMap().getRoom(room);  
-  return theRoom.getInventory().addItem(name, num);
+  try {
+    ret = theRoom.getInventory().addItem(name, num);
+  } catch (const TextEngineException &te) {
+    //Inv is full
+    return false;
+  }
+  return ret;
 }
 
 bool LuaAPI::roomRemoveItem(std::string name, size_t num, std::string room)
@@ -570,7 +588,13 @@ bool LuaAPI::putItemInItem(std::string container, std::string contained, size_t 
   if(dynamic_cast<ContainerItem*>(&theRoom.getInventory().getItem(container)))
   {
     ContainerItem *IContainer = static_cast<ContainerItem*>(&theRoom.getInventory().getItem(container));
-    IContainer->getInventory().addItem(contained, num);
+    
+    try {
+      IContainer->getInventory().addItem(contained, num);
+    } catch (const TextEngineException &te) {
+      //Inv is full
+      return false;
+    }
     return true;
   }
   

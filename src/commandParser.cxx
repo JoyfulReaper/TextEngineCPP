@@ -18,6 +18,9 @@
 /**
  * @file commandParser.cxx
  * @author Kyle Givler
+ * 
+ * TODO:
+ * Largely un-tested, based on old work, and could use many improvements!
  */
 
 #include <boost/algorithm/string.hpp>
@@ -413,7 +416,12 @@ bool CommandParser::processGet(vector &command, TextEngine &engine)
 	} else
 	  addItem.reset(new Item(*containedI));
 	
-	playerInv.addItem(std::move(addItem), 1);
+	try {
+	  playerInv.addItem(std::move(addItem), 1);
+	} catch (const TextEngineException &te) {
+	  engine.addMessage("Your inventory is full!\n");
+	  return false;
+	}
 	addItem->onTake(engine);
 	containerI->getInventory().removeItem(*containedI, 1);
 	
@@ -454,7 +462,13 @@ bool CommandParser::processGet(vector &command, TextEngine &engine)
     return false;
   }
   
-  bool added = (playerInv.addItem(std::unique_ptr<Item>(new Item(item)), quantity));
+  bool added;
+  try {
+  added = (playerInv.addItem(std::unique_ptr<Item>(new Item(item)), quantity));
+  } catch (const TextEngineException &te) {
+    engine.addMessage("Your inventory is full!\n");
+    return false;
+  }
   bool removed = (roomInv.removeItem(item, quantity));
   if( added && removed )
   {
@@ -863,7 +877,12 @@ bool CommandParser::processPut(vector &command, TextEngine &engine)
   
   std::unique_ptr<Item> tempItem(new Item(*containedI));
   tempItem->setQuantity(0);
-  containerI->getInventory().addItem(std::move(tempItem), 1);
+  try {
+    containerI->getInventory().addItem(std::move(tempItem), 1);
+  } catch (const TextEngineException &te) {
+    engine.addMessage("The container is full!\n");
+    return false;
+  }
   removeInv->removeItem(*containedI, 1);
   
   engine.addMessage("You put the " + contained + " in the " + container + ".\n");

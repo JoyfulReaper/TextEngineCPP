@@ -34,6 +34,8 @@
 
 Map::Map(std::string gamePath) : gamePath(gamePath)
 {
+  //Parse and build Rooms, Npcs, and Items 
+  
   RoomParser rp;
   MapBuilder mp(*this);
   auto results = rp.parseRooms(gamePath);
@@ -48,12 +50,15 @@ Map::Map(std::string gamePath) : gamePath(gamePath)
   ItemBuilder ib(*this);
   results = ip.parseItems(gamePath);
   ib.buildObjects(results);
-  
 }
 
 Map::Map(const Map &obj)
 {
-  //this->rooms = obj.rooms;
+  this->startRoom = obj.startRoom;
+  this->gamePath = obj.gamePath;
+  
+  //Rooms
+  //Npcs
 }
 
 bool Map::addRoom(std::unique_ptr<Room> room)

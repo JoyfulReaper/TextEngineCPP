@@ -48,8 +48,14 @@ public:
    */
   virtual void enter(Direction from, TextEngine &engine) = 0;
   
+  /**
+   * Set the name of this MapSite 
+   */
   virtual void setName(std::string name) { this->name = name; }
   
+  /**
+   * @return The name of this MapSite
+   */
   virtual std::string getName() const { return this->name; }
   
   /**

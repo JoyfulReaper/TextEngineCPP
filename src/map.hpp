@@ -49,6 +49,9 @@ class Map
 public:
   Map(std::string gamePath);
   
+  /**
+   * Don't use this copy ctor, not complete
+   */
   Map(const Map &obj);
   
   virtual ~Map() {}

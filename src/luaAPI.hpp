@@ -19,6 +19,10 @@
 /**
  * @file luaAPI.hpp
  * @author Kyle Givler
+ * 
+ * TODO:
+ * Largely un-tested, based on old work, and could use many improvements!
+ * 
  */
 
 #ifndef _LUA_API_H_
