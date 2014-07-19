@@ -33,7 +33,6 @@ std::map<std::string,bool> PlayerParser::setObjectConfig()
   objectConfig.insert(conf("description", false));
   objectConfig.insert(conf("health", true));
   objectConfig.insert(conf("money", true));
-  objectConfig.insert(conf("location", false));
   objectConfig.insert(conf("invCapacity", true));
   
   return objectConfig;

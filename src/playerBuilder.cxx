@@ -53,7 +53,6 @@ void PlayerBuilder::buildObjects(std::vector<std::map<std::string,std::string>> 
   
   player.setHealth(health);
   player.setMoney(money);
-  player.setLocation(config["location"]);
   player.setName(config["name"]);
   player.setDescription(config["description"]);
   player.setFilename(config["filename"]);
