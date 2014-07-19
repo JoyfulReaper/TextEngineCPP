@@ -33,7 +33,6 @@ Inventory::Inventory() {}
 Inventory::Inventory(const Inventory &obj)
 {
   this->capacity = obj.capacity;
-  this->size = obj.size;
   
   // I think this is correct
   for(auto it = obj.items.begin(); it != obj.items.end(); ++it)
@@ -41,10 +40,10 @@ Inventory::Inventory(const Inventory &obj)
     Item *item = it->get();
     if(dynamic_cast<ContainerItem*>(item))
     {
-      std::unique_ptr<ContainerItem> cItem(new ContainerItem(*static_cast<ContainerItem*>(item)));
-      this->addItem(std::move(cItem));
+      std::unique_ptr<ContainerItem> cItem( new ContainerItem(*static_cast<ContainerItem*>(item)) );
+      this->addItem(std::move(cItem), item->getQuantity());
     } else {
-      this->addItem(std::unique_ptr<Item>(new Item(*item)) );
+      this->addItem(std::unique_ptr<Item>( new Item(*item)), item->getQuantity() );
     }
   }
 }
