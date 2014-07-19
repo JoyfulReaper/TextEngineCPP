@@ -419,12 +419,12 @@ bool CommandParser::processGet(vector &command, TextEngine &engine)
 	  addItem.reset(new Item(*containedI));
 	
 	try {
+	  addItem->onTake(engine);
 	  playerInv.addItem(std::move(addItem), 1);
 	} catch (const TextEngineException &te) {
 	  engine.addMessage("Your inventory is full!\n");
 	  return false;
 	}
-	addItem->onTake(engine);
 	containerI->getInventory().removeItem(*containedI, 1);
 	
 	engine.addMessage("You took the " + contained + " from the " + container + ".\n");
