@@ -1,6 +1,11 @@
 VERY INCOMPLETE DOCUMENTATION
 For now RTFS I guess :\
 
+For a description of the Lua API see LuaAPI.h until better documentation is provided
+
+
+Creating a game:
+
 The directory structure for a game that uses the TextEngine:
 
 ./GameName
@@ -13,6 +18,7 @@ player.lua - Describes the main Player
   Files to describle the Rooms, used to build the Map
 (dir) scripts
   startup.lua - optional lua script that is run when the engine is started
+  scripts in this directory can be called from the Lua API.
 
 
 File Formats:
@@ -50,8 +56,6 @@ funcion onAttack()
 end
 
 
-
-
 For the Items
 * itemFileName.lua
 
@@ -70,3 +74,21 @@ end
 function onHelp()
   [Called when item help is requested]
 end
+
+
+
+For the Rooms
+* roomFileName.lua
+
+shortName = "MainEntry"
+name = "Entry Hall"
+description = "Blah blah blah"
+lookDescription = "Extra info showed on look command"
+exits = "N:hall1:S:hall2" [Direction:RoomShortName:Direction:RoomShortName:... I=Invisible L=Locked, ex: NIL:hall2:EL:hall3]
+startRoom = 1 [1 true, 0 false]
+
+function onEnter()
+  [Called when the player enters the room]
+end
+
+
