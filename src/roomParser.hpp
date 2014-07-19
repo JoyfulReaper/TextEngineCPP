@@ -41,6 +41,9 @@ public:
    */
   virtual std::vector<std::map<std::string,std::string>> parseRooms(std::string basePath);
   
+  /**
+   * Configure RoomParser
+   */
   virtual std::map<std::string,bool> setObjectConfig();
 protected:
 

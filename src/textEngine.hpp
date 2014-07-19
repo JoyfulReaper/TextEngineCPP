@@ -45,6 +45,10 @@ class TextEngine
 {
 public:
   
+  /**
+   * Main constructor
+   * @param gamePath Base path where lua scripts are stored
+   */
   TextEngine(std::string gamePath);
   
   ///////////////////////////////////////////////////////////
@@ -56,7 +60,7 @@ public:
   void addMessage(const std::string message);
   
   /**
-   * Get pending messages
+   * Get pending message from queue
    * @return Pending messages
    */
   std::string getMessage();
@@ -112,8 +116,14 @@ public:
    */
   Player& getPlayer();
   
+  /**
+   * @return The Player's current location
+   */
   std::string getPlayerLocation();
   
+  /**
+   * @return The Room the player is currently in
+   */
   Room& getPlayerRoom();
   
   //////////////////////////////////////////////////////////////
@@ -147,10 +157,18 @@ public:
   
   /////////////////////////////////////////////////////////////////////////////
   
+  /**
+   * @param min
+   * @param max
+   * @return A random int in the range of min to max
+   */
   int getRandomNumber(int min, int max);
   
   ////////////////////////////////////////////////////////////////////////////
   
+  /**
+   * @return The LuaContext
+   */
   LuaContext& getLuaContext();
   
   ////////////////////////////////////////////////////////////////////////////

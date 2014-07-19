@@ -27,6 +27,7 @@ typedef std::pair<std::string,bool> conf;
 
 std::map<std::string,bool> NPCParser::setObjectConfig()
 {
+  // False = required, True = optional
   std::map<std::string,bool> objectConfig;
   objectConfig.insert(conf("name", false));
   objectConfig.insert(conf("description", false));

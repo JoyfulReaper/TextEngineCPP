@@ -74,6 +74,10 @@ public:
    */
   void setHealth(double amount, TextEngine &engine);
   
+  /**
+   * Set health without requiring a TextEngine object, but doesn't run onAttack()
+   * @param amount Amount of health to set Npc health to (0-100)
+   */
   void setHealthNoAttack(double amount);
   
   /**

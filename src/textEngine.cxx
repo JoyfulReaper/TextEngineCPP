@@ -37,6 +37,7 @@ TextEngine::TextEngine(std::string gamePath) :
 {   
   initLuaApi();
   
+  // Run starup script
   LuaContext &lua = getLuaContext();
   boost::filesystem::path startScript(gamePath);
   startScript += "/scripts/startup.lua";

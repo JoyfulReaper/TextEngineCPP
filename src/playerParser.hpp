@@ -32,6 +32,7 @@ class PlayerParser : public Parser
 {
 public:
   PlayerParser() {}
+  
   virtual ~PlayerParser() {}
   
   virtual std::vector<std::map<std::string,std::string>> parsePlayer(const std::string &path);

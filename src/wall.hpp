@@ -29,14 +29,18 @@
 class Wall : public MapSite
 {
 public:
+  // Main ctor
   Wall () { setName("wall"); }
   
+  // Copy ctor
   Wall (const Wall &obj);
   
   virtual ~Wall() {}
   
   /**
+   * Enter the room
    * @param from Direction to enter from
+   * @param engine TextEngine to use
    */
   virtual void enter (Direction from, TextEngine &engine);
   

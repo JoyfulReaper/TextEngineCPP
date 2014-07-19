@@ -65,6 +65,10 @@ public:
    */
   virtual void enter(Direction from, TextEngine &engine);
   
+  /**
+   * Show full description of the Room, including look description,
+   * without running any scripts
+   */
   virtual void showFullDescription(TextEngine &engine);
   
   /**

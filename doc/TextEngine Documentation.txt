@@ -1,0 +1,70 @@
+VERY INCOMPLETE DOCUMENTATION
+For now RTFS I guess :\
+
+The directory structure for a game that uses the TextEngine:
+
+./GameName
+player.lua - Describes the main Player
+(dir) characters
+  Files to describe the NonPlayableCharacters
+(dir) items
+  Files to describe the Items and Container Items
+(dir) rooms
+  Files to describle the Rooms, used to build the Map
+(dir) scripts
+  startup.lua - optional lua script that is run when the engine is started
+
+
+File Formats:
+
+For the Player
+* player.lua
+
+name = "Player Name"
+description = "Player Description"
+health = 100
+money = 0
+invCapacity = 100
+
+
+For the NonPlayableCharacters
+* NpcFileName.lua
+
+name = "Name"
+description = "Description"
+health = 100
+money = 0
+canBeKilled = 0 [0 for false, 1 for true]
+respwawnProbablity = 0 [Chance to respawn if killed]
+
+function onSay(what)
+ [Called when NPC is spoken to]
+end
+
+function playerEntered()
+ [Called when player enters same room as NPC]
+end
+
+funcion onAttack()
+ [Called when NPC loses health]
+end
+
+
+
+
+For the Items
+* itemFileName.lua
+
+name = "Name"
+description = "Description"
+location = "room1:2:room3:4" [roomName:quantity:roomName:quantity...]
+obtainable = 1 [1 true, 0 false]
+visible = 1 [1 true, 0 false, whether or not it shows in item list]
+
+function onUse(command)
+  [Called when item is used]
+end
+
+function onHelp()
+  [Called when item help is requested]
+end

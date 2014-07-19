@@ -3,7 +3,7 @@ src/textEngine
 
 # Others
 *~
-/doc/
+/doc/doxygen
 
 # Compiled Object files
 *.slo
