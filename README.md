@@ -37,6 +37,7 @@ $ make
 
 To do list
 ==========
+Add/Improve documentation  
 Code cleanup  
 GUI Wrapper  
 Level Editor  
