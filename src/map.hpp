@@ -30,6 +30,7 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/serialization/vector.hpp>
+#include <boost/serialization/shared_ptr.hpp>
 #include "serialization_adaptors.hpp"
 
 #include "npc.hpp"
@@ -127,8 +128,8 @@ public:
   ////////////////////////////////////////////////////////////////////////////////////
   
 private:
-  std::vector<std::unique_ptr<Room>> rooms;
-  std::vector<std::unique_ptr<NonPlayableCharacter>> npcs;
+  std::vector<boost::shared_ptr<Room>> rooms;
+  std::vector<boost::shared_ptr<NonPlayableCharacter>> npcs;
   std::string startRoom = "";
   std::string gamePath;
   

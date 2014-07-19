@@ -29,9 +29,11 @@
 #include <climits>
 #include <memory>
 #include <map>
+#include <boost/shared_ptr.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/serialization/vector.hpp>
+#include <boost/serialization/shared_ptr.hpp>
 #include "serialization_adaptors.hpp"
 #include "item.hpp"
 
@@ -121,7 +123,7 @@ public:
 private:
   size_t capacity = UINT_MAX - 1;
   size_t size = 0;
-  std::vector<std::unique_ptr<Item>> items;
+  std::vector<boost::shared_ptr<Item>> items;
   
   friend class boost::serialization::access;
   

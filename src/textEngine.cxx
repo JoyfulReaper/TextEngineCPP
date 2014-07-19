@@ -85,16 +85,6 @@ std::string TextEngine::getAllMessages()
   return message;
 }
 
-///////////////////////////////////////////////////////////////////////////
-
-void TextEngine::setStartRoom(std::string startRoom)
-{
-  if (this->startRoom == "")
-    this->startRoom = startRoom;
-  else
-    throw (TextEngineException("Start room already set"));
-}
-
 /////////////////////////////////////////////////////////////////////////
 
 bool TextEngine::processCommand(std::string cmd) 
