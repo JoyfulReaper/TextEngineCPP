@@ -115,6 +115,7 @@ bool Inventory::removeItem(std::string name, size_t number)
 	if (cur.getName() == name || cur.getUppercaseName() == name)
 	{
 	  items.erase(it);
+	  size -= number;
 	  return true;
 	}
       }

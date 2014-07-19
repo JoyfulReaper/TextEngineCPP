@@ -333,6 +333,8 @@ bool CommandParser::processHelp(const vector &command, TextEngine &engine)
   engine.addMessage("PUT [ITEM] IN [CONTAINER]\n");
   engine.addMessage("INV [ITEM]: Show inventory, or ITEM inventory if it is a container\n");
   engine.addMessage("SELF: Show information such as health and money\n");
+  engine.addMessage("SAVE [SAVE_NAME]: Save game state\n");
+  engine.addMessage("LOAD [SAVE_NAME]: Load game state\n");
   engine.addMessage("QUIT: Exit the game\n");
   return true; 
 }
@@ -462,9 +464,17 @@ bool CommandParser::processGet(vector &command, TextEngine &engine)
     return false;
   }
   
+  std::unique_ptr<Item> itemToAdd(nullptr);
+  if( dynamic_cast<ContainerItem*>(&item) )
+  {
+    itemToAdd.reset(new ContainerItem(*static_cast<ContainerItem*>(&item)));
+  } else {
+    itemToAdd.reset(new Item(item));
+  }
+  
   bool added;
   try {
-  added = (playerInv.addItem(std::unique_ptr<Item>(new Item(item)), quantity));
+  added = (playerInv.addItem(std::move(itemToAdd), quantity));
   } catch (const TextEngineException &te) {
     engine.addMessage("Your inventory is full!\n");
     return false;

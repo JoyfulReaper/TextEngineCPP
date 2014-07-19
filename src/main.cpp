@@ -112,14 +112,14 @@ int main(void)
   showLicense();
   
   std::string game;
-  int choice = 1;
+  int choice = 0;
   while (choice < 1 || choice > 2)
   {
     std::cout << "Games:\n";
     std::cout << "1) sampleGame\n";
     std::cout << "2) derekGame\n";
     std::cout << "Choose game: ";
-    //std::cin >> choice;
+    std::cin >> choice;
   }
   
   switch(choice)
