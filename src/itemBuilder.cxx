@@ -65,33 +65,33 @@ void ItemBuilder::buildObjects(std::vector<std::map<std::string,std::string>> &i
       }
       else
 	item.reset(new Item); // Not a container
-      
-      if(config["obtainable"] == "") // Is the item obtainable by the player?
-	obtainable = 1;
-      else
-	obtainable = std::stoi(config["obtainable"]);
-      if(obtainable)
-	item->setObtainable(true);
-      else
-	item->setObtainable(false);
-      
-      if(config["visible"] == "") // Should the item be visible in the list of items in the room?
-	visible = 1;
-      else
-	visible = std::stoi(config["visible"]);
-      if(visible)
-	item->setVisible(true);
-      else
-	item->setVisible(false);
-      
-      std::string name = config["name"];
-      if(name == "player")
-	throw(TextEngineException("'player' is an invalid name for an item!"));
-      
-      item->setName(name);
-      item->setDescription(config["description"]);
-      item->setFilename(config["filename"]);
-      
+	
+	if(config["obtainable"] == "") // Is the item obtainable by the player?
+	  obtainable = 1;
+	else
+	  obtainable = std::stoi(config["obtainable"]);
+	if(obtainable)
+	  item->setObtainable(true);
+	else
+	  item->setObtainable(false);
+	
+	if(config["visible"] == "") // Should the item be visible in the list of items in the room?
+	  visible = 1;
+	else
+	  visible = std::stoi(config["visible"]);
+	if(visible)
+	  item->setVisible(true);
+	else
+	  item->setVisible(false);
+	
+	std::string name = config["name"];
+	if(name == "player")
+	  throw(TextEngineException("'player' is an invalid name for an item!"));
+	
+	item->setName(name);
+	item->setDescription(config["description"]);
+	item->setFilename(config["filename"]);
+	
     } catch (const std::invalid_argument &ia) {
       throw(TextEngineException("Invaild item configuration: " + config["filename"]));
     }
@@ -123,20 +123,13 @@ void ItemBuilder::buildObjects(std::vector<std::map<std::string,std::string>> &i
 	}
 	
 	addRoom = locVector[i];
-	if(addRoom == "player")
-	{
-	  // This was gutted since we don't have access to the Player object from
-	  // Here anymore, should be take out.
-	  //inv = engine->getPlayer()->getInventory();
-	  //inv->addItem(item);
-	}
-	else
-	{
-	  if(!map->roomExists(addRoom))
-	    throw (TextEngineException("Trying to add " + config["name"] + " to invalid location: " + addRoom));
-	  
-	  map->getRoom(addRoom).getInventory().addItem(std::move(item), quantity);
-	}
+	
+	
+	if(!map->roomExists(addRoom))
+	  throw (TextEngineException("Trying to add " + config["name"] + " to invalid location: " + addRoom));
+	
+	map->getRoom(addRoom).getInventory().addItem(std::move(item), quantity);
+	
 	if(container)
 	  item.reset(new ContainerItem(*static_cast<ContainerItem*>(copyItem.get())));
 	else
