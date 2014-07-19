@@ -120,6 +120,14 @@ bool CommandParser::processSave(const vector &command, TextEngine &engine)
 {
   boost::filesystem::path saveFile(engine.getGamePath());
   saveFile += "/saves/";
+  
+  if(!boost::filesystem::exists(saveFile))
+    if(!boost::filesystem::create_directory(saveFile))
+    {
+      engine.addMessage("Failed to create directory\n");
+      return false;
+    }
+  
   saveFile += getObjectName(command);
   saveFile += ".tes";
   
