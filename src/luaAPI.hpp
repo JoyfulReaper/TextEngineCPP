@@ -21,7 +21,7 @@
  * @author Kyle Givler
  * 
  * TODO:
- * Largely un-tested, based on old work, and could use many improvements!
+ * Largely un-tested and could use improvements, especially relating to NPCs!
  * 
  */
 
@@ -146,7 +146,7 @@ public:
    * @param name The new name for the room
    * @param room the short name of the room
    */
-  void setRoomName(std::string name, std::string room);
+  bool setRoomName(std::string name, std::string room);
   
   /**
    * @param room The short name of the room to get the full name of

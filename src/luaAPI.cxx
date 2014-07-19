@@ -21,7 +21,7 @@
  * @author Kyle Givler
  * 
  * TODO:
- * Largely un-tested, based on old work, and could use many improvements!
+ * Largely un-tested and could use improvements, especially relating to NPCs
  */
 
 #include <boost/filesystem.hpp>
@@ -161,13 +161,20 @@ std::string LuaAPI::getRoomShortName()
   return name;
 }
 
-void LuaAPI::setRoomName(std::string name, std::string room)
+bool LuaAPI::setRoomName(std::string name, std::string room)
 {
+  if(!engine->getMap().roomExists(room))
+    return false;
+  
   engine->getMap().getRoom(room).setName(name);
+  return true;
 }
 
 std::string LuaAPI::getRoomName(std::string room)
 {
+  if(!engine->getMap().roomExists(room))
+    return "";
+    
   return engine->getMap().getRoom(room).getName();
 }
 
@@ -291,7 +298,8 @@ bool LuaAPI::setPlayerLocation(std::string loc)
 { 
   if(engine->getMap().roomExists(loc))
   {
-    engine->getPlayer().setLocation(loc);
+    //engine->getPlayer().setLocation(loc);
+    engine->getMap().getRoom(loc).enter(Direction::Invalid, *engine);
     return true;
   }
   return false;
@@ -368,7 +376,9 @@ std::string LuaAPI::getCharacterLocation(std::string who)
   for(auto &npc : npcs)
   {
     if(npc->getName() == who || npc->getUppercaseName() == who)
-      where.append(npc->getLocation());
+    {
+      where.append(npc->getLocation() + ":");
+    }
   }
   return where;
 }
