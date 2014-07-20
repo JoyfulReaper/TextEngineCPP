@@ -59,6 +59,9 @@ void MainWindow::do_command()
   
   engine.processCommand(command);
   
-  pTextBuffer->insert_at_cursor(engine.getAllMessages());
+  pTextBuffer->insert_at_cursor(engine.getAllMessages()); 
   
+  auto pos = pTextBuffer->create_mark(pTextBuffer->end());
+  //pTextBuffer->move_mark(pos, buffer->end());
+  pTextView->scroll_to(pos, 0.0);
 }
