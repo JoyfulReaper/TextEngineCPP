@@ -1,5 +1,5 @@
 /*
- TextEngine: mainWindow.hpp
+ TextEngine: mainWindow.cxx
  Copyright (C) 2014 Kyle Givler
  
  This program is free software: you can redistribute it and/or modify
@@ -18,13 +18,41 @@
 
 #include "mainWindow.hpp"
 
-MainWindow::MainWindows(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &refGlade)
+MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade)
 : Gtk::Window(cobject),
+  engine("sampleGame"),
   m_refGlade(refGlade),
   pButton(0),
   pEntry(0),
-  pTextView(0)
+  pTextView(0),
+  pTextBuffer(0)
 {
   m_refGlade->get_widget("button", pButton);
+  if(pButton)
+  {
+    pButton->signal_clicked().connect( sigc::mem_fun(*this, &MainWindow::do_command) );
+  }
+  m_refGlade->get_widget("entry", pEntry);
+  if(pEntry)
+  {
+    pEntry->signal_activate().connect( sigc::mem_fun(*this, &MainWindow::do_command) );
+  }
+  m_refGlade->get_widget("textview", pTextView);
+  
+  pTextBuffer = pTextView->get_buffer();
+  pTextBuffer->insert_at_cursor(engine.getAllMessages());
+}
+
+MainWindow::~MainWindow() {}
+
+void MainWindow::do_command()
+{
+  std::string command;
+  command = pEntry->get_text();
+  pEntry->set_text("");
+  
+  engine.processCommand(command);
+  
+  pTextBuffer->insert_at_cursor(engine.getAllMessages());
   
 }

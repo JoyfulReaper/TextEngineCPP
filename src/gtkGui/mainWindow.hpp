@@ -20,20 +20,23 @@
 #define _MAIN_WINDOW_H_
 
 #include <gtkmm.h>
+#include "../textEngine.hpp"
 
-class MainWindow : Gtk::Window 
+class MainWindow : public Gtk::Window 
 {
 public:
-  MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder> &refGlade);
+  MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade);
   virtual ~MainWindow();
   
 protected:
   void do_command();
   
+  TextEngine engine;
   Glib::RefPtr<Gtk::Builder> m_refGlade;
   Gtk::Button *pButton;
   Gtk::Entry *pEntry;
   Gtk::TextView *pTextView;
-}
+  Glib::RefPtr<Gtk::TextBuffer> pTextBuffer;
+};
 
 #endif
