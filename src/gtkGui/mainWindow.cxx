@@ -59,6 +59,9 @@ void MainWindow::do_command()
   
   engine.processCommand(command);
   
+  if(engine.isGameOver())
+    this->hide();
+  
   pTextBuffer->insert_at_cursor(engine.getAllMessages()); 
   
   auto pos = pTextBuffer->create_mark(pTextBuffer->end());
