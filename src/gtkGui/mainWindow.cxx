@@ -32,12 +32,18 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
   {
     pButton->signal_clicked().connect( sigc::mem_fun(*this, &MainWindow::do_command) );
   }
+  
   m_refGlade->get_widget("entry", pEntry);
   if(pEntry)
   {
     pEntry->signal_activate().connect( sigc::mem_fun(*this, &MainWindow::do_command) );
   }
+  
   m_refGlade->get_widget("textview", pTextView);
+  if(pTextView)
+  {
+    pTextView->set_wrap_mode(Gtk::WRAP_WORD);
+  }
   
   pTextBuffer = pTextView->get_buffer();
   pTextBuffer->insert_at_cursor(engine.getAllMessages());
