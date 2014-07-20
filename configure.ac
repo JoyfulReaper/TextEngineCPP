@@ -13,6 +13,8 @@ AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_PROG_CXX
 AC_PROG_CC
 AC_LANG(C++)
+AM_PROG_AR
+AC_PROG_RANLIB
 
 AX_CXX_COMPILE_STDCXX_11([noext],[mandatory])
 
@@ -29,6 +31,8 @@ AX_BOOST_SERIALIZATION
 
 AX_LIB_READLINE
 
+PKG_CHECK_MODULES([gtkmm], [gtkmm-3.0 >= 3.8.0])
+
 if test "x$want_boost" = "xno"; then 
 AC_MSG_ERROR(Boost is required)
 fi
@@ -42,4 +46,6 @@ AC_TYPE_SIZE_T
 
 AC_CONFIG_FILES([Makefile
                  src/Makefile])
+
+# LT_INIT
 AC_OUTPUT
