@@ -66,7 +66,7 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
   
   // Lets get started!
   pTextBuffer = pTextView->get_buffer();
-  pTextBuffer->insert_at_cursor(engine.getAllMessages()); //FIXME
+  pTextBuffer->insert(pTextBuffer->end(), engine.getAllMessages());
 }
 
 MainWindow::~MainWindow() {}
@@ -80,14 +80,12 @@ void MainWindow::do_command()
   pEntry->set_text("");
   
   engine.processCommand(command);
-  
   if(engine.isGameOver())
     this->hide();
   
-  pTextBuffer->insert_at_cursor(engine.getAllMessages()); 
+  pTextBuffer->insert(pTextBuffer->end(), engine.getAllMessages());
   
   auto pos = pTextBuffer->create_mark(pTextBuffer->end());
-  //pTextBuffer->move_mark(pos, buffer->end());
   pTextView->scroll_to(pos, 0.0);
 }
 
