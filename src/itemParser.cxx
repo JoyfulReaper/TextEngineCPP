@@ -46,6 +46,13 @@ std::vector<std::map<std::string,std::string>> ItemParser::parseItems(std::strin
   boost::filesystem::path fullPath(basePath);
   boost::filesystem::path items("/items");
   fullPath += items;
+  
+  if(!boost::filesystem::exists(fullPath))
+  {
+    std::vector<std::map<std::string,std::string>> empty;
+    return empty;
+  }
+  
   std::map<std::string,bool> objectConfig = setObjectConfig();
   std::string ext = ".lua";
   std::vector<boost::filesystem::path> files = getAllFilesWithExt(fullPath.native(), ext);
