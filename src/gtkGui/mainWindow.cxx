@@ -19,42 +19,59 @@
 /**
  * @file mainWindow.cxx
  * @author Kyle Givler
+ * 
+ * I know the way things done here are inconsistent, this is the first
+ * time I have done a GTK Gui. BTW, Glade is sweet.
  */
 
 #include "mainWindow.hpp"
 
 MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade)
 : Gtk::Window(cobject),
-  engine("sampleGame"),
-  m_refGlade(refGlade),
+  engine("../sampleGame"),
+  glade(refGlade),
   pButton(0),
   pEntry(0),
   pTextView(0),
-  pTextBuffer(0)
+  pTextBuffer(0),
+  pAboutDialog(0)
 {
-  m_refGlade->get_widget("button", pButton);
+  // Basics
+  glade->get_widget("button", pButton);
   if(pButton)
-  {
     pButton->signal_clicked().connect( sigc::mem_fun(*this, &MainWindow::do_command) );
-  }
   
-  m_refGlade->get_widget("entry", pEntry);
+  glade->get_widget("entry", pEntry);
   if(pEntry)
-  {
     pEntry->signal_activate().connect( sigc::mem_fun(*this, &MainWindow::do_command) );
-  }
   
-  m_refGlade->get_widget("textview", pTextView);
+  glade->get_widget("textview", pTextView);
   if(pTextView)
-  {
     pTextView->set_wrap_mode(Gtk::WRAP_WORD);
-  }
   
+  glade->get_widget("aboutdialog", pAboutDialog);
+  if(pAboutDialog)
+    pAboutDialog->signal_response().connect( sigc::mem_fun(*this, &MainWindow::on_about_dialog_response) );
+  
+  // Menu Stuff
+  Gtk::MenuItem *pQuitItem = 0;
+  glade->get_widget("quitMenuItem", pQuitItem);
+  if(pQuitItem)
+    pQuitItem->signal_activate().connect( sigc::mem_fun(*this, &MainWindow::quit) );
+  
+  Gtk::MenuItem *pAboutItem = 0;
+  glade->get_widget("aboutMenuItem", pAboutItem);
+  if(pAboutItem)
+    pAboutItem->signal_activate().connect( sigc::mem_fun(*this, &MainWindow::show_about) );
+  
+  // Lets get started!
   pTextBuffer = pTextView->get_buffer();
   pTextBuffer->insert_at_cursor(engine.getAllMessages()); //FIXME
 }
 
 MainWindow::~MainWindow() {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void MainWindow::do_command()
 {
@@ -72,4 +89,23 @@ void MainWindow::do_command()
   auto pos = pTextBuffer->create_mark(pTextBuffer->end());
   //pTextBuffer->move_mark(pos, buffer->end());
   pTextView->scroll_to(pos, 0.0);
+}
+
+void MainWindow::quit()
+{
+  this->hide();
+}
+
+void MainWindow::show_about()
+{
+  pAboutDialog->show();
+  pAboutDialog->present();
+}
+
+void MainWindow::on_about_dialog_response(int response_id)
+{
+  if( (response_id == Gtk::RESPONSE_CLOSE) || (response_id == Gtk::RESPONSE_CANCEL) )
+  {
+    pAboutDialog->hide();
+  }
 }

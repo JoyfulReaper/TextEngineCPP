@@ -31,7 +31,7 @@ int main (int argc, char **argv)
  
   try
   {
-    refBuilder->add_from_file("gui.glade");
+    refBuilder->add_from_file("../gui.glade");
   }
   catch(const Glib::FileError& ex)
   {

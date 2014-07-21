@@ -35,13 +35,20 @@ public:
   
 protected:
   void do_command();
+  void quit();
+  void show_about();
+  void on_about_dialog_response(int response_id);
   
   TextEngine engine;
-  Glib::RefPtr<Gtk::Builder> m_refGlade;
+  
+  Glib::RefPtr<Gtk::Builder> glade;
+  
   Gtk::Button *pButton;
   Gtk::Entry *pEntry;
   Gtk::TextView *pTextView;
   Glib::RefPtr<Gtk::TextBuffer> pTextBuffer;
+  
+  Gtk::AboutDialog *pAboutDialog;
 };
 
 #endif
