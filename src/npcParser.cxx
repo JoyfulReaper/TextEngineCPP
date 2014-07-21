@@ -46,6 +46,13 @@ std::vector<std::map<std::string,std::string>> NPCParser::parseNPCs(const std::s
   boost::filesystem::path npcs("/characters");
   fullPath += npcs;
   
+  if(!boost::filesystem::exists(fullPath))
+  {
+    std::vector<std::map<std::string,std::string>> empty;
+    return empty;
+  }
+  
+  
   std::map<std::string, bool> npcConfig = setObjectConfig();
   std::vector<boost::filesystem::path> files = getAllFilesWithExt(fullPath.native(), ".lua");
   return parseFiles(files, npcConfig);
