@@ -39,7 +39,7 @@ To do list
 ==========
 Add/Improve documentation  
 Code cleanup  
-GUI Wrapper  
+GUI Wrapper (A GTK based GUI has been started)  
 Level Editor  
 
 Contributors
