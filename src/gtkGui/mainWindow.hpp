@@ -16,6 +16,11 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @file mainWindow.hpp
+ * @author Kyle Givler
+ */
+
 #ifndef _MAIN_WINDOW_H_
 #define _MAIN_WINDOW_H_
 

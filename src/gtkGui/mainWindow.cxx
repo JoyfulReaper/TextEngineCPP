@@ -16,6 +16,11 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @file mainWindow.cxx
+ * @author Kyle Givler
+ */
+
 #include "mainWindow.hpp"
 
 MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade)
@@ -46,7 +51,7 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
   }
   
   pTextBuffer = pTextView->get_buffer();
-  pTextBuffer->insert_at_cursor(engine.getAllMessages());
+  pTextBuffer->insert_at_cursor(engine.getAllMessages()); //FIXME
 }
 
 MainWindow::~MainWindow() {}

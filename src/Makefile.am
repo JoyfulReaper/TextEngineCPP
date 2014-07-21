@@ -1,4 +1,4 @@
-bin_PROGRAMS = textEngine textEngineGTK
+bin_PROGRAMS = textEngine
 
 # noinst_LTLIBRARIES = libtextengine.la
 # libtextengine_la_SOURCES = luaAPI.cxx map.cxx mapBuilder.cxx containerItem.cxx npc.cxx npcBuilder.cxx npcParser.cxx roomParser.cxx itemParser.cxx itemBuilder.cxx commandParser.cxx room.cxx exit.cxx roof.cxx floor.cxx wall.cxx mapsite.cxx item.cxx inventory.cxx player.cxx textEngine.cxx character.cxx greedyWrap.cxx parser.cxx playerParser.cxx playerBuilder.cxx
@@ -11,7 +11,4 @@ textEngine_LDADD = $(LUA_LIB) $(BOOST_SERIALIZATION_LIB) $(BOOST_FILESYSTEM_LIB)
 textEngine_LDFLAGS = $(BOOST_LDFLAGS)
 textEngine_CPPFLAGS = $(LUA_INCLUDE) $(BOOST_CPPFLAGS) -Wall
 
-textEngineGTK_SOURCES = ./gtkGui/main_gtk.cpp ./gtkGui/mainWindow.cxx
-textEngineGTK_LDADD = $(LUA_LIB) $(BOOST_SERIALIZATION_LIB) $(BOOST_FILESYSTEM_LIB) $(BOOST_SYSTEM_LIB) $(gtkmm_LIBS) libtextengine.a
-textEngineGTK_LDFLAGS = $(BOOST_LDFLAGS)
-textEngineGTK_CPPFLAGS = $(LUA_INCLUDE) $(BOOST_CPPFLAGS) $(gtkmm_CFLAGS) -Wall
+AM_CPPFLAGS = -DDATADIR=\"$(pkgdatadir)\"
