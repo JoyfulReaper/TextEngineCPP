@@ -125,10 +125,10 @@ int main(void)
   switch(choice)
   {
     case 1:
-      game = "sampleGame";
+      game = "../games/sampleGame";
       break;
     case 2:
-      game = "derekGame";
+      game = "../games/derekGame";
       break;
     default:
     {
