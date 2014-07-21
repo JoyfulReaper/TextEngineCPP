@@ -38,8 +38,9 @@ protected:
   void quit();
   void show_about();
   void on_about_dialog_response(int response_id);
+  void show_open();
   
-  TextEngine engine;
+  TextEngine *engine;
   
   Glib::RefPtr<Gtk::Builder> glade;
   
@@ -49,6 +50,7 @@ protected:
   Glib::RefPtr<Gtk::TextBuffer> pTextBuffer;
   
   Gtk::AboutDialog *pAboutDialog;
+  Gtk::FileChooserDialog *pFolderChooser;
 };
 
 #endif

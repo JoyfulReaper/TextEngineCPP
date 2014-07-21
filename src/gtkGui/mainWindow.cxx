@@ -28,13 +28,14 @@
 
 MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade)
 : Gtk::Window(cobject),
-  engine("../sampleGame"),
+  engine(0),
   glade(refGlade),
   pButton(0),
   pEntry(0),
   pTextView(0),
   pTextBuffer(0),
-  pAboutDialog(0)
+  pAboutDialog(0),
+  pFolderChooser(0)
 {
   // Basics
   glade->get_widget("button", pButton);
@@ -64,40 +65,68 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
   if(pAboutItem)
     pAboutItem->signal_activate().connect( sigc::mem_fun(*this, &MainWindow::show_about) );
   
+  Gtk::MenuItem *pOpenItem = 0;
+  glade->get_widget("openMenuItem", pOpenItem);
+  if(pOpenItem)
+    pOpenItem->signal_activate().connect( sigc::mem_fun(*this, &MainWindow::show_open) );
+  
+  //File chooser
+  glade->get_widget("folderchooserdialog", pFolderChooser);
+  if(pFolderChooser)
+  {
+    pFolderChooser->add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+    pFolderChooser->add_button("Select", Gtk::RESPONSE_OK);
+  }
+  
   // Lets get started!
   pTextBuffer = pTextView->get_buffer();
-  pTextBuffer->insert(pTextBuffer->end(), engine.getAllMessages());
+  pTextBuffer->insert(pTextBuffer->end(), "Open the folder containing your game to begin!\n");
+  //pTextBuffer->insert(pTextBuffer->end(), engine.getAllMessages());
 }
 
-MainWindow::~MainWindow() {}
+MainWindow::~MainWindow() 
+{
+  if(engine)
+    delete engine;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void MainWindow::do_command()
 {
+  if(!engine)
+  {
+    pTextBuffer->insert(pTextBuffer->end(), "Open the folder containing your game to begin!\n");
+    pEntry->set_text("");
+    return;
+  }
+  
   std::string command;
   command = pEntry->get_text();
   pEntry->set_text("");
   
-  engine.processCommand(command);
-  if(engine.isGameOver())
+  engine->processCommand(command);
+  if(engine->isGameOver())
     this->hide();
   
-  pTextBuffer->insert(pTextBuffer->end(), engine.getAllMessages());
+  pTextBuffer->insert(pTextBuffer->end(), engine->getAllMessages());
   
   auto pos = pTextBuffer->create_mark(pTextBuffer->end());
   pTextView->scroll_to(pos, 0.0);
+  return;
 }
 
 void MainWindow::quit()
 {
   this->hide();
+  return;
 }
 
 void MainWindow::show_about()
 {
   pAboutDialog->show();
   pAboutDialog->present();
+  return;
 }
 
 void MainWindow::on_about_dialog_response(int response_id)
@@ -106,4 +135,31 @@ void MainWindow::on_about_dialog_response(int response_id)
   {
     pAboutDialog->hide();
   }
+  return;
+}
+
+void MainWindow::show_open()
+{
+  pFolderChooser->set_transient_for(*this);
+  int result = pFolderChooser->run();
+  
+  switch(result)
+  {
+    case(Gtk::RESPONSE_CANCEL):
+    {
+      pFolderChooser->hide();
+      break;
+    }
+    case(Gtk::RESPONSE_OK):
+    {
+      if(engine)
+	delete engine;
+      
+      pFolderChooser->hide();
+      engine = new TextEngine(pFolderChooser->get_filename());
+      pTextBuffer->insert(pTextBuffer->end(), engine->getAllMessages());
+      break;
+    }
+  }
+  return;
 }
