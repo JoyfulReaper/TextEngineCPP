@@ -1,1 +1,1 @@
-SUBDIRS = src src/gtkGui data
+SUBDIRS = src src/gtkGui

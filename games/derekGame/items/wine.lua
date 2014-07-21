@@ -1,6 +1,6 @@
 name = 'Wine'
 description = "An expensive merlot."
-location = 'room6:1'
+location = "room6:1"
 obtainable = '1'
 visible = '1'
 

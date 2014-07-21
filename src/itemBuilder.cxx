@@ -108,49 +108,51 @@ void ItemBuilder::buildObjects(std::vector<std::map<std::string,std::string>> &i
 	  ret = Inventory::allItems.insert(std::pair<std::string, std::string>(item->getUppercaseName(), item->getFilename()));
 	  if(!ret.second && item->getFilename() != ret.first->second)
 	    throw(TextEngineException("Already exists: " + config["name"]));
-	  return;
 	}
       } catch (const std::invalid_argument &ia) {
 	throw(TextEngineException("Error: " + config["name"]));
       }
       
-      // Split locations string: [addRoom | 'player']:quantity
-      std::vector<std::string> locVector;
-      split(locVector, config["location"], is_any_of(":"));
-      if(locVector.size() == 0 || locVector.size() % 2 != 0)
+      if(config["location"] != "")
       {
-	throw (TextEngineException("Malformed location string in item " + config["name"]));
-      }
-      
-      // Add items to locations
-      for(size_t i = 0; i < locVector.size(); i += 2)
-      {
-	std::unique_ptr<Item> copyItem;
-	if(container)
-	  copyItem.reset(new ContainerItem(*static_cast<ContainerItem*>(item.get())));
-	else
-	  copyItem.reset(new Item(*item));
-	
-	try {
-	  quantity = std::stoi(locVector[i+1]);
-	} catch (const std::invalid_argument &ia) {
+	// Split locations string: [addRoom | 'player']:quantity
+	std::vector<std::string> locVector;
+	split(locVector, config["location"], is_any_of(":"));
+	if(locVector.size() == 0 || locVector.size() % 2 != 0)
+	{
 	  throw (TextEngineException("Malformed location string in item " + config["name"]));
 	}
 	
-	addRoom = locVector[i];
-	
-	
-	if(!map->roomExists(addRoom))
-	  throw (TextEngineException("Trying to add " + config["name"] + " to invalid location: " + addRoom));
-	
-	map->getRoom(addRoom).getInventory().addItem(std::move(item), quantity);
-	
-	if(container)
-	  item.reset(new ContainerItem(*static_cast<ContainerItem*>(copyItem.get())));
-	else
-	  item.reset(new Item(*copyItem));
+	// Add items to locations
+	for(size_t i = 0; i < locVector.size(); i += 2)
+	{
+	  std::unique_ptr<Item> copyItem;
+	  if(container)
+	    copyItem.reset(new ContainerItem(*static_cast<ContainerItem*>(item.get())));
+	  else
+	    copyItem.reset(new Item(*item));
+	  
+	  try {
+	    quantity = std::stoi(locVector[i+1]);
+	  } catch (const std::invalid_argument &ia) {
+	    throw (TextEngineException("Malformed location string in item " + config["name"]));
+	  }
+	  
+	  addRoom = locVector[i];
+	  
+	  
+	  if(!map->roomExists(addRoom))
+	    throw (TextEngineException("Trying to add " + config["name"] + " to invalid location: " + addRoom));
+	  
+	  map->getRoom(addRoom).getInventory().addItem(std::move(item), quantity);
+	  
+	  if(container)
+	    item.reset(new ContainerItem(*static_cast<ContainerItem*>(copyItem.get())));
+	  else
+	    item.reset(new Item(*copyItem));
+	}
       }
-    } // End location parsing
+    }// End location parsing
     else
     { // add to given inventory
       assert(inventory != nullptr);

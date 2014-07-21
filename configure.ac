@@ -46,8 +46,7 @@ AC_TYPE_SIZE_T
 
 AC_CONFIG_FILES([Makefile
                  src/Makefile
-                 src/gtkGui/Makefile
-                 data/Makefile])
+                 src/gtkGui/Makefile])
 
 # LT_INIT
 AC_OUTPUT
