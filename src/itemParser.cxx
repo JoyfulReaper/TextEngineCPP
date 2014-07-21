@@ -33,7 +33,7 @@ std::map<std::string,bool> ItemParser::setObjectConfig()
   std::map<std::string,bool> objectConfig;
   objectConfig.insert(config("description", false));
   objectConfig.insert(config("name", false));
-  objectConfig.insert(config("location", false));
+  objectConfig.insert(config("location", true));
   objectConfig.insert(config("obtainable", true));
   objectConfig.insert(config("visible", true));
   objectConfig.insert(config("container", true));

@@ -99,6 +99,21 @@ void ItemBuilder::buildObjects(std::vector<std::map<std::string,std::string>> &i
     
     if(quantity == -1) // Need to parse location
     {
+      try {
+	if(config["location"] == "") // Just add to know items, not a location 
+	{
+	  auto ret = Inventory::allItems.insert(std::pair<std::string, std::string>(item->getName(), item->getFilename()));
+	  if(!ret.second && item->getFilename() != ret.first->second)
+	    throw(TextEngineException("Already exists: " + config["name"]));
+	  ret = Inventory::allItems.insert(std::pair<std::string, std::string>(item->getUppercaseName(), item->getFilename()));
+	  if(!ret.second && item->getFilename() != ret.first->second)
+	    throw(TextEngineException("Already exists: " + config["name"]));
+	  return;
+	}
+      } catch (const std::invalid_argument &ia) {
+	throw(TextEngineException("Error: " + config["name"]));
+      }
+      
       // Split locations string: [addRoom | 'player']:quantity
       std::vector<std::string> locVector;
       split(locVector, config["location"], is_any_of(":"));
@@ -143,4 +158,5 @@ void ItemBuilder::buildObjects(std::vector<std::map<std::string,std::string>> &i
 	throw(TextEngineException("Failed to add item"));
     }
   } // End main loop
+  return;
 } // End buildObjects()
