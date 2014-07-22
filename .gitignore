@@ -1,5 +1,6 @@
 # Binary files
 src/textEngine
+src/gtkGui/textEngineGTK
 
 # Others
 *~
