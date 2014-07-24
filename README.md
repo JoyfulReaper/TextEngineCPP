@@ -7,7 +7,7 @@ This project aims to provide an easy to use and cross platform mechanism for cre
 
 Please contact me if you would like to contribute: xvegan88x __AT_ gmail dOt com
 
-This program is intended to be cross platform, however I have little experince building software for platforms other than Linux. If you experince problems building TextEngine on any platform please let me know. You can contact me at xvegan88x __AT_ gmail dOt com
+This program is intended to be cross platform, however I have little experince building software for platforms other than Linux. If you experince problems building TextEngine on any platform please let me know. You can contact me at the above e-mail address.
 
 If you find this useful or fun feel free to get me something from my Amazon wishlist :) http://amzn.com/w/2Y6UMLRG23W6W
 
@@ -44,5 +44,5 @@ Level Editor
 
 Contributors
 ============
-Kyle Givler - Everything so far!
+Kyle Givler (JoyfulReaper) - Everything so far!
 
