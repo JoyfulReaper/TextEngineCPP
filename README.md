@@ -1,3 +1,7 @@
+Abandoned
+=========
+This project was abandoned long long ago, I am currently trying to do this better in C#
+
 TextEngine 0.0.1
 ================
 
